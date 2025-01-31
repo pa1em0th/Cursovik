@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная - Hotel Booking</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Система бронирования гостиниц</h1>
+        <nav>
+            <a href="index.html">Главная</a>
+            <a href="register.html">Регистрация</a>
+            <a href="login.html">Вход</a>
+            <a href="profile.html">Личный кабинет</a>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Поиск номеров</h2>
+        <form id="searchForm">
+            <label for="city">Город:</label>
+            <input type="text" id="city" name="city" required>
+
+            <label for="check_in_date">Дата заезда:</label>
+            <input type="date" id="check_in_date" name="check_in_date" required>
+
+            <label for="check_out_date">Дата выезда:</label>
+            <input type="date" id="check_out_date" name="check_out_date" required>
+
+            <button type="submit">Найти</button>
+        </form>
+    </main>
+
+    <script src="js/scripts.js"></script>
+</body>
+</html>
