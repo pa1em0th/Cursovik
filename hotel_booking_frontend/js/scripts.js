@@ -1,5 +1,23 @@
 const API_URL = 'http://localhost:5000/api';
 
+// Плавное изменение фона шапки при скролле
+window.addEventListener('scroll', () => {
+    const header = document.querySelector('.header');
+    if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
+});
+
+// Мобильное меню
+const mobileMenu = document.getElementById('mobile-menu');
+const nav = document.querySelector('.nav');
+
+mobileMenu.addEventListener('click', () => {
+    mobileMenu.classList.toggle('active');
+    nav.classList.toggle('active');
+});
 // Регистрация пользователя
 document.getElementById('registerForm')?.addEventListener('submit', async (e) => {
     e.preventDefault();

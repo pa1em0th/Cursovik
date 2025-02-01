@@ -7,31 +7,123 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <header>
-        <h1>Система бронирования гостиниц</h1>
-        <nav>
-            <a href="index.html">Главная</a>
-            <a href="register.html">Регистрация</a>
-            <a href="login.html">Вход</a>
-            <a href="profile.html">Личный кабинет</a>
-        </nav>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <img src="assets/logo.png" alt="Hotel Booking Logo">
+                <span>Hotel Booking</span>
+            </div>
+            <nav class="nav">
+                <a href="index.html" class="nav-link active">Главная</a>
+                <a href="register.html" class="nav-link">Регистрация</a>
+                <a href="login.html" class="nav-link">Вход</a>
+                <a href="profile.html" class="nav-link">Личный кабинет</a>
+            </nav>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
     </header>
 
-    <main>
-        <h2>Поиск номеров</h2>
-        <form id="searchForm">
-            <label for="city">Город:</label>
-            <input type="text" id="city" name="city" required>
+    <section class="hero">
+        <div class="container">
+            <h2 class="hero-title">Найдите идеальный номер для вашего отдыха</h2>
+            <form id="searchForm" class="search-form">
+                <input type="text" id="city" name="city" placeholder="Город" required>
+                <input type="date" id="check_in_date" name="check_in_date" required>
+                <input type="date" id="check_out_date" name="check_out_date" required>
+                <button type="submit" class="btn-primary">Найти</button>
+            </form>
+        </div>
+    </section>
 
-            <label for="check_in_date">Дата заезда:</label>
-            <input type="date" id="check_in_date" name="check_in_date" required>
+    <section class="features">
+        <div class="container">
+            <h2>Почему выбирают нас?</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Лучшие цены</h3>
+                    <p>Мы предлагаем самые выгодные цены на номера в лучших отелях.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Широкий выбор</h3>
+                    <p>Более 1000 отелей по всему миру на любой вкус и бюджет.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Поддержка 24/7</h3>
+                    <p>Наша служба поддержки всегда готова помочь вам.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            <label for="check_out_date">Дата выезда:</label>
-            <input type="date" id="check_out_date" name="check_out_date" required>
+    <section class="popular-destinations">
+        <div class="container">
+            <h2>Популярные направления</h2>
+            <div class="destination-grid">
+                <div class="destination-card">
+                    <img src="assets/moscow.jpg" alt="Москва">
+                    <h3>Москва</h3>
+                    <p>Столица России с богатой историей и культурой.</p>
+                </div>
+                <div class="destination-card">
+                    <img src="assets/saint-petersburg.jpg" alt="Санкт-Петербург">
+                    <h3>Санкт-Петербург</h3>
+                    <p>Культурная столица России с великолепной архитектурой.</p>
+                </div>
+                <div class="destination-card">
+                    <img src="assets/sochi.jpg" alt="Сочи">
+                    <h3>Сочи</h3>
+                    <p>Курортный город на берегу Черного моря.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-            <button type="submit">Найти</button>
-        </form>
-    </main>
+    <section class="testimonials">
+        <div class="container">
+            <h2>Отзывы наших клиентов</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p>"Отличный сервис! Все быстро и удобно. Спасибо!"</p>
+                    <p class="author">— Иван Иванов</p>
+                </div>
+                <div class="testimonial-card">
+                    <p>"Очень понравилось, цены действительно низкие."</p>
+                    <p class="author">— Мария Петрова</p>
+                </div>
+                <div class="testimonial-card">
+                    <p>"Буду рекомендовать друзьям. Все на высшем уровне!"</p>
+                    <p class="author">— Алексей Смирнов</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>О нас</h3>
+                    <p>Мы предлагаем лучшие отели по всему миру по доступным ценам.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Контакты</h3>
+                    <p>Email: info@hotelbooking.com</p>
+                    <p>Телефон: +7 (999) 123-45-67</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Социальные сети</h3>
+                    <a href="#">Facebook</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">Twitter</a>
+                </div>
+            </div>
+            <p class="footer-copy">&copy; 2023 Hotel Booking. Все права защищены.</p>
+        </div>
+    </footer>
 
     <script src="js/scripts.js"></script>
 </body>
