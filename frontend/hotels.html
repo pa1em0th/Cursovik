@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список отелей</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FFD700',
+                        secondary: '#FFC107',
+                        background: '#121212',
+                        text: '#f5f5f5',
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-text font-sans min-h-screen flex flex-col">
+    <!-- Заголовок -->
+    <header class="bg-[#1E1E1E] text-primary py-4 px-6 shadow-md sticky top-0 z-50">
+        <nav class="flex justify-center items-center">
+            <ul class="flex gap-6">
+                <li><a href="index.html" class="hover:text-secondary transition-colors">Главная</a></li>
+                <li><a href="search.html" class="hover:text-secondary transition-colors">Поиск отелей</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Список отелей -->
+    <main class="flex-grow px-4 py-8">
+        <h2 class="text-2xl font-bold text-primary text-center mb-8">Результаты поиска</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-[#222222] p-4 rounded-lg shadow-lg">
+                <img src="images/hotel1.jpg" alt="Отель Хилтон" class="w-full h-48 object-cover rounded-lg mb-4">
+                <h3 class="text-lg font-bold text-primary">Хилтон</h3>
+                <p class="text-sm text-gray-400">Адрес: Москва, Россия</p>
+                <p class="text-sm text-primary">Цена: 5000 ₽/ночь</p>
+                <a href="booking.html" class="bg-primary hover:bg-secondary text-background py-2 px-4 rounded-full font-bold mt-4 inline-block transition-colors">Забронировать</a>
+            </div>
+            <div class="bg-[#222222] p-4 rounded-lg shadow-lg">
+                <img src="images/hotel2.jpg" alt="Отель Марриотт" class="w-full h-48 object-cover rounded-lg mb-4">
+                <h3 class="text-lg font-bold text-primary">Марриотт</h3>
+                <p class="text-sm text-gray-400">Адрес: Санкт-Петербург, Россия</p>
+                <p class="text-sm text-primary">Цена: 6000 ₽/ночь</p>
+                <a href="booking.html" class="bg-primary hover:bg-secondary text-background py-2 px-4 rounded-full font-bold mt-4 inline-block transition-colors">Забронировать</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Подвал -->
+    <footer class="bg-background text-primary py-4 mt-auto text-center">
+        <p>&copy; 2023 Система бронирования гостиниц</p>
+    </footer>
+</body>
+</html>

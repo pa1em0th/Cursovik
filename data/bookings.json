@@ -1,0 +1,12 @@
+[
+    {
+        "hotelName": "Hotel Hilton",
+        "checkInDate": "2023-10-15",
+        "checkOutDate": "2023-10-20"
+    },
+    {
+        "hotelName": "Hotel Marriott",
+        "checkInDate": "2023-11-25",
+        "checkOutDate": "2023-11-30"
+    }
+]

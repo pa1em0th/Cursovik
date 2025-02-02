@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поиск отелей</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FFD700',
+                        secondary: '#FFC107',
+                        background: '#121212',
+                        text: '#f5f5f5',
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-text font-sans min-h-screen flex flex-col">
+    <!-- Заголовок -->
+    <header class="bg-[#1E1E1E] text-primary py-4 px-6 shadow-md sticky top-0 z-50">
+        <nav class="flex justify-center items-center">
+            <ul class="flex gap-6">
+                <li><a href="index.html" class="hover:text-secondary transition-colors">Главная</a></li>
+                <li><a href="search.html" class="hover:text-secondary transition-colors">Поиск отелей</a></li>
+                <li><a href="login.html" class="hover:text-secondary transition-colors">Вход</a></li>
+                <li><a href="register.html" class="hover:text-secondary transition-colors">Регистрация</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Поиск отелей -->
+    <main class="flex-grow px-4 py-8">
+        <section class="max-w-4xl mx-auto bg-[#1E1E1E] p-8 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold text-primary text-center mb-6">Поиск отелей</h2>
+            <form action="/search" method="GET" class="space-y-4">
+                <div>
+                    <label for="location" class="block text-sm font-medium text-primary mb-2">Локация:</label>
+                    <input type="text" id="location" name="location" placeholder="Город или страна" class="w-full px-4 py-2 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border" required>
+                </div>
+                <div>
+                    <label for="check-in" class="block text-sm font-medium text-primary mb-2">Дата заезда:</label>
+                    <input type="date" id="check-in" name="check-in" class="w-full px-4 py-2 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border" required>
+                </div>
+                <div>
+                    <label for="check-out" class="block text-sm font-medium text-primary mb-2">Дата выезда:</label>
+                    <input type="date" id="check-out" name="check-out" class="w-full px-4 py-2 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border" required>
+                </div>
+                <div>
+                    <label for="guests" class="block text-sm font-medium text-primary mb-2">Количество гостей:</label>
+                    <select id="guests" name="guests" class="w-full px-4 py-2 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-primary hover:bg-secondary text-background py-3 rounded-full font-bold transition-colors">Найти</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Подвал -->
+    <footer class="bg-background text-primary py-4 mt-auto text-center">
+        <p>&copy; 2023 Система бронирования гостиниц</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,296 @@
+/* Общие настройки */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif; /* Современный шрифт Poppins */
+    line-height: 1.6;
+    background-color: #121212; /* Темно-черный фон */
+    color: #f5f5f5; /* Белый текст */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Заполняем всю высоту экрана */
+}
+
+a {
+    text-decoration: none;
+    color: #FFD700; /* Ярко-желтый цвет ссылок */
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #FFC107; /* Немного темнее желтый при наведении */
+}
+
+button {
+    background-color: #FFD700; /* Желтая кнопка */
+    color: #121212; /* Темно-черный текст */
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+    background-color: #FFC107; /* Сlightly darker yellow on hover */
+    transform: translateY(-2px); /* Маленький эффект "подъема" */
+}
+
+/* Заголовок */
+header {
+    width: 100%; /* Ширина заголовка во всю ширину экрана */
+    background-color: #1E1E1E; /* Темно-серый фон заголовка */
+    color: #FFD700; /* Желтый текст */
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center; /* Выравнивание по центру */
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    justify-content: center; /* Выравнивание пунктов меню по центру */
+}
+
+header nav ul li a {
+    color: #FFD700;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+}
+
+header nav ul li a:hover {
+    background-color: #FFC107;
+    border-radius: 5px;
+}
+
+/* Главная секция */
+.hero {
+    text-align: center;
+    padding: 80px 20px;
+    background: linear-gradient(45deg, #121212, #222222); /* Градиентный фон */
+    color: #FFD700;
+    max-width: 1000px; /* Ограничиваем максимальную ширину */
+    margin: 0 auto; /* Центрируем блок */
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.hero p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.hero .btn {
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Формы (Вход и Регистрация) */
+form {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #1E1E1E;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+form h2 {
+    margin-bottom: 20px;
+    color: #FFD700;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+form label {
+    display: block;
+    margin-bottom: 10px;
+    color: #FFD700;
+    font-weight: 600;
+    text-align: left;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #222222;
+    color: #f5f5f5;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="password"]:focus {
+    background-color: #333333; /* При фокусе делаем чуть светлее */
+}
+
+form button {
+    width: 100%;
+    margin-top: 20px;
+}
+
+form p {
+    margin-top: 10px;
+    color: #FFD700;
+}
+
+/* Личный кабинет */
+.profile {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #1E1E1E;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.profile h2 {
+    margin-bottom: 20px;
+    color: #FFD700;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.profile ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.profile li {
+    padding: 10px;
+    border-bottom: 1px solid #333333;
+    color: #f5f5f5;
+    font-size: 16px;
+    text-align: left;
+}
+
+/* Поиск отелей */
+.search-form {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #1E1E1E;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.search-form h2 {
+    margin-bottom: 20px;
+    color: #FFD700;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.search-form label {
+    display: block;
+    margin-bottom: 10px;
+    color: #FFD700;
+    font-weight: 600;
+    text-align: left;
+}
+
+.search-form input,
+.search-form select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #222222;
+    color: #f5f5f5;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.search-form button {
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Список отелей */
+.hotel-list {
+    max-width: 1200px;
+    margin: 50px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.hotel-card {
+    background-color: #222222;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.hotel-card:hover {
+    transform: scale(1.05);
+}
+
+.hotel-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0;
+}
+
+.hotel-card h3 {
+    margin: 10px;
+    font-size: 20px;
+    color: #FFD700;
+    font-weight: 600;
+}
+
+.hotel-card p {
+    margin: 10px;
+    font-size: 16px;
+    color: #f5f5f5;
+}
+
+.hotel-card .btn {
+    display: block;
+    margin: 10px auto;
+    padding: 12px 24px;
+}
+
+/* Подвал */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #121212;
+    color: #FFD700;
+    width: 100%;
+    margin-top: auto; /* Прикрепляем подвал к нижней части */
+}
+
+/* Основной контейнер для содержимого */
+main {
+    flex: 1; /* Занимает все доступное пространство между header и footer */
+}

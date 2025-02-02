@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система бронирования гостиниц</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FFD700',
+                        secondary: '#FFC107',
+                        background: '#121212',
+                        text: '#f5f5f5',
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-text font-sans min-h-screen flex flex-col">
+    <!-- Заголовок -->
+    <header class="bg-[#1E1E1E] text-primary py-4 px-6 shadow-md sticky top-0 z-50">
+        <nav class="flex justify-center items-center">
+            <ul class="flex gap-6">
+                <li><a href="index.html" class="hover:text-secondary transition-colors">Главная</a></li>
+                <li><a href="search.html" class="hover:text-secondary transition-colors">Поиск отелей</a></li>
+                <li><a href="login.html" class="hover:text-secondary transition-colors">Вход</a></li>
+                <li><a href="register.html" class="hover:text-secondary transition-colors">Регистрация</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Главная секция -->
+    <main class="flex-grow flex items-center justify-center">
+        <section class="text-center max-w-4xl p-8 bg-[#1E1E1E] rounded-lg shadow-lg">
+            <h1 class="text-4xl font-bold mb-4 text-primary">Бронируйте номера в лучших отелях!</h1>
+            <p class="text-lg mb-6 text-gray-400">Удобная система поиска и бронирования мест в гостиницах.</p>
+            <a href="search.html" class="bg-primary hover:bg-secondary text-background py-3 px-6 rounded-full font-bold transition-colors">Начать поиск</a>
+        </section>
+    </main>
+
+    <!-- Подвал -->
+    <footer class="bg-background text-primary py-4 mt-auto text-center">
+        <p>&copy; 2023 Система бронирования гостиниц</p>
+    </footer>
+</body>
+</html>

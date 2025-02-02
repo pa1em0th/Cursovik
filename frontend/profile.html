@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FFD700',
+                        secondary: '#FFC107',
+                        background: '#121212',
+                        text: '#f5f5f5',
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-text font-sans min-h-screen flex flex-col">
+    <!-- Заголовок -->
+    <header class="bg-[#1E1E1E] text-primary py-4 px-6 shadow-md sticky top-0 z-50">
+        <nav class="flex justify-center items-center">
+            <ul class="flex gap-6">
+                <li><a href="index.html" class="hover:text-secondary transition-colors">Главная</a></li>
+                <li><a href="search.html" class="hover:text-secondary transition-colors">Поиск отелей</a></li>
+                <li><a href="profile.html" class="hover:text-secondary transition-colors">Личный кабинет</a></li>
+                <li><a href="logout.html" class="hover:text-secondary transition-colors">Выход</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Личный кабинет -->
+    <main class="flex-grow flex items-center justify-center">
+        <section class="bg-[#1E1E1E] p-8 rounded-lg shadow-lg w-96">
+            <h2 class="text-2xl font-bold text-primary text-center mb-6">Личный кабинет</h2>
+
+            <!-- Вкладки -->
+            <div class="flex space-x-4 mb-6">
+                <button id="personalDataTab" class="tab-button active text-primary hover:text-secondary transition-colors">Мои данные</button>
+                <button id="bookingsTab" class="tab-button text-primary hover:text-secondary transition-colors">Мои бронирования</button>
+            </div>
+
+            <!-- Содержимое вкладок -->
+            <div id="personalDataContent" class="tab-content space-y-4">
+                <p class="text-center text-primary">Имя: <span id="userName">[Имя пользователя]</span></p>
+                <p class="text-center text-primary">Email: <span id="userEmail">[Email пользователя]</span></p>
+            </div>
+
+            <div id="bookingsContent" class="tab-content hidden space-y-4">
+                <h3 class="text-lg font-bold text-primary mb-4">Мои бронирования:</h3>
+                <ul id="bookingsList" class="space-y-4">
+                    <!-- Здесь будут отображаться бронирования -->
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- Подвал -->
+    <footer class="bg-background text-primary py-4 mt-auto text-center">
+        <p>&copy; 2023 Система бронирования гостиниц</p>
+    </footer>
+
+    <!-- Подключение main.js -->
+    <script src="js/main.js"></script>
+</body>
+</html>

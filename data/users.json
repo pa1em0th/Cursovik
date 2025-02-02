@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "вмв",
+    "email": "annaruabtseva053@gmail.com",
+    "password": "$2a$10$TuWyAP5XsbJ01L1iip/zTu6JwqMjCgwkdKCc5JpuRu23jXuLoWxGu"
+  },
+  {
+    "id": 2,
+    "name": "2",
+    "email": "pa1emo0th@gmail.com",
+    "password": "$2a$10$WDNDUzlx41ncZSaA37Ytr.fsXeld3QZ36XIEAavf/uYD9oGetOSU2"
+  },
+  {
+    "id": 3,
+    "name": "user",
+    "email": "annaruabtseva052@gmail.com",
+    "password": "$2a$10$HUneNLhbynslzBFX5FG3LOB7Gp5uVnm5n9CfE8wZWtQ2f/U2Njqx2"
+  }
+]
