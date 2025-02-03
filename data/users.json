@@ -16,5 +16,17 @@
     "name": "user",
     "email": "annaruabtseva052@gmail.com",
     "password": "$2a$10$HUneNLhbynslzBFX5FG3LOB7Gp5uVnm5n9CfE8wZWtQ2f/U2Njqx2"
+  },
+  {
+    "id": 4,
+    "name": "анна",
+    "email": "antonsymkin3456@gmail.com",
+    "password": "$2a$10$82bAB8t4W5wpj.Ak54HqQe0QCdMHNlZBAL7BPKdGzwnIvK01XgNha"
+  },
+  {
+    "id": 5,
+    "name": "анна",
+    "email": "antonsymkin34446@gmail.com",
+    "password": "$2a$10$mzoK9A7BpwvBNH7qjJjv1uQBpTmyPNfixtWeCu4TleBJCltbkr9tC"
   }
 ]

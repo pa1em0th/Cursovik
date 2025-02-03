@@ -91,7 +91,7 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
 
         if (response.ok) {
             alert(result.message || 'Вы успешно вошли!');
-            localStorage.setItem('userToken', result.token); // Сохраняем токен в localStorage
+            localStorage.setItem('sessionId', result.sessionId); // Сохраняем sessionId в localStorage
             window.location.href = 'profile.html'; // Перенаправление на страницу профиля
         } else {
             alert(result.message || 'Ошибка входа');
@@ -104,8 +104,8 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
 
 // Функция для проверки авторизации
 function checkAuthorization() {
-    const token = localStorage.getItem('userToken'); // Используем единое имя для токена
-    if (!token) {
+    const sessionId = localStorage.getItem('sessionId'); // Используем sessionId вместо токена
+    if (!sessionId) {
         alert('Пожалуйста, войдите в систему.');
         window.location.href = 'login.html';
     }
@@ -119,7 +119,7 @@ async function loadUserData() {
         const response = await fetch('/api/user', {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('userToken')}`,
+                'Authorization': localStorage.getItem('sessionId'), // Используем sessionId
             },
         });
 
@@ -145,7 +145,7 @@ async function loadBookings() {
         const response = await fetch('/api/bookings', {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('userToken')}`,
+                'Authorization': localStorage.getItem('sessionId'), // Используем sessionId
             },
         });
 
@@ -177,6 +177,29 @@ async function loadBookings() {
         alert('Произошла ошибка. Попробуйте снова.');
     }
 }
+
+// Функция для выхода из системы
+document.getElementById('logoutButton')?.addEventListener('click', async () => {
+    try {
+        const response = await fetch('/logout', {
+            method: 'POST',
+            headers: {
+                'Authorization': localStorage.getItem('sessionId'), // Используем sessionId
+            },
+        });
+
+        if (response.ok) {
+            localStorage.removeItem('sessionId'); // Удаляем sessionId из localStorage
+            alert('Вы успешно вышли из системы.');
+            window.location.href = 'login.html'; // Перенаправление на страницу входа
+        } else {
+            alert('Ошибка при выходе из системы.');
+        }
+    } catch (error) {
+        console.error('Ошибка при выходе:', error);
+        alert('Произошла ошибка. Попробуйте снова.');
+    }
+});
 
 // Переключение между вкладками
 document.querySelectorAll('.tab-button').forEach(button => {

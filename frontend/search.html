@@ -24,11 +24,15 @@
     <!-- Заголовок -->
     <header class="bg-[#1E1E1E] text-primary py-4 px-6 shadow-md sticky top-0 z-50">
         <nav class="flex justify-center items-center">
-            <ul class="flex gap-6">
+            <ul class="flex gap-6" id="navMenu">
                 <li><a href="index.html" class="hover:text-secondary transition-colors">Главная</a></li>
                 <li><a href="search.html" class="hover:text-secondary transition-colors">Поиск отелей</a></li>
                 <li><a href="login.html" class="hover:text-secondary transition-colors">Вход</a></li>
                 <li><a href="register.html" class="hover:text-secondary transition-colors">Регистрация</a></li>
+                <!-- Вкладка личного кабинета (скрыта по умолчанию) -->
+                <li id="profileTab" class="hidden"><a href="profile.html" class="hover:text-secondary transition-colors">Личный кабинет</a></li>
+                <!-- Вкладка выхода (скрыта по умолчанию) -->
+                <li id="logoutTab" class="hidden"><a href="#" id="logoutLink" class="hover:text-secondary transition-colors">Выйти</a></li>
             </ul>
         </nav>
     </header>
@@ -67,5 +71,57 @@
     <footer class="bg-background text-primary py-4 mt-auto text-center">
         <p>&copy; 2023 Система бронирования гостиниц</p>
     </footer>
+
+    <script>
+        // Проверка авторизации при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            const sessionId = localStorage.getItem('sessionId'); // Проверяем наличие sessionId
+            const profileTab = document.getElementById('profileTab');
+            const logoutTab = document.getElementById('logoutTab');
+
+            if (sessionId) {
+                // Если пользователь авторизован, показываем вкладку личного кабинета и выхода
+                profileTab.classList.remove('hidden');
+                logoutTab.classList.remove('hidden');
+                // Скрываем вкладки "Вход" и "Регистрация"
+                document.querySelectorAll('#navMenu li a[href="login.html"], #navMenu li a[href="register.html"]').forEach(link => {
+                    link.parentElement.classList.add('hidden');
+                });
+            } else {
+                // Если пользователь не авторизован, скрываем вкладку личного кабинета и выхода
+                profileTab.classList.add('hidden');
+                logoutTab.classList.add('hidden');
+                // Показываем вкладки "Вход" и "Регистрация"
+                document.querySelectorAll('#navMenu li a[href="login.html"], #navMenu li a[href="register.html"]').forEach(link => {
+                    link.parentElement.classList.remove('hidden');
+                });
+            }
+        });
+
+        // Обработчик для выхода из системы
+        document.getElementById('logoutLink')?.addEventListener('click', async (e) => {
+            e.preventDefault(); // Предотвращаем переход по ссылке
+
+            try {
+                const response = await fetch('/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': localStorage.getItem('sessionId'), // Используем sessionId
+                    },
+                });
+
+                if (response.ok) {
+                    localStorage.removeItem('sessionId'); // Удаляем sessionId из localStorage
+                    alert('Вы успешно вышли из системы.');
+                    window.location.href = 'index.html'; // Перенаправление на главную страницу
+                } else {
+                    alert('Ошибка при выходе из системы.');
+                }
+            } catch (error) {
+                console.error('Ошибка при выходе:', error);
+                alert('Произошла ошибка. Попробуйте снова.');
+            }
+        });
+    </script>
 </body>
 </html>
