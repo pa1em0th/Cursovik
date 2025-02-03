@@ -38,17 +38,105 @@
     </header>
 
     <!-- Главная секция -->
-    <main class="flex-grow flex items-center justify-center">
-        <section class="text-center max-w-4xl p-8 bg-[#1E1E1E] rounded-lg shadow-lg">
-            <h1 class="text-4xl font-bold mb-4 text-primary">Бронируйте номера в лучших отелях!</h1>
-            <p class="text-lg mb-6 text-gray-400">Удобная система поиска и бронирования мест в гостиницах.</p>
-            <a href="search.html" class="bg-primary hover:bg-secondary text-background py-3 px-6 rounded-full font-bold transition-colors">Начать поиск</a>
+    <main class="flex-grow">
+        <!-- Герой-секция -->
+        <section class="bg-[url('https://via.placeholder.com/1920x600')] bg-cover bg-center py-32 text-center">
+            <div class="max-w-4xl mx-auto px-4">
+                <h1 class="text-5xl font-bold text-primary mb-6">Бронируйте номера в лучших отелях!</h1>
+                <p class="text-lg text-gray-300 mb-8">Удобная система поиска и бронирования мест в гостиницах по всему миру.</p>
+                <a href="search.html" class="bg-primary hover:bg-secondary text-background py-3 px-6 rounded-full font-bold transition-colors">Начать поиск</a>
+            </div>
+        </section>
+
+        <!-- Популярные направления -->
+        <section class="py-16">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-primary text-center mb-8">Популярные направления</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Карточка направления -->
+                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
+                        <img src="png/moskow.png" alt="Москва" class="w-full h-50 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-semibold text-primary mb-2">Москва</h3>
+                        <p class="text-gray-400">Столица России с богатой историей и культурой.</p>
+                    </div>
+                    <!-- Карточка направления -->
+                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
+                        <img src="png/st peterbutg.png" alt="Санкт-Петербург" class="w-full h-50 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-semibold text-primary mb-2">Санкт-Петербург</h3>
+                        <p class="text-gray-400">Город музеев, дворцов и разводных мостов.</p>
+                    </div>
+                    <!-- Карточка направления -->
+                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
+                        <img src="png/sochi.png" alt="Сочи" class="w-full h-50 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-semibold text-primary mb-2">Сочи</h3>
+                        <p class="text-gray-400">Курортный город на берегу Черного моря.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Преимущества -->
+        <section class="bg-[#1E1E1E] py-16">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-primary text-center mb-8">Почему выбирают нас?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Преимущество 1 -->
+                    <div class="text-center">
+                        <div class="text-4xl text-primary mb-4">🏨</div>
+                        <h3 class="text-xl font-semibold text-primary mb-2">Широкий выбор отелей</h3>
+                        <p class="text-gray-400">Более 10 000 отелей по всему миру.</p>
+                    </div>
+                    <!-- Преимущество 2 -->
+                    <div class="text-center">
+                        <div class="text-4xl text-primary mb-4">💳</div>
+                        <h3 class="text-xl font-semibold text-primary mb-2">Безопасная оплата</h3>
+                        <p class="text-gray-400">Гарантия безопасности ваших платежей.</p>
+                    </div>
+                    <!-- Преимущество 3 -->
+                    <div class="text-center">
+                        <div class="text-4xl text-primary mb-4">📞</div>
+                        <h3 class="text-xl font-semibold text-primary mb-2">Поддержка 24/7</h3>
+                        <p class="text-gray-400">Мы всегда готовы помочь вам.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Отзывы клиентов -->
+        <section class="py-16">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-primary text-center mb-8">Отзывы наших клиентов</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Отзыв 1 -->
+                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
+                        <p class="text-gray-400 mb-4">"Отличный сервис! Нашли подходящий отель по выгодной цене."</p>
+                        <div class="flex items-center">
+                            <img src="png/man.png" alt="Аватар" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-primary">Иван Иванов</h3>
+                                <p class="text-sm text-gray-400">Москва</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Отзыв 2 -->
+                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
+                        <p class="text-gray-400 mb-4">"Очень удобный сайт. Все бронирования в одном месте."</p>
+                        <div class="flex items-center">
+                            <img src="png/woman.png" alt="Аватар" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-primary">Мария Петрова</h3>
+                                <p class="text-sm text-gray-400">Санкт-Петербург</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 
     <!-- Подвал -->
     <footer class="bg-background text-primary py-4 mt-auto text-center">
-        <p>&copy; 2023 Система бронирования гостиниц</p>
+        <p>&copy; 2025 Система бронирования гостиниц</p>
     </footer>
 
     <script>
