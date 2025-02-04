@@ -19,6 +19,28 @@
             },
         }
     </script>
+    <style>
+        .carousel {
+            display: flex;
+            overflow: hidden;
+            scroll-behavior: smooth;
+            gap: 2rem; /* Увеличиваем расстояние между контейнерами */
+        }
+        .carousel-item {
+            min-width: calc(33.333% - 2rem); /* Ширина карточки с учетом отступов */
+            transition: transform 0.5s ease-in-out;
+        }
+        @media (max-width: 1200px) {
+            .carousel-item {
+                min-width: calc(50% - 2rem);
+            }
+        }
+        @media (max-width: 768px) {
+            .carousel-item {
+                min-width: calc(100% - 2rem);
+            }
+        }
+    </style>
 </head>
 <body class="bg-background text-text font-sans min-h-screen flex flex-col">
     <!-- Заголовок -->
@@ -44,7 +66,7 @@
             <div class="max-w-4xl mx-auto px-4">
                 <h1 class="text-5xl font-bold text-primary mb-6">Бронируйте номера в лучших отелях!</h1>
                 <p class="text-lg text-gray-300 mb-8">Удобная система поиска и бронирования мест в гостиницах по всему миру.</p>
-                <a href="search.html" class="bg-primary hover:bg-secondary text-background py-3 px-6 rounded-full font-bold transition-colors">Начать поиск</a>
+                <a href="catalog.html" class="bg-primary hover:bg-secondary text-background py-3 px-6 rounded-full font-bold transition-colors">Начать поиск</a>
             </div>
         </section>
 
@@ -52,24 +74,36 @@
         <section class="py-16">
             <div class="max-w-6xl mx-auto px-4">
                 <h2 class="text-3xl font-bold text-primary text-center mb-8">Популярные направления</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="carousel" id="cityCarousel">
                     <!-- Карточка направления -->
-                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
+                    <div class="carousel-item bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
                         <img src="png/moskow.png" alt="Москва" class="w-full h-50 object-cover rounded-lg mb-4">
                         <h3 class="text-xl font-semibold text-primary mb-2">Москва</h3>
                         <p class="text-gray-400">Столица России с богатой историей и культурой.</p>
                     </div>
                     <!-- Карточка направления -->
-                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
+                    <div class="carousel-item bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
                         <img src="png/st peterbutg.png" alt="Санкт-Петербург" class="w-full h-50 object-cover rounded-lg mb-4">
                         <h3 class="text-xl font-semibold text-primary mb-2">Санкт-Петербург</h3>
                         <p class="text-gray-400">Город музеев, дворцов и разводных мостов.</p>
                     </div>
                     <!-- Карточка направления -->
-                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
+                    <div class="carousel-item bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
                         <img src="png/sochi.png" alt="Сочи" class="w-full h-50 object-cover rounded-lg mb-4">
                         <h3 class="text-xl font-semibold text-primary mb-2">Сочи</h3>
                         <p class="text-gray-400">Курортный город на берегу Черного моря.</p>
+                    </div>
+                    <!-- Новая карточка направления -->
+                    <div class="carousel-item bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
+                        <img src="png/kazan.png" alt="Казань" class="w-full h-50 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-semibold text-primary mb-2">Казань</h3>
+                        <p class="text-gray-400">Столица Татарстана с уникальной культурой и архитектурой.</p>
+                    </div>
+                    <!-- Новая карточка направления -->
+                    <div class="carousel-item bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
+                        <img src="png/novosibirsk.png" alt="Новосибирск" class="w-full h-50 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-semibold text-primary mb-2">Новосибирск</h3>
+                        <p class="text-gray-400">Крупнейший город Сибири с множеством достопримечательностей.</p>
                     </div>
                 </div>
             </div>
@@ -106,9 +140,9 @@
         <section class="py-16">
             <div class="max-w-6xl mx-auto px-4">
                 <h2 class="text-3xl font-bold text-primary text-center mb-8">Отзывы наших клиентов</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="carousel" id="reviewCarousel">
                     <!-- Отзыв 1 -->
-                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
+                    <div class="carousel-item bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
                         <p class="text-gray-400 mb-4">"Отличный сервис! Нашли подходящий отель по выгодной цене."</p>
                         <div class="flex items-center">
                             <img src="png/man.png" alt="Аватар" class="w-10 h-10 rounded-full mr-4">
@@ -119,13 +153,57 @@
                         </div>
                     </div>
                     <!-- Отзыв 2 -->
-                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
+                    <div class="carousel-item bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
                         <p class="text-gray-400 mb-4">"Очень удобный сайт. Все бронирования в одном месте."</p>
                         <div class="flex items-center">
                             <img src="png/woman.png" alt="Аватар" class="w-10 h-10 rounded-full mr-4">
                             <div>
                                 <h3 class="text-lg font-semibold text-primary">Мария Петрова</h3>
                                 <p class="text-sm text-gray-400">Санкт-Петербург</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Новый отзыв 3 -->
+                    <div class="carousel-item bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
+                        <p class="text-gray-400 mb-4">"Быстро и удобно. Рекомендую всем!"</p>
+                        <div class="flex items-center">
+                            <img src="png/man2.png" alt="Аватар" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-primary">Алексей Смирнов</h3>
+                                <p class="text-sm text-gray-400">Казань</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Новый отзыв 4 -->
+                    <div class="carousel-item bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
+                        <p class="text-gray-400 mb-4">"Отличный выбор отелей и хорошие цены."</p>
+                        <div class="flex items-center">
+                            <img src="png/woman2.png" alt="Аватар" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-primary">Ольга Кузнецова</h3>
+                                <p class="text-sm text-gray-400">Новосибирск</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Новый отзыв 5 -->
+                    <div class="carousel-item bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
+                        <p class="text-gray-400 mb-4">"Легко и быстро нашел нужный отель."</p>
+                        <div class="flex items-center">
+                            <img src="png/man3.png" alt="Аватар" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-primary">Дмитрий Иванов</h3>
+                                <p class="text-sm text-gray-400">Екатеринбург</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Новый отзыв 6 -->
+                    <div class="carousel-item bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
+                        <p class="text-gray-400 mb-4">"Отличный сервис и поддержка. Спасибо!"</p>
+                        <div class="flex items-center">
+                            <img src="png/woman3.png" alt="Аватар" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-primary">Елена Васильева</h3>
+                                <p class="text-sm text-gray-400">Ростов-на-Дону</p>
                             </div>
                         </div>
                     </div>
@@ -163,6 +241,39 @@
                     link.parentElement.classList.remove('hidden');
                 });
             }
+
+            // Листание карусели с помощью щелчка мыши
+            const carousels = document.querySelectorAll('.carousel');
+            carousels.forEach(carousel => {
+                let isDown = false;
+                let startX;
+                let scrollLeft;
+
+                carousel.addEventListener('mousedown', (e) => {
+                    isDown = true;
+                    carousel.classList.add('active');
+                    startX = e.pageX - carousel.offsetLeft;
+                    scrollLeft = carousel.scrollLeft;
+                });
+
+                carousel.addEventListener('mouseleave', () => {
+                    isDown = false;
+                    carousel.classList.remove('active');
+                });
+
+                carousel.addEventListener('mouseup', () => {
+                    isDown = false;
+                    carousel.classList.remove('active');
+                });
+
+                carousel.addEventListener('mousemove', (e) => {
+                    if (!isDown) return;
+                    e.preventDefault();
+                    const x = e.pageX - carousel.offsetLeft;
+                    const walk = (x - startX) * 2; // Ускорение прокрутки
+                    carousel.scrollLeft = scrollLeft - walk;
+                });
+            });
         });
 
         // Обработчик для выхода из системы
