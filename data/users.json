@@ -28,5 +28,17 @@
     "name": "анна",
     "email": "antonsymkin34446@gmail.com",
     "password": "$2a$10$mzoK9A7BpwvBNH7qjJjv1uQBpTmyPNfixtWeCu4TleBJCltbkr9tC"
+  },
+  {
+    "id": 6,
+    "name": "admin",
+    "email": "annaruabtseva050@gmail.com",
+    "password": "$2a$10$xyXgm9jVALXSdlse8nZQ/.xXL6GhS509hbjHtotYA6iVU2sOGXWxC"
+  },
+  {
+    "id": 7,
+    "name": "Andrey",
+    "email": "ondruusha@gmail.com",
+    "password": "$2a$10$1Q6aN1eIeRO.YT7Ho/TZu.nGCWmXii7EW6Ciq9byd05hvpHQK2xxm"
   }
 ]

@@ -27,11 +27,7 @@
             <ul class="flex gap-6" id="navMenu">
                 <li><a href="index.html" class="hover:text-secondary transition-colors">Главная</a></li>
                 <li><a href="search.html" class="hover:text-secondary transition-colors">Поиск отелей</a></li>
-                <li><a href="login.html" class="hover:text-secondary transition-colors">Вход</a></li>
-                <li><a href="register.html" class="hover:text-secondary transition-colors">Регистрация</a></li>
-                <!-- Вкладка личного кабинета (скрыта по умолчанию) -->
                 <li id="profileTab" class="hidden"><a href="profile.html" class="hover:text-secondary transition-colors">Личный кабинет</a></li>
-                <!-- Вкладка выхода (скрыта по умолчанию) -->
                 <li id="logoutTab" class="hidden"><a href="#" id="logoutLink" class="hover:text-secondary transition-colors">Выйти</a></li>
             </ul>
         </nav>
@@ -63,115 +59,91 @@
     </footer>
 
     <script>
-        // Проверка авторизации при загрузке страницы
         document.addEventListener('DOMContentLoaded', () => {
-            const sessionId = localStorage.getItem('sessionId'); // Проверяем наличие sessionId
+            const sessionId = localStorage.getItem('sessionId');
             const profileTab = document.getElementById('profileTab');
             const logoutTab = document.getElementById('logoutTab');
 
             if (sessionId) {
-                // Если пользователь авторизован, показываем вкладку личного кабинета и выхода
                 profileTab.classList.remove('hidden');
                 logoutTab.classList.remove('hidden');
-                // Скрываем вкладки "Вход" и "Регистрация"
-                document.querySelectorAll('#navMenu li a[href="login.html"], #navMenu li a[href="register.html"]').forEach(link => {
-                    link.parentElement.classList.add('hidden');
-                });
+                loadUserData();
+                loadBookings();
             } else {
-                // Если пользователь не авторизован, скрываем вкладку личного кабинета и выхода
                 profileTab.classList.add('hidden');
                 logoutTab.classList.add('hidden');
-                // Показываем вкладки "Вход" и "Регистрация"
-                document.querySelectorAll('#navMenu li a[href="login.html"], #navMenu li a[href="register.html"]').forEach(link => {
-                    link.parentElement.classList.remove('hidden');
-                });
-                // Перенаправляем на страницу входа
                 alert('Пожалуйста, войдите в систему.');
                 window.location.href = 'login.html';
             }
-        });
 
-        // Обработчик для выхода из системы
-        document.getElementById('logoutLink')?.addEventListener('click', async (e) => {
-            e.preventDefault(); // Предотвращаем переход по ссылке
-
-            try {
-                const response = await fetch('/logout', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': localStorage.getItem('sessionId'), // Используем sessionId
-                    },
-                });
-
-                if (response.ok) {
-                    localStorage.removeItem('sessionId'); // Удаляем sessionId из localStorage
-                    alert('Вы успешно вышли из системы.');
-                    window.location.href = 'index.html'; // Перенаправление на главную страницу
-                } else {
-                    alert('Ошибка при выходе из системы.');
+            document.getElementById('logoutLink')?.addEventListener('click', async (e) => {
+                e.preventDefault();
+                try {
+                    const response = await fetch('/logout', {
+                        method: 'POST',
+                        headers: { 'Authorization': sessionId },
+                    });
+                    if (response.ok) {
+                        localStorage.removeItem('sessionId');
+                        alert('Вы успешно вышли из системы.');
+                        window.location.href = 'index.html';
+                    } else {
+                        alert('Ошибка при выходе из системы.');
+                    }
+                } catch (error) {
+                    console.error('Ошибка при выходе:', error);
+                    alert('Произошла ошибка. Попробуйте снова.');
                 }
-            } catch (error) {
-                console.error('Ошибка при выходе:', error);
-                alert('Произошла ошибка. Попробуйте снова.');
-            }
+            });
         });
 
-        // Загрузка данных пользователя
         async function loadUserData() {
             try {
                 const response = await fetch('/api/user', {
                     method: 'GET',
-                    headers: {
-                        'Authorization': localStorage.getItem('sessionId'), // Используем sessionId
-                    },
+                    headers: { 'Authorization': localStorage.getItem('sessionId') },
                 });
-
-                if (!response.ok) {
+                if (response.ok) {
+                    const result = await response.json();
+                    document.getElementById('userName').textContent = `Имя: ${result.user.name}`;
+                    document.getElementById('userEmail').textContent = `Email: ${result.user.email}`;
+                } else {
                     alert('Ошибка при загрузке данных пользователя.');
-                    return;
                 }
-
-                const result = await response.json();
-                document.getElementById('userName').textContent = `Имя: ${result.user.name}`;
-                document.getElementById('userEmail').textContent = `Email: ${result.user.email}`;
             } catch (error) {
                 console.error('Ошибка при получении данных пользователя:', error);
                 alert('Произошла ошибка. Попробуйте снова.');
             }
         }
 
-        // Загрузка бронирований
         async function loadBookings() {
             try {
                 const response = await fetch('/api/bookings', {
                     method: 'GET',
-                    headers: {
-                        'Authorization': localStorage.getItem('sessionId'), // Используем sessionId
-                    },
+                    headers: { 'Authorization': localStorage.getItem('sessionId') },
                 });
+                if (response.ok) {
+                    const bookings = await response.json();
+                    const bookingsList = document.getElementById('bookingsList');
+                    bookingsList.innerHTML = '';
 
-                if (!response.ok) {
-                    alert('Ошибка при загрузке бронирований.');
-                    return;
-                }
-
-                const bookings = await response.json();
-                const bookingsList = document.getElementById('bookingsList');
-                bookingsList.innerHTML = ''; // Очищаем список
-
-                if (bookings.length === 0) {
-                    bookingsList.innerHTML = '<p class="text-center text-gray-400">У вас нет бронирований.</p>';
+                    if (bookings.length === 0) {
+                        bookingsList.innerHTML = '<p class="text-center text-gray-400">У вас нет бронирований.</p>';
+                    } else {
+                        bookings.forEach(booking => {
+                            const bookingItem = document.createElement('div');
+                            bookingItem.className = 'bg-[#222222] p-4 rounded-lg';
+                            bookingItem.innerHTML = `
+                                <p class="text-sm text-primary">Отель: ${booking.hotelName}</p>
+                                <p class="text-sm text-gray-400">Дата заезда: ${booking.checkInDate}</p>
+                                <p class="text-sm text-gray-400">Дата выезда: ${booking.checkOutDate}</p>
+                                <button class="bg-red-500 text-background py-2 px-4 rounded-full mt-4 hover:bg-red-600 transition-colors" onclick="cancelBooking(${booking.id})">Отменить бронирование</button>
+                            `;
+                            bookingsList.appendChild(bookingItem);
+                        });
+                    }
                 } else {
-                    bookings.forEach(booking => {
-                        const bookingItem = document.createElement('div');
-                        bookingItem.className = 'bg-[#222222] p-4 rounded-lg';
-                        bookingItem.innerHTML = `
-                            <p class="text-sm text-primary">Отель: ${booking.hotelName}</p>
-                            <p class="text-sm text-gray-400">Дата заезда: ${booking.checkInDate}</p>
-                            <p class="text-sm text-gray-400">Дата выезда: ${booking.checkOutDate}</p>
-                        `;
-                        bookingsList.appendChild(bookingItem);
-                    });
+                    alert('Ошибка при загрузке бронирований.');
                 }
             } catch (error) {
                 console.error('Ошибка при получении бронирований:', error);
@@ -179,9 +151,29 @@
             }
         }
 
-        // Загрузка данных при открытии страницы
-        loadUserData();
-        loadBookings();
+        async function cancelBooking(bookingId) {
+            const sessionId = localStorage.getItem('sessionId');
+            try {
+                const response = await fetch(`/api/bookings/${bookingId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': sessionId,
+                    },
+                });
+
+                if (response.ok) {
+                    alert('Бронирование успешно отменено!');
+                    // Обновляем список бронирований
+                    loadBookings();
+                } else {
+                    const errorData = await response.json();
+                    alert(`Ошибка при отмене бронирования: ${errorData.message}`);
+                }
+            } catch (error) {
+                console.error('Ошибка при отмене бронирования:', error);
+                alert('Произошла ошибка. Попробуйте снова.');
+            }
+        }
     </script>
 </body>
 </html>
