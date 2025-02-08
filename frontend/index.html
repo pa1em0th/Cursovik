@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Система бронирования гостиниц</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -14,6 +15,13 @@
                         secondary: '#FFC107',
                         background: '#121212',
                         text: '#f5f5f5',
+                        accent: '#FF6B6B',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        glow: '0 0 15px rgba(255, 215, 0, 0.5)',
                     },
                 },
             },
@@ -22,7 +30,7 @@
     <style>
         .carousel {
             display: flex;
-            overflow-x: auto;
+            overflow-x: hidden;
             scroll-behavior: smooth;
             gap: 2rem;
         }
@@ -40,11 +48,17 @@
                 min-width: calc(100% - 2rem);
             }
         }
+        .hover-glow:hover {
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #121212, #1E1E1E);
+        }
     </style>
 </head>
 <body class="bg-background text-text font-sans min-h-screen flex flex-col">
     <!-- Заголовок -->
-    <header class="bg-[#1E1E1E] text-primary py-4 px-6 shadow-md sticky top-0 z-50">
+    <header class="gradient-bg text-primary py-4 px-6 shadow-md sticky top-0 z-50">
         <nav class="flex justify-center items-center">
             <ul class="flex gap-6" id="navMenu">
                 <li><a href="index.html" class="hover:text-secondary transition-colors">Главная</a></li>
@@ -60,16 +74,17 @@
     <!-- Главная секция -->
     <main class="flex-grow">
         <!-- Герой-секция -->
-        <section class="bg-[url('https://via.placeholder.com/1920x600')] bg-cover bg-center py-32 text-center">
-            <div class="max-w-4xl mx-auto px-4">
+        <section class="bg-[url('png/hotel_footer.png')] bg-cover bg-center py-32 text-center relative">
+            <div class="absolute inset-0 bg-black/50"></div>
+            <div class="max-w-4xl mx-auto px-4 relative z-10">
                 <h1 class="text-5xl font-bold text-primary mb-6">Бронируйте номера в лучших отелях!</h1>
                 <p class="text-lg text-gray-300 mb-8">Удобная система поиска и бронирования мест в гостиницах по всему миру.</p>
-                <a href="search.html" class="bg-primary hover:bg-secondary text-background py-3 px-6 rounded-full font-bold transition-colors">Начать поиск</a>
+                <a href="search.html" class="bg-primary hover:bg-secondary text-background py-3 px-6 rounded-full font-bold transition-colors hover-glow">Начать поиск</a>
             </div>
         </section>
 
         <!-- Популярные направления -->
-        <section class="py-16">
+        <section class="py-16 gradient-bg">
             <div class="max-w-6xl mx-auto px-4">
                 <h2 class="text-3xl font-bold text-primary text-center mb-8">Популярные направления</h2>
                 <div class="carousel" id="cityCarousel">
@@ -102,32 +117,92 @@
             </div>
         </section>
 
-        <!-- Преимущества -->
-        <section class="bg-[#1E1E1E] py-16">
+        <!-- Акции и спецпредложения -->
+        <section class="py-16">
             <div class="max-w-6xl mx-auto px-4">
-                <h2 class="text-3xl font-bold text-primary text-center mb-8">Почему выбирают нас?</h2>
+                <h2 class="text-3xl font-bold text-primary text-center mb-8">Акции и спецпредложения</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="text-center">
-                        <div class="text-4xl text-primary mb-4">🏨</div>
-                        <h3 class="text-xl font-semibold text-primary mb-2">Широкий выбор отелей</h3>
-                        <p class="text-gray-400">Более 10 000 отелей по всему миру.</p>
+                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg hover-glow">
+                        <img src="https://via.placeholder.com/400x200" alt="Акция 1" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-semibold text-primary mb-2">Скидка 20% на отели в Москве</h3>
+                        <p class="text-gray-400">Только до конца месяца! Успейте забронировать.</p>
                     </div>
-                    <div class="text-center">
-                        <div class="text-4xl text-primary mb-4">💳</div>
-                        <h3 class="text-xl font-semibold text-primary mb-2">Безопасная оплата</h3>
-                        <p class="text-gray-400">Гарантия безопасности ваших платежей.</p>
+                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg hover-glow">
+                        <img src="https://via.placeholder.com/400x200" alt="Акция 2" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-semibold text-primary mb-2">Бесплатный завтрак в Сочи</h3>
+                        <p class="text-gray-400">Забронируйте номер на 3 ночи и получите завтрак в подарок.</p>
                     </div>
-                    <div class="text-center">
-                        <div class="text-4xl text-primary mb-4">📞</div>
-                        <h3 class="text-xl font-semibold text-primary mb-2">Поддержка 24/7</h3>
-                        <p class="text-gray-400">Мы всегда готовы помочь вам.</p>
+                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg hover-glow">
+                        <img src="https://via.placeholder.com/400x200" alt="Акция 3" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-semibold text-primary mb-2">Скидка 15% на раннее бронирование</h3>
+                        <p class="text-gray-400">Забронируйте заранее и получите скидку.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Популярные отели -->
+        <section class="py-16 gradient-bg">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-primary text-center mb-8">Популярные отели</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg hover-glow">
+                        <img src="png/hotel1.png" alt="Отель 1" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-semibold text-primary mb-2">Отель «Люкс»</h3>
+                        <p class="text-gray-400">5-звездочный отель в центре Москвы.</p>
+                        <div class="flex items-center mt-4">
+                            <span class="text-yellow-400">★★★★★</span>
+                            <span class="text-gray-400 ml-2">(4.9/5)</span>
+                        </div>
+                    </div>
+                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg hover-glow">
+                        <img src="png/hotel2.png" alt="Отель 2" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-semibold text-primary mb-2">Отель «Морской бриз»</h3>
+                        <p class="text-gray-400">4-звездочный отель в Сочи с видом на море.</p>
+                        <div class="flex items-center mt-4">
+                            <span class="text-yellow-400">★★★★☆</span>
+                            <span class="text-gray-400 ml-2">(4.5/5)</span>
+                        </div>
+                    </div>
+                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg hover-glow">
+                        <img src="png/hotel3.png" alt="Отель 3" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-semibold text-primary mb-2">Отель «Северное сияние»</h3>
+                        <p class="text-gray-400">5-звездочный отель в Санкт-Петербурге.</p>
+                        <div class="flex items-center mt-4">
+                            <span class="text-yellow-400">★★★★★</span>
+                            <span class="text-gray-400 ml-2">(4.8/5)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Блог -->
+        <section class="py-16">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-primary text-center mb-8">Полезные статьи</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg hover-glow">
+                        <img src="https://via.placeholder.com/400x200" alt="Статья 1" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-semibold text-primary mb-2">Как выбрать отель?</h3>
+                        <p class="text-gray-400">Советы по выбору отеля для комфортного отдыха.</p>
+                    </div>
+                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg hover-glow">
+                        <img src="https://via.placeholder.com/400x200" alt="Статья 2" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-semibold text-primary mb-2">Топ-10 отелей России</h3>
+                        <p class="text-gray-400">Лучшие отели по версии наших клиентов.</p>
+                    </div>
+                    <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg hover-glow">
+                        <img src="https://via.placeholder.com/400x200" alt="Статья 3" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <h3 class="text-xl font-semibold text-primary mb-2">Как сэкономить на бронировании?</h3>
+                        <p class="text-gray-400">Полезные советы для экономии на отелях.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Отзывы клиентов -->
-        <section class="py-16">
+        <section class="py-16 gradient-bg">
             <div class="max-w-6xl mx-auto px-4">
                 <h2 class="text-3xl font-bold text-primary text-center mb-8">Отзывы наших клиентов</h2>
                 <div class="carousel" id="reviewCarousel">
@@ -197,7 +272,7 @@
     </main>
 
     <!-- Подвал -->
-    <footer class="bg-background text-primary py-4 mt-auto text-center">
+    <footer class="gradient-bg text-primary py-4 mt-auto text-center">
         <p>&copy; 2025 Система бронирования гостиниц</p>
     </footer>
 
@@ -283,6 +358,24 @@
                     alert('Произошла ошибка. Попробуйте снова.');
                 }
             });
+
+            // Автоматическая прокрутка слайдера
+            function autoScrollCarousel(carouselId, itemsToScroll, interval) {
+                const carousel = document.getElementById(carouselId);
+                const items = carousel.querySelectorAll('.carousel-item');
+                let currentIndex = 0;
+
+                setInterval(() => {
+                    currentIndex = (currentIndex + itemsToScroll) % items.length;
+                    carousel.scrollTo({
+                        left: currentIndex * (items[0].offsetWidth + 32), // 32 - это gap между элементами
+                        behavior: 'smooth'
+                    });
+                }, interval);
+            }
+
+            autoScrollCarousel('cityCarousel', 3, 3000);
+            autoScrollCarousel('reviewCarousel', 3, 3000);
         });
     </script>
 </body>
