@@ -135,5 +135,36 @@
             </div>
         </div>
     </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const sessionId = localStorage.getItem('sessionId');
+
+    if (!sessionId) {
+        // Если пользователь не авторизован, перенаправляем на страницу входа
+        window.location.href = 'login.html';
+    } else {
+        // Если пользователь авторизован, загружаем контент страницы
+        fetch('/api/user', {
+            headers: {
+                'Authorization': sessionId,
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Неавторизованный доступ');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Пользователь авторизован, можно отобразить контент
+                console.log('Пользователь авторизован:', data.user);
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                window.location.href = 'login.html'; // Перенаправляем на страницу входа
+            });
+    }
+});
+    </script>
 </body>
 </html>

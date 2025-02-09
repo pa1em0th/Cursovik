@@ -251,6 +251,17 @@ app.delete('/api/bookings/:bookingId', authenticateUser, (req, res) => {
     }
 });
 
+// Маршрут для страницы "Полезные статьи"
+app.get('/articles', authenticateUser, (req, res) => {
+    try {
+        // Отправляем HTML-страницу
+        res.sendFile(path.join(__dirname, '../frontend/articles.html'));
+    } catch (error) {
+        console.error('Ошибка при загрузке страницы статей:', error);
+        res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
+
 // Запуск сервера
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
