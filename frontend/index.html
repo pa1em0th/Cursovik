@@ -6,6 +6,7 @@
     <title>Система бронирования гостиниц</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -57,18 +58,38 @@
     </style>
 </head>
 <body class="bg-background text-text font-sans min-h-screen flex flex-col">
-    <!-- Заголовок -->
+    <!-- Шапка -->
     <header class="gradient-bg text-primary py-4 px-6 shadow-md sticky top-0 z-50">
-        <nav class="flex justify-center items-center">
-            <ul class="flex gap-6" id="navMenu">
-                <li><a href="index.html" class="hover:text-secondary transition-colors">Главная</a></li>
-                <li><a href="search.html" class="hover:text-secondary transition-colors">Поиск отелей</a></li>
-                <li><a href="login.html" class="hover:text-secondary transition-colors">Вход</a></li>
-                <li><a href="register.html" class="hover:text-secondary transition-colors">Регистрация</a></li>
-                <li id="profileTab" class="hidden"><a href="profile.html" class="hover:text-secondary transition-colors">Личный кабинет</a></li>
-                <li id="logoutTab" class="hidden"><a href="#" id="logoutLink" class="hover:text-secondary transition-colors">Выйти</a></li>
-            </ul>
-        </nav>
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <!-- Логотип -->
+            <div class="flex items-center">
+                <img src="png/logo.png" alt="Логотип" class="w-10 h-10 mr-4">
+                <span class="text-xl font-bold">Hotel Booking</span>
+            </div>
+            <!-- Навигация -->
+            <nav>
+                <ul class="flex gap-6" id="navMenu">
+                    <li><a href="index.html" class="hover:text-secondary transition-colors">Главная</a></li>
+                    <li><a href="search.html" class="hover:text-secondary transition-colors">Поиск отелей</a></li>
+                    <li><a href="login.html" class="hover:text-secondary transition-colors">Вход</a></li>
+                    <li><a href="register.html" class="hover:text-secondary transition-colors">Регистрация</a></li>
+                    <li id="profileTab" class="hidden"><a href="profile.html" class="hover:text-secondary transition-colors">Личный кабинет</a></li>
+                    <li id="logoutTab" class="hidden"><a href="#" id="logoutLink" class="hover:text-secondary transition-colors">Выйти</a></li>
+                </ul>
+            </nav>
+            <!-- Иконки соцсетей -->
+            <div class="flex gap-4">
+                <a href="#" class="text-primary hover:text-secondary transition-colors">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="text-primary hover:text-secondary transition-colors">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="text-primary hover:text-secondary transition-colors">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+        </div>
     </header>
 
     <!-- Главная секция -->
@@ -147,7 +168,7 @@
                 <h2 class="text-3xl font-bold text-primary text-center mb-8">Популярные отели</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg hover-glow">
-                        <img src="png/hotel1.png" alt="Отель 1" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <img src="https://via.placeholder.com/400x200" alt="Отель 1" class="w-full h-40 object-cover rounded-lg mb-4">
                         <h3 class="text-xl font-semibold text-primary mb-2">Отель «Люкс»</h3>
                         <p class="text-gray-400">5-звездочный отель в центре Москвы.</p>
                         <div class="flex items-center mt-4">
@@ -156,7 +177,7 @@
                         </div>
                     </div>
                     <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg hover-glow">
-                        <img src="png/hotel2.png" alt="Отель 2" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <img src="https://via.placeholder.com/400x200" alt="Отель 2" class="w-full h-40 object-cover rounded-lg mb-4">
                         <h3 class="text-xl font-semibold text-primary mb-2">Отель «Морской бриз»</h3>
                         <p class="text-gray-400">4-звездочный отель в Сочи с видом на море.</p>
                         <div class="flex items-center mt-4">
@@ -165,7 +186,7 @@
                         </div>
                     </div>
                     <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg hover-glow">
-                        <img src="png/hotel3.png" alt="Отель 3" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <img src="https://via.placeholder.com/400x200" alt="Отель 3" class="w-full h-40 object-cover rounded-lg mb-4">
                         <h3 class="text-xl font-semibold text-primary mb-2">Отель «Северное сияние»</h3>
                         <p class="text-gray-400">5-звездочный отель в Санкт-Петербурге.</p>
                         <div class="flex items-center mt-4">
@@ -183,17 +204,17 @@
                 <h2 class="text-3xl font-bold text-primary text-center mb-8">Полезные статьи</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg hover-glow">
-                        <img src="https://via.placeholder.com/400x200" alt="Статья 1" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <img src="png/st1.png" alt="Статья 1" class="w-full h-70 object-cover rounded-lg mb-4">
                         <h3 class="text-xl font-semibold text-primary mb-2">Как выбрать отель?</h3>
                         <p class="text-gray-400">Советы по выбору отеля для комфортного отдыха.</p>
                     </div>
                     <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg hover-glow">
-                        <img src="https://via.placeholder.com/400x200" alt="Статья 2" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <img src="png/st3.png" alt="Статья 2" class="w-full h-70 object-cover rounded-lg mb-4">
                         <h3 class="text-xl font-semibold text-primary mb-2">Топ-10 отелей России</h3>
                         <p class="text-gray-400">Лучшие отели по версии наших клиентов.</p>
                     </div>
                     <div class="bg-[#1E1E1E] p-6 rounded-lg shadow-lg hover-glow">
-                        <img src="https://via.placeholder.com/400x200" alt="Статья 3" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <img src="png/st2.png" alt="Статья 3" class="w-full h-70 object-cover rounded-lg mb-4">
                         <h3 class="text-xl font-semibold text-primary mb-2">Как сэкономить на бронировании?</h3>
                         <p class="text-gray-400">Полезные советы для экономии на отелях.</p>
                     </div>
@@ -272,8 +293,47 @@
     </main>
 
     <!-- Подвал -->
-    <footer class="gradient-bg text-primary py-4 mt-auto text-center">
-        <p>&copy; 2025 Система бронирования гостиниц</p>
+    <footer class="gradient-bg text-primary py-8 mt-auto">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Логотип и описание -->
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="png/logo.png" alt="Логотип" class="w-10 h-10 mr-4">
+                        <span class="text-xl font-bold">Hotel Booking</span>
+                    </div>
+                    <p class="text-gray-400">Удобная система бронирования отелей по всему миру. Найдите идеальный отель для вашего отдыха.</p>
+                </div>
+                <!-- Навигация -->
+                <div>
+                    <h3 class="text-xl font-semibold text-primary mb-4">Навигация</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-secondary transition-colors">Главная</a></li>
+                        <li><a href="search.html" class="text-gray-400 hover:text-secondary transition-colors">Поиск отелей</a></li>
+                        <li><a href="login.html" class="text-gray-400 hover:text-secondary transition-colors">Вход</a></li>
+                        <li><a href="register.html" class="text-gray-400 hover:text-secondary transition-colors">Регистрация</a></li>
+                    </ul>
+                </div>
+                <!-- Соцсети -->
+                <div>
+                    <h3 class="text-xl font-semibold text-primary mb-4">Социальные сети</h3>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-primary hover:text-secondary transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-primary hover:text-secondary transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-primary hover:text-secondary transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 Система бронирования гостиниц. Все права защищены.</p>
+            </div>
+        </div>
     </footer>
 
     <script>
