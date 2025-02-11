@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Личный кабинет</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -14,48 +16,142 @@
                         secondary: '#FFC107',
                         background: '#121212',
                         text: '#f5f5f5',
+                        accent: '#FF6B6B',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        glow: '0 0 15px rgba(255, 215, 0, 0.5)',
                     },
                 },
             },
         }
     </script>
+    <style>
+        .nav-bg {
+            background-color: #1E1E1E; /* Непрозрачный фон для навигации */
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #121212, #1E1E1E);
+        }
+        .hover-glow:hover {
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+        .tab-active {
+            border-bottom: 2px solid #FFD700;
+            color: #FFD700;
+        }
+    </style>
 </head>
 <body class="bg-background text-text font-sans min-h-screen flex flex-col">
-    <!-- Заголовок -->
-    <header class="bg-[#1E1E1E] text-primary py-4 px-6 shadow-md sticky top-0 z-50">
-        <nav class="flex justify-center items-center">
-            <ul class="flex gap-6" id="navMenu">
-                <li><a href="index.html" class="hover:text-secondary transition-colors">Главная</a></li>
-                <li><a href="search.html" class="hover:text-secondary transition-colors">Поиск отелей</a></li>
-                <li id="profileTab" class="hidden"><a href="profile.html" class="hover:text-secondary transition-colors">Личный кабинет</a></li>
-                <li id="logoutTab" class="hidden"><a href="#" id="logoutLink" class="hover:text-secondary transition-colors">Выйти</a></li>
-            </ul>
-        </nav>
+    <!-- Шапка -->
+    <header class="gradient-bg text-primary py-4 px-6 shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <!-- Логотип -->
+            <div class="flex items-center">
+                <img src="png/logo.png" alt="Логотип" class="w-10 h-10 mr-4">
+                <span class="text-xl font-bold">Hotel Booking</span>
+            </div>
+            <!-- Навигация -->
+            <nav>
+                <ul class="flex gap-6" id="navMenu">
+                    <li><a href="index.html" class="hover:text-secondary transition-colors">Главная</a></li>
+                    <li><a href="search.html" class="hover:text-secondary transition-colors">Поиск отелей</a></li>
+                    <li><a href="articles.html" class="hover:text-secondary transition-colors">Полезные статьи</a></li>
+                    <li id="profileTab" class="hidden"><a href="profile.html" class="hover:text-secondary transition-colors">Личный кабинет</a></li>
+                    <li id="logoutTab" class="hidden"><a href="#" id="logoutLink" class="hover:text-secondary transition-colors">Выйти</a></li>
+                </ul>
+            </nav>
+            <!-- Иконки соцсетей -->
+            <div class="flex gap-4">
+                <a href="#" class="text-primary hover:text-secondary transition-colors">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="text-primary hover:text-secondary transition-colors">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="text-primary hover:text-secondary transition-colors">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+        </div>
     </header>
 
-    <!-- Личный кабинет -->
-    <main class="flex-grow px-4 py-8">
-        <section class="max-w-4xl mx-auto bg-[#1E1E1E] p-8 rounded-lg shadow-lg">
+    <!-- Основной контент -->
+    <main class="flex-grow flex flex-col items-center">
+        <!-- Герой-секция -->
+        <section class="bg-[url('png/profile_shapka.png')] bg-cover bg-center py-32 text-center relative w-full">
+            <div class="absolute inset-0 bg-black/50"></div>
+            <div class="max-w-4xl mx-auto px-4 relative z-10">
+                <h1 class="text-5xl font-bold text-primary mb-6">Личный кабинет</h1>
+                <p class="text-lg text-gray-300 mb-8">Управляйте своими бронированиями и личной информацией.</p>
+            </div>
+        </section>
+
+        <!-- Личный кабинет -->
+        <section class="max-w-4xl w-full bg-[#1E1E1E] p-8 rounded-lg shadow-lg mt-8 mb-16">
             <h2 class="text-2xl font-bold text-primary text-center mb-6">Личный кабинет</h2>
-            <div class="space-y-4">
-                <div>
-                    <h3 class="text-lg font-semibold text-primary">Мои данные</h3>
-                    <p id="userName" class="text-gray-400">Имя: Загрузка...</p>
-                    <p id="userEmail" class="text-gray-400">Email: Загрузка...</p>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold text-primary">Мои бронирования</h3>
-                    <div id="bookingsList" class="space-y-4">
-                        <p class="text-center text-gray-400">Загрузка бронирований...</p>
-                    </div>
+            <div class="flex justify-center border-b border-gray-700 mb-4">
+                <button id="userDataTab" class="tab-active px-4 py-2 text-lg font-semibold">Мои данные</button>
+                <button id="bookingsTab" class="px-4 py-2 text-lg font-semibold text-gray-400">Мои бронирования</button>
+            </div>
+            <div id="userDataContent" class="text-center">
+                <h3 class="text-lg font-semibold text-primary">Мои данные</h3>
+                <p id="userName" class="text-gray-400">Имя: Загрузка...</p>
+                <p id="userEmail" class="text-gray-400">Email: Загрузка...</p>
+            </div>
+            <div id="bookingsContent" class="hidden text-center">
+                <h3 class="text-lg font-semibold text-primary">Мои бронирования</h3>
+                <div id="bookingsList" class="space-y-4">
+                    <p class="text-center text-gray-400">Загрузка бронирований...</p>
                 </div>
             </div>
         </section>
     </main>
 
     <!-- Подвал -->
-    <footer class="bg-background text-primary py-4 mt-auto text-center">
-        <p>&copy; 2025 Система бронирования гостиниц</p>
+    <footer class="gradient-bg text-primary py-8 mt-auto">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Логотип и описание -->
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="png/logo.png" alt="Логотип" class="w-10 h-10 mr-4">
+                        <span class="text-xl font-bold">Hotel Booking</span>
+                    </div>
+                    <p class="text-gray-400">Удобная система бронирования отелей по всему миру. Найдите идеальный отель для вашего отдыха.</p>
+                </div>
+                <!-- Навигация -->
+                <div>
+                    <h3 class="text-xl font-semibold text-primary mb-4">Навигация</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-secondary transition-colors">Главная</a></li>
+                        <li><a href="search.html" class="text-gray-400 hover:text-secondary transition-colors">Поиск отелей</a></li>
+                        <li><a href="login.html" class="text-gray-400 hover:text-secondary transition-colors">Вход</a></li>
+                        <li><a href="register.html" class="text-gray-400 hover:text-secondary transition-colors">Регистрация</a></li>
+                    </ul>
+                </div>
+                <!-- Соцсети -->
+                <div>
+                    <h3 class="text-xl font-semibold text-primary mb-4">Социальные сети</h3>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-primary hover:text-secondary transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-primary hover:text-secondary transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-primary hover:text-secondary transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 Система бронирования гостиниц. Все права защищены.</p>
+            </div>
+        </div>
     </footer>
 
     <script>
@@ -63,6 +159,10 @@
             const sessionId = localStorage.getItem('sessionId');
             const profileTab = document.getElementById('profileTab');
             const logoutTab = document.getElementById('logoutTab');
+            const userDataTab = document.getElementById('userDataTab');
+            const bookingsTab = document.getElementById('bookingsTab');
+            const userDataContent = document.getElementById('userDataContent');
+            const bookingsContent = document.getElementById('bookingsContent');
 
             if (sessionId) {
                 profileTab.classList.remove('hidden');
@@ -75,6 +175,20 @@
                 alert('Пожалуйста, войдите в систему.');
                 window.location.href = 'login.html';
             }
+
+            userDataTab.addEventListener('click', () => {
+                userDataTab.classList.add('tab-active');
+                bookingsTab.classList.remove('tab-active');
+                userDataContent.classList.remove('hidden');
+                bookingsContent.classList.add('hidden');
+            });
+
+            bookingsTab.addEventListener('click', () => {
+                bookingsTab.classList.add('tab-active');
+                userDataTab.classList.remove('tab-active');
+                bookingsContent.classList.remove('hidden');
+                userDataContent.classList.add('hidden');
+            });
 
             document.getElementById('logoutLink')?.addEventListener('click', async (e) => {
                 e.preventDefault();

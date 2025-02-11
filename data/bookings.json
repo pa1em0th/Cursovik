@@ -19,5 +19,12 @@
     "hotelId": 4,
     "checkInDate": "2025-02-07",
     "checkOutDate": "2025-02-08"
+  },
+  {
+    "id": 4,
+    "userId": 4,
+    "hotelId": 1,
+    "checkInDate": "2025-02-11",
+    "checkOutDate": "2025-02-12"
   }
 ]

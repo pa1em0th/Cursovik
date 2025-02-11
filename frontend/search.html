@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Каталог отелей</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -14,6 +16,13 @@
                         secondary: '#FFC107',
                         background: '#121212',
                         text: '#f5f5f5',
+                        accent: '#FF6B6B',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        glow: '0 0 15px rgba(255, 215, 0, 0.5)',
                     },
                 },
             },
@@ -25,22 +34,62 @@
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 1rem;
         }
+        .nav-bg {
+            background-color: #1E1E1E; /* Непрозрачный фон для навигации */
+        }
+        .header-image {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body class="bg-background text-text font-sans min-h-screen flex flex-col">
-    <!-- Заголовок -->
-    <header class="bg-[#1E1E1E] text-primary py-4 px-6 shadow-md sticky top-0 z-50">
-        <nav class="flex justify-center items-center">
-            <ul class="flex gap-6" id="navMenu">
-                <li><a href="index.html" class="hover:text-secondary transition-colors">Главная</a></li>
-                <li><a href="catalog.html" class="hover:text-secondary transition-colors">Каталог отелей</a></li>
-                <li><a href="login.html" class="hover:text-secondary transition-colors">Вход</a></li>
-                <li><a href="register.html" class="hover:text-secondary transition-colors">Регистрация</a></li>
-                <li id="profileTab" class="hidden"><a href="profile.html" class="hover:text-secondary transition-colors">Личный кабинет</a></li>
-                <li id="logoutTab" class="hidden"><a href="#" id="logoutLink" class="hover:text-secondary transition-colors">Выйти</a></li>
-            </ul>
-        </nav>
+    <!-- Шапка -->
+    <header class="nav-bg text-primary py-4 px-6 shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center bg-[#1E1E1E]">
+            <!-- Логотип -->
+            <div class="flex items-center">
+                <img src="png/logo.png" alt="Логотип" class="w-10 h-10 mr-4">
+                <span class="text-xl font-bold">Hotel Booking</span>
+            </div>
+            <!-- Навигация -->
+            <nav>
+                <ul class="flex gap-6" id="navMenu">
+                    <li><a href="index.html" class="hover:text-secondary transition-colors">Главная</a></li>
+                    <li><a href="search.html" class="hover:text-secondary transition-colors">Поиск отелей</a></li>
+                    <li><a href="articles.html" class="hover:text-secondary transition-colors">Полезные статьи</a></li>
+                    <li><a href="login.html" class="hover:text-secondary transition-colors">Вход</a></li>
+                    <li><a href="register.html" class="hover:text-secondary transition-colors">Регистрация</a></li>
+                    <li id="profileTab" class="hidden"><a href="profile.html" class="hover:text-secondary transition-colors">Личный кабинет</a></li>
+                    <li id="logoutTab" class="hidden"><a href="#" id="logoutLink" class="hover:text-secondary transition-colors">Выйти</a></li>
+                </ul>
+            </nav>
+            <!-- Иконки соцсетей -->
+            <div class="flex gap-4">
+                <a href="#" class="text-primary hover:text-secondary transition-colors">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="text-primary hover:text-secondary transition-colors">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="text-primary hover:text-secondary transition-colors">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+        </div>
     </header>
+
+     <!-- Основной контент -->
+     <main class="flex-grow">
+        <!-- Герой-секция -->
+        <section class="bg-[url('png/search_shapka.png')] bg-cover bg-center py-32 text-center relative">
+            <div class="absolute inset-0 bg-black/50"></div>
+            <div class="max-w-4xl mx-auto px-4 relative z-10">
+                <h1 class="text-5xl font-bold text-primary mb-6">Каталог отелей</h1>
+                <p class="text-lg text-gray-300 mb-8">Найдите идеальный отель для вашего отдыха.</p>
+            </div>
+        </section>
 
     <!-- Каталог отелей -->
     <main class="flex-grow px-4 py-8">
@@ -69,118 +118,92 @@
     </main>
 
     <!-- Подвал -->
-    <footer class="bg-background text-primary py-4 mt-auto text-center">
-        <p>&copy; 2025 Система бронирования гостиниц</p>
+    <footer class="gradient-bg text-primary py-8 mt-auto">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Логотип и описание -->
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="png/logo.png" alt="Логотип" class="w-10 h-10 mr-4">
+                        <span class="text-xl font-bold">Hotel Booking</span>
+                    </div>
+                    <p class="text-gray-400">Удобная система бронирования отелей по всему миру. Найдите идеальный отель для вашего отдыха.</p>
+                </div>
+                <!-- Навигация -->
+                <div>
+                    <h3 class="text-xl font-semibold text-primary mb-4">Навигация</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-secondary transition-colors">Главная</a></li>
+                        <li><a href="search.html" class="text-gray-400 hover:text-secondary transition-colors">Поиск отелей</a></li>
+                        <li><a href="login.html" class="text-gray-400 hover:text-secondary transition-colors">Вход</a></li>
+                        <li><a href="register.html" class="text-gray-400 hover:text-secondary transition-colors">Регистрация</a></li>
+                    </ul>
+                </div>
+                <!-- Соцсети -->
+                <div>
+                    <h3 class="text-xl font-semibold text-primary mb-4">Социальные сети</h3>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-primary hover:text-secondary transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-primary hover:text-secondary transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-primary hover:text-secondary transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 Система бронирования гостиниц. Все права защищены.</p>
+            </div>
+        </div>
     </footer>
 
     <script>
-        // Объявляем функцию bookHotel в глобальной области видимости
         async function bookHotel(hotelId) {
-    const sessionId = localStorage.getItem('sessionId');
-    try {
-        const response = await fetch('http://localhost:5000/api/bookings', {
-            method: 'POST', // Убедитесь, что используется POST
-            headers: {
-                'Authorization': sessionId,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ hotelId }),
-        });
+            const sessionId = localStorage.getItem('sessionId');
+            try {
+                const response = await fetch('http://localhost:5000/api/bookings', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': sessionId,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ hotelId }),
+                });
 
-        if (response.ok) {
-            alert('Отель успешно забронирован!');
-            window.location.href = 'profile.html';
-        } else {
-            const errorData = await response.json();
-            alert(`Ошибка при бронировании: ${errorData.message}`);
+                if (response.ok) {
+                    alert('Отель успешно забронирован!');
+                    window.location.href = 'profile.html';
+                } else {
+                    const errorData = await response.json();
+                    alert(`Ошибка при бронировании: ${errorData.message}`);
+                }
+            } catch (error) {
+                console.error('Ошибка при бронировании:', error);
+                alert('Произошла ошибка. Попробуйте снова.');
+            }
         }
-    } catch (error) {
-        console.error('Ошибка при бронировании:', error);
-        alert('Произошла ошибка. Попробуйте снова.');
-    }
-}
 
         document.addEventListener('DOMContentLoaded', () => {
-            console.log("DOM fully loaded and parsed");
-
             const sessionId = localStorage.getItem('sessionId');
             const profileTab = document.getElementById('profileTab');
             const logoutTab = document.getElementById('logoutTab');
 
             let hotels = [
-                {
-                    "id": 1,
-                    "name": "Hotel Hilton",
-                    "location": "Moscow, Russia",
-                    "pricePerNight": 5000,
-                    "image": "png/hotel1.png"
-                },
-                {
-                    "id": 2,
-                    "name": "Hotel Marriott",
-                    "location": "St. Petersburg, Russia",
-                    "pricePerNight": 6000,
-                    "image": "png/hotel2.png"
-                },
-                {
-                    "id": 3,
-                    "name": "Hotel Ritz-Carlton",
-                    "location": "Novosibirsk, Russia",
-                    "pricePerNight": 7000,
-                    "image": "png/hotel3.png"
-                },
-                {
-                    "id": 4,
-                    "name": "Hotel Four Seasons",
-                    "location": "Kazan, Russia",
-                    "pricePerNight": 8000,
-                    "image": "png/hotel4.png"
-                },
-                {
-                    "id": 5,
-                    "name": "Hotel Hyatt",
-                    "location": "Ekaterinburg, Russia",
-                    "pricePerNight": 6500,
-                    "image": "png/hotel5.png"
-                },
-                {
-                    "id": 6,
-                    "name": "Hotel InterContinental",
-                    "location": "Nizhny Novgorod, Russia",
-                    "pricePerNight": 7500,
-                    "image": "png/hotel6.png"
-                },
-                {
-                    "id": 7,
-                    "name": "Hotel Sheraton",
-                    "location": "Samara, Russia",
-                    "pricePerNight": 5500,
-                    "image": "png/hotel7.png"
-                },
-                {
-                    "id": 8,
-                    "name": "Hotel Radisson Blu",
-                    "location": "Rostov-on-Don, Russia",
-                    "pricePerNight": 6200,
-                    "image": "png/hotel8.png"
-                },
-                {
-                    "id": 9,
-                    "name": "Hotel Crowne Plaza",
-                    "location": "Krasnodar, Russia",
-                    "pricePerNight": 5800,
-                    "image": "png/hotel9.png"
-                },
-                {
-                    "id": 10,
-                    "name": "Hotel Holiday Inn",
-                    "location": "Voronezh, Russia",
-                    "pricePerNight": 5200,
-                    "image": "png/hotel10.png"
-                }
+                { "id": 1, "name": "Hotel Hilton", "location": "Moscow, Russia", "pricePerNight": 5000, "image": "png/hotel1.png" },
+                { "id": 2, "name": "Hotel Marriott", "location": "St. Petersburg, Russia", "pricePerNight": 6000, "image": "png/hotel2.png" },
+                { "id": 3, "name": "Hotel Ritz-Carlton", "location": "Novosibirsk, Russia", "pricePerNight": 7000, "image": "png/hotel3.png" },
+                { "id": 4, "name": "Hotel Four Seasons", "location": "Kazan, Russia", "pricePerNight": 8000, "image": "png/hotel4.png" },
+                { "id": 5, "name": "Hotel Hyatt", "location": "Ekaterinburg, Russia", "pricePerNight": 6500, "image": "png/hotel5.png" },
+                { "id": 6, "name": "Hotel InterContinental", "location": "Nizhny Novgorod, Russia", "pricePerNight": 7500, "image": "png/hotel6.png" },
+                { "id": 7, "name": "Hotel Sheraton", "location": "Samara, Russia", "pricePerNight": 5500, "image": "png/hotel7.png" },
+                { "id": 8, "name": "Hotel Radisson Blu", "location": "Rostov-on-Don, Russia", "pricePerNight": 6200, "image": "png/hotel8.png" },
+                { "id": 9, "name": "Hotel Crowne Plaza", "location": "Krasnodar, Russia", "pricePerNight": 5800, "image": "png/hotel9.png" },
+                { "id": 10, "name": "Hotel Holiday Inn", "location": "Voronezh, Russia", "pricePerNight": 5200, "image": "png/hotel10.png" }
             ];
-
-            console.log("Hotels data:", hotels);
 
             if (sessionId) {
                 profileTab.classList.remove('hidden');
@@ -188,7 +211,7 @@
                 document.querySelectorAll('#navMenu li a[href="login.html"], #navMenu li a[href="register.html"]').forEach(link => {
                     link.parentElement.classList.add('hidden');
                 });
-                loadHotels(); // Загрузка списка отелей
+                loadHotels();
             } else {
                 profileTab.classList.add('hidden');
                 logoutTab.classList.add('hidden');
@@ -233,17 +256,11 @@
             });
 
             function loadHotels() {
-                console.log("Loading hotels...");
                 displayHotels(hotels);
             }
 
             function displayHotels(hotelsToDisplay) {
-                console.log("Displaying hotels:", hotelsToDisplay);
                 const hotelList = document.getElementById('hotelList');
-                if (!hotelList) {
-                    console.error("Element with id 'hotelList' not found.");
-                    return;
-                }
                 hotelList.innerHTML = '';
 
                 hotelsToDisplay.forEach(hotel => {
