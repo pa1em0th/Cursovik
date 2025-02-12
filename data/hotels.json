@@ -12,5 +12,61 @@
         "location": "St. Petersburg, Russia",
         "pricePerNight": 6000,
         "image": "https://example.com/hotel2.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Hotel Ritz-Carlton",
+        "location": "Novosibirsk, Russia",
+        "pricePerNight": 7000,
+        "image": "https://example.com/hotel3.jpg"
+    },
+    {
+        "id": 4,
+        "name": "Hotel Four Seasons",
+        "location": "Kazan, Russia",
+        "pricePerNight": 8000,
+        "image": "https://example.com/hotel4.jpg"
+    },
+    {
+        "id": 5,
+        "name": "Hotel Hyatt",
+        "location": "Ekaterinburg, Russia",
+        "pricePerNight": 6500,
+        "image": "https://example.com/hotel5.jpg"
+    },
+    {
+        "id": 6,
+        "name": "Hotel InterContinental",
+        "location": "Nizhny Novgorod, Russia",
+        "pricePerNight": 7500,
+        "image": "https://example.com/hotel6.jpg"
+    },
+    {
+        "id": 7,
+        "name": "Hotel Sheraton",
+        "location": "Samara, Russia",
+        "pricePerNight": 5500,
+        "image": "https://example.com/hotel7.jpg"
+    },
+    {
+        "id": 8,
+        "name": "Hotel Radisson Blu",
+        "location": "Rostov-on-Don, Russia",
+        "pricePerNight": 6200,
+        "image": "https://example.com/hotel8.jpg"
+    },
+    {
+        "id": 9,
+        "name": "Hotel Crowne Plaza",
+        "location": "Krasnodar, Russia",
+        "pricePerNight": 5800,
+        "image": "https://example.com/hotel9.jpg"
+    },
+    {
+        "id": 10,
+        "name": "Hotel Holiday Inn",
+        "location": "Voronezh, Russia",
+        "pricePerNight": 5200,
+        "image": "https://example.com/hotel10.jpg"
     }
 ]

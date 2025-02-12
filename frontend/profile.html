@@ -245,12 +245,15 @@
                         bookingsList.innerHTML = '<p class="text-center text-gray-400">У вас нет бронирований.</p>';
                     } else {
                         bookings.forEach(booking => {
+                            const checkInDate = new Date(booking.checkInDate).toLocaleDateString();
+                            const checkOutDate = new Date(booking.checkOutDate).toLocaleDateString();
+
                             const bookingItem = document.createElement('div');
                             bookingItem.className = 'bg-[#222222] p-4 rounded-lg';
                             bookingItem.innerHTML = `
                                 <p class="text-sm text-primary">Отель: ${booking.hotelName}</p>
-                                <p class="text-sm text-gray-400">Дата заезда: ${booking.checkInDate}</p>
-                                <p class="text-sm text-gray-400">Дата выезда: ${booking.checkOutDate}</p>
+                                <p class="text-sm text-gray-400">Дата заезда: ${checkInDate}</p>
+                                <p class="text-sm text-gray-400">Дата выезда: ${checkOutDate}</p>
                                 <button class="bg-red-500 text-background py-2 px-4 rounded-full mt-4 hover:bg-red-600 transition-colors" onclick="cancelBooking(${booking.id})">Отменить бронирование</button>
                             `;
                             bookingsList.appendChild(bookingItem);

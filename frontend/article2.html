@@ -6,37 +6,120 @@
     <title>Топ-10 отелей России - Hotel Booking</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FFD700',
+                        secondary: '#FFC107',
+                        background: '#121212',
+                        text: '#f5f5f5',
+                        accent: '#FF6B6B',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        glow: '0 0 15px rgba(255, 215, 0, 0.5)',
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .carousel {
+            display: flex;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            gap: 2rem;
+        }
+        .carousel-item {
+            min-width: calc(33.333% - 2rem);
+            transition: transform 0.5s ease-in-out;
+        }
+        @media (max-width: 1200px) {
+            .carousel-item {
+                min-width: calc(50% - 2rem);
+            }
+        }
+        @media (max-width: 768px) {
+            .carousel-item {
+                min-width: calc(100% - 2rem);
+            }
+        }
+        .hover-glow:hover {
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #121212, #1E1E1E);
+        }
+        .article-content p {
+            font-size: 1.125rem; /* Increased font size for better readability */
+            line-height: 1.75rem; /* Improved line height for readability */
+        }
+        .article-content ol {
+            list-style-type: decimal;
+            padding-left: 1.5rem; /* Adjusted padding for list items */
+        }
+        .article-content li {
+            margin-bottom: 0.5rem; /* Space between list items */
+        }
+    </style>
 </head>
 <body class="bg-background text-text font-sans min-h-screen flex flex-col">
     <!-- Шапка -->
     <header class="gradient-bg text-primary py-4 px-6 shadow-md sticky top-0 z-50">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <!-- Логотип -->
             <div class="flex items-center">
-                <img src="https://via.placeholder.com/50" alt="Логотип" class="w-10 h-10 mr-4">
+                <img src="png/logo.png" alt="Логотип" class="w-10 h-10 mr-4">
                 <span class="text-xl font-bold">Hotel Booking</span>
             </div>
+            <!-- Навигация -->
             <nav>
                 <ul class="flex gap-6" id="navMenu">
                     <li><a href="index.html" class="hover:text-secondary transition-colors">Главная</a></li>
                     <li><a href="search.html" class="hover:text-secondary transition-colors">Поиск отелей</a></li>
                     <li><a href="articles.html" class="hover:text-secondary transition-colors">Полезные статьи</a></li>
-                    <li><a href="login.html" class="hover:text-secondary transition-colors">Вход</a></li>
-                    <li><a href="register.html" class="hover:text-secondary transition-colors">Регистрация</a></li>
+                    <li id="loginTab"><a href="login.html" class="hover:text-secondary transition-colors">Вход</a></li>
+                    <li id="registerTab"><a href="register.html" class="hover:text-secondary transition-colors">Регистрация</a></li>
                     <li id="profileTab" class="hidden"><a href="profile.html" class="hover:text-secondary transition-colors">Личный кабинет</a></li>
                     <li id="logoutTab" class="hidden"><a href="#" id="logoutLink" class="hover:text-secondary transition-colors">Выйти</a></li>
                 </ul>
             </nav>
+            <!-- Иконки соцсетей -->
+            <div class="flex gap-4">
+                <a href="#" class="text-primary hover:text-secondary transition-colors">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="text-primary hover:text-secondary transition-colors">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="text-primary hover:text-secondary transition-colors">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
         </div>
     </header>
 
     <!-- Основной контент -->
     <main class="flex-grow py-16">
-        <div class="max-w-4xl mx-auto px-4">
-            <h1 class="text-3xl font-bold text-primary mb-8">Топ-10 отелей России</h1>
-            <img src="https://via.placeholder.com/800x400" alt="Топ-10 отелей России" class="w-full h-64 object-cover rounded-lg mb-8">
-            <div class="text-gray-400 space-y-4">
+        <!-- Герой-секция -->
+        <section class="bg-[url('png/article2_shapka.png')] bg-cover bg-center py-32 text-center relative">
+            <div class="absolute inset-0 bg-black/50"></div>
+            <div class="max-w-4xl mx-auto px-4 relative z-10">
+                <h1 class="text-6xl font-extrabold text-primary mb-8">Топ-10 отелей России</h1>
+                <p class="text-xl text-gray-300 mb-10">Лучшие отели по версии наших клиентов.</p>
+            </div>
+        </section>
+
+        <!-- Основной контент статьи -->
+        <section class="max-w-4xl mx-auto px-4 article-content">
+            <div class="space-y-6">
                 <p>Россия предлагает множество роскошных отелей, которые удовлетворят даже самых взыскательных путешественников. Вот наш топ-10:</p>
-                <ol class="list-decimal pl-6">
+                <ol>
                     <li>Отель «Люкс» (Москва)</li>
                     <li>Отель «Северное сияние» (Санкт-Петербург)</li>
                     <li>Отель «Морской бриз» (Сочи)</li>
@@ -50,14 +133,93 @@
                 </ol>
                 <p>Эти отели предлагают высокий уровень сервиса и незабываемые впечатления.</p>
             </div>
-        </div>
+        </section>
     </main>
 
     <!-- Подвал -->
     <footer class="gradient-bg text-primary py-8 mt-auto">
-        <div class="max-w-6xl mx-auto px-4 text-center">
-            <p class="text-gray-400">&copy; 2025 Система бронирования гостиниц. Все права защищены.</p>
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Логотип и описание -->
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="png/logo.png" alt="Логотип" class="w-10 h-10 mr-4">
+                        <span class="text-xl font-bold">Hotel Booking</span>
+                    </div>
+                    <p class="text-gray-400">Удобная система бронирования отелей по всему миру. Найдите идеальный отель для вашего отдыха.</p>
+                </div>
+                <!-- Навигация -->
+                <div>
+                    <h3 class="text-xl font-semibold text-primary mb-4">Навигация</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-secondary transition-colors">Главная</a></li>
+                        <li><a href="search.html" class="text-gray-400 hover:text-secondary transition-colors">Поиск отелей</a></li>
+                        <li><a href="login.html" class="text-gray-400 hover:text-secondary transition-colors">Вход</a></li>
+                        <li><a href="register.html" class="text-gray-400 hover:text-secondary transition-colors">Регистрация</a></li>
+                    </ul>
+                </div>
+                <!-- Соцсети -->
+                <div>
+                    <h3 class="text-xl font-semibold text-primary mb-4">Социальные сети</h3>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-primary hover:text-secondary transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-primary hover:text-secondary transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-primary hover:text-secondary transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 Система бронирования гостиниц. Все права защищены.</p>
+            </div>
         </div>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sessionId = localStorage.getItem('sessionId');
+            const profileTab = document.getElementById('profileTab');
+            const logoutTab = document.getElementById('logoutTab');
+            const loginTab = document.getElementById('loginTab');
+            const registerTab = document.getElementById('registerTab');
+
+            if (sessionId) {
+                profileTab.classList.remove('hidden');
+                logoutTab.classList.remove('hidden');
+                loginTab.classList.add('hidden');
+                registerTab.classList.add('hidden');
+            } else {
+                profileTab.classList.add('hidden');
+                logoutTab.classList.add('hidden');
+                loginTab.classList.remove('hidden');
+                registerTab.classList.remove('hidden');
+            }
+
+            document.getElementById('logoutLink')?.addEventListener('click', async (e) => {
+                e.preventDefault();
+                try {
+                    const response = await fetch('/logout', {
+                        method: 'POST',
+                        headers: { 'Authorization': sessionId },
+                    });
+                    if (response.ok) {
+                        localStorage.removeItem('sessionId');
+                        alert('Вы успешно вышли из системы.');
+                        window.location.href = 'index.html';
+                    } else {
+                        alert('Ошибка при выходе из системы.');
+                    }
+                } catch (error) {
+                    console.error('Ошибка при выходе:', error);
+                    alert('Произошла ошибка. Попробуйте снова.');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

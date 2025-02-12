@@ -148,7 +148,7 @@ app.get('/api/user', authenticateUser, (req, res) => {
 // Маршрут для бронирования отеля
 app.post('/api/bookings', authenticateUser, (req, res) => {
     try {
-        const { hotelId } = req.body;
+        const { hotelId, checkInDate, checkOutDate } = req.body;
         const userId = req.user.id;
 
         const bookingsFilePath = path.join(__dirname, '../data', 'bookings.json');
@@ -168,8 +168,8 @@ app.post('/api/bookings', authenticateUser, (req, res) => {
             id: bookings.length + 1,
             userId,
             hotelId,
-            checkInDate: new Date().toISOString().split('T')[0],
-            checkOutDate: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().split('T')[0],
+            checkInDate,
+            checkOutDate,
         };
 
         bookings.push(newBooking);
