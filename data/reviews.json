@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "userId": 4,
+    "hotelId": 1,
+    "rating": "1",
+    "comment": "efwdw",
+    "timestamp": "2025-02-14T11:13:47.434Z"
+  },
+  {
+    "id": 2,
+    "userId": 4,
+    "hotelId": 2,
+    "rating": "1",
+    "comment": "wdwqd",
+    "timestamp": "2025-02-14T11:35:09.026Z"
+  },
+  {
+    "id": 3,
+    "userId": 4,
+    "hotelId": 3,
+    "rating": "1",
+    "comment": "йывй",
+    "timestamp": "2025-02-14T11:51:05.376Z"
+  },
+  {
+    "id": 4,
+    "userId": 4,
+    "hotelId": 3,
+    "rating": "2",
+    "comment": "вцв",
+    "timestamp": "2025-02-14T11:56:18.153Z"
+  },
+  {
+    "id": 5,
+    "userId": 4,
+    "hotelId": 4,
+    "rating": "1",
+    "comment": "цвцв",
+    "timestamp": "2025-02-14T11:57:29.490Z"
+  }
+]

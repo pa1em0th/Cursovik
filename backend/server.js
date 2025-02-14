@@ -122,14 +122,10 @@ app.post('/login', async (req, res) => {
 // Маршрут для выхода
 app.post('/logout', (req, res) => {
     const sessionId = req.headers.authorization;
-    console.log('Logout Session ID:', sessionId);
-
     if (sessionId && sessions[sessionId]) {
         delete sessions[sessionId];
-        console.log('Session deleted successfully.');
         return res.status(200).json({ message: 'Выход выполнен успешно' });
     } else {
-        console.log('Session not found.');
         return res.status(400).json({ message: 'Сессия не найдена' });
     }
 });
@@ -247,6 +243,61 @@ app.delete('/api/bookings/:bookingId', authenticateUser, (req, res) => {
         return res.status(200).json({ message: 'Бронирование успешно отменено' });
     } catch (error) {
         console.error('Ошибка при отмене бронирования:', error);
+        return res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
+
+// Маршрут для получения отзывов об отеле
+app.get('/api/reviews/:hotelId', (req, res) => {
+    try {
+        const hotelId = parseInt(req.params.hotelId, 10);
+
+        const reviewsFilePath = path.join(__dirname, '../data', 'reviews.json');
+        let reviews = [];
+
+        if (fs.existsSync(reviewsFilePath)) {
+            const rawData = fs.readFileSync(reviewsFilePath, 'utf-8');
+            reviews = JSON.parse(rawData) || [];
+        }
+
+        const hotelReviews = reviews.filter(review => review.hotelId === hotelId);
+
+        return res.status(200).json(hotelReviews);
+    } catch (error) {
+        console.error('Ошибка при получении отзывов:', error);
+        return res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
+
+// Маршрут для добавления отзыва об отеле
+app.post('/api/reviews', authenticateUser, (req, res) => {
+    try {
+        const { hotelId, rating, comment } = req.body;
+        const userId = req.user.id;
+
+        const reviewsFilePath = path.join(__dirname, '../data', 'reviews.json');
+        let reviews = [];
+
+        if (fs.existsSync(reviewsFilePath)) {
+            const rawData = fs.readFileSync(reviewsFilePath, 'utf-8');
+            reviews = JSON.parse(rawData) || [];
+        }
+
+        const newReview = {
+            id: reviews.length + 1,
+            userId,
+            hotelId,
+            rating,
+            comment,
+            timestamp: new Date().toISOString(),
+        };
+
+        reviews.push(newReview);
+        fs.writeFileSync(reviewsFilePath, JSON.stringify(reviews, null, 2), 'utf-8');
+
+        return res.status(201).json({ message: 'Отзыв успешно добавлен' });
+    } catch (error) {
+        console.error('Ошибка при добавлении отзыва:', error);
         return res.status(500).json({ message: 'Ошибка сервера' });
     }
 });

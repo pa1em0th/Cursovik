@@ -21,13 +21,6 @@
     "checkOutDate": "2025-02-08"
   },
   {
-    "id": 4,
-    "userId": 4,
-    "hotelId": 1,
-    "checkInDate": "2025-02-11",
-    "checkOutDate": "2025-02-12"
-  },
-  {
     "id": 6,
     "userId": 6,
     "hotelId": 1,
@@ -46,6 +39,20 @@
     "userId": 6,
     "hotelId": 4,
     "checkInDate": "2025-02-04",
+    "checkOutDate": "2025-02-26"
+  },
+  {
+    "id": 7,
+    "userId": 4,
+    "hotelId": 1,
+    "checkInDate": "2026-06-15",
+    "checkOutDate": "2026-06-17"
+  },
+  {
+    "id": 8,
+    "userId": 4,
+    "hotelId": 2,
+    "checkInDate": "2025-02-18",
     "checkOutDate": "2025-02-26"
   }
 ]
