@@ -247,8 +247,10 @@
                         <h3 class="text-primary text-xl font-bold">${hotel.name}</h3>
                         <p class="text-text">${hotel.location}</p>
                         <p class="text-secondary font-bold mt-2">${hotel.pricePerNight} руб./ночь</p>
-                        <button class="bg-primary text-background py-2 px-4 rounded-full mt-4 hover:bg-secondary transition-colors" onclick="toggleDatePicker(${hotel.id})">Выбрать дату бронирования</button>
-                        <button class="bg-primary text-background py-2 px-4 rounded-full mt-4 hover:bg-secondary transition-colors" onclick="viewHotelDetails(${hotel.id})">Подробнее</button>
+                        <!-- Кнопка "Подробнее" -->
+                        <button class="bg-blue-500 text-background py-2 px-4 rounded-full w-full hover:bg-blue-600 transition-colors mb-2" onclick="viewHotelDetails(${hotel.id})">Подробнее</button>
+                        <!-- Кнопка "Забронировать" -->
+                        <button class="bg-primary text-background py-2 px-4 rounded-full w-full hover:bg-secondary transition-colors" onclick="toggleDatePicker(${hotel.id})">Забронировать</button>
                         <div id="datePicker-${hotel.id}" class="hidden mt-4">
                             <div class="mt-4">
                                 <label for="checkIn-${hotel.id}" class="text-primary">Дата заезда:</label>
@@ -258,7 +260,7 @@
                                 <label for="checkOut-${hotel.id}" class="text-primary">Дата выезда:</label>
                                 <input type="text" id="checkOut-${hotel.id}" class="flatpickr px-4 py-2 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border mb-2" placeholder="Выберите дату">
                             </div>
-                            <button class="bg-accent text-background py-2 px-4 rounded-full mt-4 hover:bg-red-600 transition-colors" onclick="calculateTotalAndBook(${hotel.id}, ${hotel.pricePerNight})">Забронировать</button>
+                            <button class="bg-accent text-background py-2 px-4 rounded-full w-full mt-4 hover:bg-red-600 transition-colors" onclick="calculateTotalAndBook(${hotel.id}, ${hotel.pricePerNight})">Забронировать</button>
                         </div>
                     `;
                     hotelList.appendChild(hotelDiv);
