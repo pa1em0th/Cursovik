@@ -38,5 +38,69 @@
     "rating": "1",
     "comment": "цвцв",
     "timestamp": "2025-02-14T11:57:29.490Z"
+  },
+  {
+    "id": 6,
+    "userId": 4,
+    "hotelId": 2,
+    "rating": "5",
+    "comment": "каук",
+    "timestamp": "2025-02-17T11:36:38.488Z"
+  },
+  {
+    "id": 7,
+    "userId": 4,
+    "hotelId": 2,
+    "rating": "5",
+    "comment": "уауауа",
+    "timestamp": "2025-02-17T11:36:42.807Z"
+  },
+  {
+    "id": 8,
+    "userId": 4,
+    "hotelId": 1,
+    "rating": "5",
+    "comment": "frgvreg",
+    "timestamp": "2025-02-17T11:38:38.783Z"
+  },
+  {
+    "id": 9,
+    "userId": 4,
+    "hotelId": 1,
+    "rating": "5",
+    "comment": "efefeefeffe",
+    "timestamp": "2025-02-17T11:38:46.638Z"
+  },
+  {
+    "id": 10,
+    "userId": 4,
+    "hotelId": 1,
+    "rating": "5",
+    "comment": "efef",
+    "timestamp": "2025-02-17T11:38:59.054Z"
+  },
+  {
+    "id": 11,
+    "userId": 4,
+    "hotelId": 1,
+    "rating": "3",
+    "comment": "ацыавцыва",
+    "timestamp": "2025-02-17T11:42:54.116Z"
+  },
+  {
+    "id": 12,
+    "userId": 4,
+    "hotelId": 1,
+    "rating": "1",
+    "comment": "злзщл",
+    "timestamp": "2025-02-17T11:44:37.526Z"
+  },
+  {
+    "id": 13,
+    "userId": 4,
+    "hotelId": 1,
+    "rating": "3",
+    "comment": "3к3к3к",
+    "timestamp": "2025-02-17T11:48:15.535Z"
   }
 ]

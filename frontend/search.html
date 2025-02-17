@@ -248,7 +248,7 @@
                         <p class="text-text">${hotel.location}</p>
                         <p class="text-secondary font-bold mt-2">${hotel.pricePerNight} руб./ночь</p>
                         <!-- Кнопка "Подробнее" -->
-                        <button class="bg-blue-500 text-background py-2 px-4 rounded-full w-full hover:bg-blue-600 transition-colors mb-2" onclick="viewHotelDetails(${hotel.id})">Подробнее</button>
+                        <button class="bg-blue-500 text-background py-2 px-4 rounded-full w-full hover:bg-blue-600 transition-colors mb-2" onclick="viewHotelDetails()">Подробнее</button>
                         <!-- Кнопка "Забронировать" -->
                         <button class="bg-primary text-background py-2 px-4 rounded-full w-full hover:bg-secondary transition-colors" onclick="toggleDatePicker(${hotel.id})">Забронировать</button>
                         <div id="datePicker-${hotel.id}" class="hidden mt-4">
@@ -278,8 +278,8 @@
                 }
             };
 
-            window.viewHotelDetails = function(hotelId) {
-                window.location.href = `hotel${hotelId}.html`;
+            window.viewHotelDetails = function() {
+                window.location.href = 'about-hotels.html';
             };
 
             function filterHotels(query) {

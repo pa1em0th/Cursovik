@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Об отелях</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212;
+            color: #f5f5f5;
+            font-family: 'Inter', sans-serif;
+        }
+        .hotel-image {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+        .review-form {
+            margin-top: 2rem;
+        }
+        .review {
+            background-color: #222222;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="text-primary py-4 px-6 shadow-md sticky top-0 z-50 bg-[#1E1E1E]">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <img src="png/logo.png" alt="Логотип" class="w-10 h-10 mr-4">
+                <span class="text-xl font-bold">Hotel Booking</span>
+            </div>
+            <nav>
+                <ul class="flex gap-6">
+                    <li><a href="index.html" class="hover:text-secondary transition-colors">Главная</a></li>
+                    <li><a href="search.html" class="hover:text-secondary transition-colors">Поиск отелей</a></li>
+                    <li><a href="profile.html" class="hover:text-secondary transition-colors">Личный кабинет</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto bg-[#1E1E1E] p-8 rounded-lg shadow-lg mt-8 mb-16">
+        <h1 class="text-3xl font-bold text-primary text-center mb-8">Об отелях</h1>
+
+        <div id="hotelDetails" class="space-y-8">
+            <!-- Hotel details will be injected here -->
+        </div>
+    </main>
+
+    <footer class="text-primary py-8 mt-auto bg-[#1E1E1E]">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="png/logo.png" alt="Логотип" class="w-10 h-10 mr-4">
+                        <span class="text-xl font-bold">Hotel Booking</span>
+                    </div>
+                    <p class="text-gray-400">Удобная система бронирования отелей по всему миру. Найдите идеальный отель для вашего отдыха.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-primary mb-4">Навигация</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-secondary transition-colors">Главная</a></li>
+                        <li><a href="search.html" class="text-gray-400 hover:text-secondary transition-colors">Поиск отелей</a></li>
+                        <li><a href="login.html" class="text-gray-400 hover:text-secondary transition-colors">Вход</a></li>
+                        <li><a href="register.html" class="text-gray-400 hover:text-secondary transition-colors">Регистрация</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold text-primary mb-4">Социальные сети</h3>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-primary hover:text-secondary transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-primary hover:text-secondary transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-primary hover:text-secondary transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 Система бронирования гостиниц. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let hotels = []; // Глобальная переменная для хранения данных об отелях
+
+        document.addEventListener('DOMContentLoaded', () => {
+            hotels = [
+                { "id": 1, "name": "Hotel Hilton", "location": "Moscow, Russia", "pricePerNight": 5000, "image": "https://example.com/hotel1.jpg", "description": "Роскошный отель в центре Москвы с великолепным видом на Кремль." },
+                { "id": 2, "name": "Hotel Marriott", "location": "St. Petersburg, Russia", "pricePerNight": 6000, "image": "https://example.com/hotel2.jpg", "description": "Исторический отель с современным интерьером и удобствами." },
+                { "id": 3, "name": "Hotel Ritz-Carlton", "location": "Novosibirsk, Russia", "pricePerNight": 7000, "image": "https://example.com/hotel3.jpg", "description": "Элегантный отель с высоким уровнем сервиса и комфорта." },
+                { "id": 4, "name": "Hotel Four Seasons", "location": "Kazan, Russia", "pricePerNight": 8000, "image": "https://example.com/hotel4.jpg", "description": "Уютный отель с уникальным дизайном и вниманием к деталям." },
+                { "id": 5, "name": "Hotel Hyatt", "location": "Ekaterinburg, Russia", "pricePerNight": 6500, "image": "https://example.com/hotel5.jpg", "description": "Современный отель с широким спектром услуг для бизнеса и отдыха." },
+                { "id": 6, "name": "Hotel InterContinental", "location": "Nizhny Novgorod, Russia", "pricePerNight": 7500, "image": "https://example.com/hotel6.jpg", "description": "Комфортабельный отель с отличным расположением и панорамными видами." },
+                { "id": 7, "name": "Hotel Sheraton", "location": "Samara, Russia", "pricePerNight": 5500, "image": "https://example.com/hotel7.jpg", "description": "Стильный отель с просторными номерами и высококлассным обслуживанием." },
+                { "id": 8, "name": "Hotel Radisson Blu", "location": "Rostov-on-Don, Russia", "pricePerNight": 6200, "image": "https://example.com/hotel8.jpg", "description": "Отель с уникальной атмосферой и вниманием к каждому гостю." },
+                { "id": 9, "name": "Hotel Crowne Plaza", "location": "Krasnodar, Russia", "pricePerNight": 5800, "image": "https://example.com/hotel9.jpg", "description": "Идеальное место для деловых встреч и отдыха." },
+                { "id": 10, "name": "Hotel Holiday Inn", "location": "Voronezh, Russia", "pricePerNight": 5200, "image": "https://example.com/hotel10.jpg", "description": "Доступный отель с высоким уровнем комфорта и удобствами." }
+            ];
+
+            fetchReviewsAndDisplayHotels(hotels);
+        });
+
+        async function fetchReviewsAndDisplayHotels(hotels) {
+            try {
+                const reviewsResponses = await Promise.all(hotels.map(hotel =>
+                    fetch(`/api/reviews/${hotel.id}`).then(response => response.json())
+                ));
+
+                const reviews = reviewsResponses.flat();
+                displayHotelDetails(hotels, reviews);
+            } catch (error) {
+                console.error('Ошибка при получении отзывов:', error);
+            }
+        }
+
+        function displayHotelDetails(hotels, reviews) {
+            const hotelDetails = document.getElementById('hotelDetails');
+            hotelDetails.innerHTML = '';
+
+            hotels.forEach(hotel => {
+                const hotelDiv = document.createElement('div');
+                hotelDiv.classList.add('bg-[#222222]', 'p-6', 'rounded-lg', 'shadow-lg');
+                hotelDiv.innerHTML = `
+                    <img src="${hotel.image}" alt="${hotel.name}" class="hotel-image mb-4 rounded-lg">
+                    <h2 class="text-2xl font-bold text-primary">${hotel.name}</h2>
+                    <p class="text-gray-300">${hotel.location}</p>
+                    <p class="text-secondary font-bold mt-2">${hotel.pricePerNight} руб./ночь</p>
+                    <p class="text-gray-400 mt-4">${hotel.description}</p>
+                    <div class="review-form mt-4">
+                        <h3 class="text-xl font-semibold text-primary mb-2">Оставить отзыв</h3>
+                        <div class="mb-4">
+                            <label for="rating-${hotel.id}" class="text-gray-300">Ваш рейтинг:</label>
+                            <select id="rating-${hotel.id}" class="w-full px-4 py-2 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <textarea id="review-${hotel.id}" class="w-full px-4 py-2 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border" placeholder="Ваш отзыв..."></textarea>
+                        <button class="bg-primary text-background py-2 px-4 rounded-full mt-2 hover:bg-secondary transition-colors" onclick="submitReview(${hotel.id})">Отправить</button>
+                    </div>
+                    <div class="reviews mt-4">
+                        <h3 class="text-xl font-semibold text-primary mb-2">Отзывы</h3>
+                        ${displayReviews(hotel.id, reviews)}
+                    </div>
+                `;
+                hotelDetails.appendChild(hotelDiv);
+            });
+        }
+
+        function displayReviews(hotelId, reviews) {
+            const hotelReviews = reviews.filter(review => review.hotelId === hotelId);
+            return hotelReviews.map(review => `
+                <div class="review">
+                    <p class="text-gray-300"><strong>Рейтинг:</strong> ${review.rating}</p>
+                    <p class="text-gray-300"><strong>Комментарий:</strong> ${review.comment}</p>
+                    <p class="text-gray-500 text-sm"><strong>Дата:</strong> ${new Date(review.timestamp).toLocaleString()}</p>
+                </div>
+            `).join('');
+        }
+
+        async function submitReview(hotelId) {
+            const reviewText = document.getElementById(`review-${hotelId}`).value;
+            const rating = document.getElementById(`rating-${hotelId}`).value;
+
+            if (reviewText.trim() === '' || !rating) {
+                alert('Пожалуйста, введите ваш отзыв и выберите рейтинг.');
+                return;
+            }
+
+            const sessionId = localStorage.getItem('sessionId');
+            if (!sessionId) {
+                alert('Пожалуйста, войдите в систему, чтобы оставить отзыв.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/reviews', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': sessionId,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ hotelId, rating, comment: reviewText }),
+                });
+
+                if (response.ok) {
+                    alert('Отзыв успешно отправлен!');
+                    document.getElementById(`review-${hotelId}`).value = '';
+                    fetchReviewsAndDisplayHotels(hotels); // Обновляем отзывы
+                } else {
+                    const errorData = await response.json();
+                    console.error('Ошибка при отправке отзыва:', errorData);
+                    alert(`Ошибка при отправке отзыва: ${errorData.message}`);
+                }
+            } catch (error) {
+                console.error('Ошибка при отправке отзыва:', error);
+                alert('Произошла ошибка. Попробуйте снова.');
+            }
+        }
+    </script>
+</body>
+</html>
