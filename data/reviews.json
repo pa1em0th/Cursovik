@@ -102,5 +102,45 @@
     "rating": "3",
     "comment": "3к3к3к",
     "timestamp": "2025-02-17T11:48:15.535Z"
+  },
+  {
+    "id": 14,
+    "userId": 4,
+    "hotelId": 1,
+    "rating": "1",
+    "comment": "кц",
+    "timestamp": "2025-02-19T11:44:21.172Z"
+  },
+  {
+    "id": 15,
+    "userId": 4,
+    "hotelId": 1,
+    "rating": "2",
+    "comment": "фывв",
+    "timestamp": "2025-02-19T11:49:54.979Z"
+  },
+  {
+    "id": 16,
+    "userId": 4,
+    "hotelId": 1,
+    "rating": "5",
+    "comment": "цывцыв",
+    "timestamp": "2025-02-19T11:50:03.211Z"
+  },
+  {
+    "id": 17,
+    "userId": 4,
+    "hotelId": 5,
+    "rating": "3",
+    "comment": "вцв",
+    "timestamp": "2025-02-19T11:55:28.391Z"
+  },
+  {
+    "id": 18,
+    "userId": 4,
+    "hotelId": 5,
+    "rating": "1",
+    "comment": "цвцв",
+    "timestamp": "2025-02-19T11:55:31.127Z"
   }
 ]
