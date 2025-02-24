@@ -57,7 +57,7 @@
         }
         .hotel-image {
             width: 100%;
-            height: auto;
+            height: 200px; /* Одинаковая высота для всех изображений */
             object-fit: cover;
         }
         .review-form {
@@ -69,9 +69,32 @@
             border-radius: 0.5rem;
             margin-top: 1rem;
         }
+        .hotel-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+        @media (max-width: 768px) {
+            .hotel-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: -1;
+        }
     </style>
 </head>
-<body class="bg-background text-text font-sans min-h-screen flex flex-col">
+<body class="bg-background text-text font-sans min-h-screen flex flex-col relative">
+    <!-- Фоновое изображение -->
+    <img src="png/background.jpg" alt="Фоновое изображение" class="background-image">
+
     <!-- Шапка -->
     <header class="gradient-bg text-primary py-4 px-6 shadow-md sticky top-0 z-50">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
@@ -108,10 +131,10 @@
     </header>
 
     <!-- Основной контент -->
-    <main class="max-w-6xl mx-auto bg-[#1E1E1E] p-8 rounded-lg shadow-lg mt-8 mb-16">
+    <main class="max-w-6xl mx-auto bg-[#1E1E1E] p-8 rounded-lg shadow-lg mt-8 mb-16 relative">
         <h1 class="text-3xl font-bold text-primary text-center mb-8">Об отелях</h1>
 
-        <div id="hotelDetails" class="space-y-8">
+        <div id="hotelDetails" class="hotel-grid">
             <!-- Hotel details will be injected here -->
         </div>
     </main>
@@ -183,16 +206,106 @@
             }
 
             hotels = [
-                { "id": 1, "name": "Hotel Hilton", "location": "Moscow, Russia", "pricePerNight": 5000, "image": "png/hotel1.png", "description": "Роскошный отель в центре Москвы с великолепным видом на Кремль." },
-                { "id": 2, "name": "Hotel Marriott", "location": "St. Petersburg, Russia", "pricePerNight": 6000, "image": "png/hotel2.png", "description": "Исторический отель с современным интерьером и удобствами." },
-                { "id": 3, "name": "Hotel Ritz-Carlton", "location": "Novosibirsk, Russia", "pricePerNight": 7000, "image": "png/hotel3.png", "description": "Элегантный отель с высоким уровнем сервиса и комфорта." },
-                { "id": 4, "name": "Hotel Four Seasons", "location": "Kazan, Russia", "pricePerNight": 8000, "image": "png/hotel4.png", "description": "Уютный отель с уникальным дизайном и вниманием к деталям." },
-                { "id": 5, "name": "Hotel Hyatt", "location": "Ekaterinburg, Russia", "pricePerNight": 6500, "image": "png/hotel5.png", "description": "Современный отель с широким спектром услуг для бизнеса и отдыха." },
-                { "id": 6, "name": "Hotel InterContinental", "location": "Nizhny Novgorod, Russia", "pricePerNight": 7500, "image": "png/hotel6.png", "description": "Комфортабельный отель с отличным расположением и панорамными видами." },
-                { "id": 7, "name": "Hotel Sheraton", "location": "Samara, Russia", "pricePerNight": 5500, "image": "png/hotel7.jpg", "description": "Стильный отель с просторными номерами и высококлассным обслуживанием." },
-                { "id": 8, "name": "Hotel Radisson Blu", "location": "Rostov-on-Don, Russia", "pricePerNight": 6200, "image": "png/hotel8.png", "description": "Отель с уникальной атмосферой и вниманием к каждому гостю." },
-                { "id": 9, "name": "Hotel Crowne Plaza", "location": "Krasnodar, Russia", "pricePerNight": 5800, "image": "png/hotel9.png", "description": "Идеальное место для деловых встреч и отдыха." },
-                { "id": 10, "name": "Hotel Holiday Inn", "location": "Voronezh, Russia", "pricePerNight": 5200, "image": "png/hotel10.png", "description": "Доступный отель с высоким уровнем комфорта и удобствами." }
+                {
+                    "id": 1,
+                    "name": "Hotel Hilton",
+                    "location": "Moscow, Russia",
+                    "pricePerNight": 5000,
+                    "image": "png/hotel1.png",
+                    "description": "Роскошный отель в центре Москвы с великолепным видом на Кремль.",
+                    "amenities": "Бесплатный Wi-Fi, фитнес-центр, ресторан, обслуживание номеров 24/7.",
+                    "features": "Просторные номера с современным дизайном, панорамные окна с видом на город."
+                },
+                {
+                    "id": 2,
+                    "name": "Hotel Marriott",
+                    "location": "St. Petersburg, Russia",
+                    "pricePerNight": 6000,
+                    "image": "png/hotel2.png",
+                    "description": "Исторический отель с современным интерьером и удобствами.",
+                    "amenities": "Спа-центр, бассейн, конференц-залы, бесплатный завтрак.",
+                    "features": "Уникальная архитектура, сочетающая исторические элементы с современными удобствами."
+                },
+                {
+                    "id": 3,
+                    "name": "Hotel Ritz-Carlton",
+                    "location": "Novosibirsk, Russia",
+                    "pricePerNight": 7000,
+                    "image": "png/hotel3.png",
+                    "description": "Элегантный отель с высоким уровнем сервиса и комфорта.",
+                    "amenities": "Лобби-бар, ресторан высокой кухни, услуги консьержа.",
+                    "features": "Индивидуальный подход к каждому гостю, эксклюзивные номера с уникальным дизайном."
+                },
+                {
+                    "id": 4,
+                    "name": "Hotel Four Seasons",
+                    "location": "Kazan, Russia",
+                    "pricePerNight": 8000,
+                    "image": "png/hotel4.png",
+                    "description": "Уютный отель с уникальным дизайном и вниманием к деталям.",
+                    "amenities": "Спа-центр, фитнес-зал, ресторан, бесплатный Wi-Fi.",
+                    "features": "Индивидуальный дизайн номеров, внимание к каждому гостю."
+                },
+                {
+                    "id": 5,
+                    "name": "Hotel Hyatt",
+                    "location": "Ekaterinburg, Russia",
+                    "pricePerNight": 6500,
+                    "image": "png/hotel5.png",
+                    "description": "Современный отель с широким спектром услуг для бизнеса и отдыха.",
+                    "amenities": "Конференц-залы, фитнес-центр, ресторан, бесплатный Wi-Fi.",
+                    "features": "Просторные номера с современным дизайном, удобства для бизнеса."
+                },
+                {
+                    "id": 6,
+                    "name": "Hotel InterContinental",
+                    "location": "Nizhny Novgorod, Russia",
+                    "pricePerNight": 7500,
+                    "image": "png/hotel6.png",
+                    "description": "Комфортабельный отель с отличным расположением и панорамными видами.",
+                    "amenities": "Спа-центр, фитнес-зал, ресторан, бесплатный Wi-Fi.",
+                    "features": "Панорамные виды на город, удобное расположение."
+                },
+                {
+                    "id": 7,
+                    "name": "Hotel Sheraton",
+                    "location": "Samara, Russia",
+                    "pricePerNight": 5500,
+                    "image": "png/hotel7.png",
+                    "description": "Стильный отель с просторными номерами и высококлассным обслуживанием.",
+                    "amenities": "Фитнес-центр, ресторан, бесплатный Wi-Fi, обслуживание номеров.",
+                    "features": "Просторные номера, высокий уровень обслуживания."
+                },
+                {
+                    "id": 8,
+                    "name": "Hotel Radisson Blu",
+                    "location": "Rostov-on-Don, Russia",
+                    "pricePerNight": 6200,
+                    "image": "png/hotel8.png",
+                    "description": "Отель с уникальной атмосферой и вниманием к каждому гостю.",
+                    "amenities": "Фитнес-центр, ресторан, бесплатный Wi-Fi, обслуживание номеров.",
+                    "features": "Уникальная атмосфера, внимание к каждому гостю."
+                },
+                {
+                    "id": 9,
+                    "name": "Hotel Crowne Plaza",
+                    "location": "Krasnodar, Russia",
+                    "pricePerNight": 5800,
+                    "image": "png/hotel9.png",
+                    "description": "Идеальное место для деловых встреч и отдыха.",
+                    "amenities": "Конференц-залы, фитнес-центр, ресторан, бесплатный Wi-Fi.",
+                    "features": "Удобства для деловых встреч, комфортные номера."
+                },
+                {
+                    "id": 10,
+                    "name": "Hotel Holiday Inn",
+                    "location": "Voronezh, Russia",
+                    "pricePerNight": 5200,
+                    "image": "png/hotel10.png",
+                    "description": "Доступный отель с высоким уровнем комфорта и удобствами.",
+                    "amenities": "Ресторан, бесплатный Wi-Fi, обслуживание номеров.",
+                    "features": "Доступные цены, высокий уровень комфорта."
+                }
             ];
 
             fetchReviewsAndDisplayHotels(hotels);
@@ -236,11 +349,18 @@
             }
         }
 
+        function calculateAverageRating(reviews, hotelId) {
+            const hotelReviews = reviews.filter(review => review.hotelId === hotelId);
+            const totalRating = hotelReviews.reduce((sum, review) => sum + parseFloat(review.rating), 0);
+            return hotelReviews.length > 0 ? (totalRating / hotelReviews.length).toFixed(1) : 'N/A';
+        }
+
         function displayHotelDetails(hotels, reviews) {
             const hotelDetails = document.getElementById('hotelDetails');
             hotelDetails.innerHTML = '';
 
             hotels.forEach(hotel => {
+                const averageRating = calculateAverageRating(reviews, hotel.id);
                 const hotelDiv = document.createElement('div');
                 hotelDiv.classList.add('bg-[#222222]', 'p-6', 'rounded-lg', 'shadow-lg');
                 hotelDiv.innerHTML = `
@@ -249,6 +369,9 @@
                     <p class="text-gray-300">${hotel.location}</p>
                     <p class="text-secondary font-bold mt-2">${hotel.pricePerNight} руб./ночь</p>
                     <p class="text-gray-400 mt-4">${hotel.description}</p>
+                    <p class="text-primary font-bold mt-2">Средний рейтинг: ${averageRating}</p>
+                    <p class="text-gray-400 mt-4"><strong>Удобства:</strong> ${hotel.amenities}</p>
+                    <p class="text-gray-400 mt-2"><strong>Особенности:</strong> ${hotel.features}</p>
                     <div class="review-form mt-4">
                         <h3 class="text-xl font-semibold text-primary mb-2">Оставить отзыв</h3>
                         <div class="mb-4">

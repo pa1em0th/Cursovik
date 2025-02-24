@@ -9,6 +9,7 @@ const PORT = 5000;
 app.use(express.json()); // Для парсинга JSON
 app.use(express.static(path.join(__dirname, '../frontend'))); // Для статических файлов
 
+
 // Хранение текущих сессий пользователей (в памяти)
 let sessions = {};
 
@@ -19,6 +20,11 @@ sessions = {};
 // Генерация уникального идентификатора сессии
 const generateSessionId = () => {
     return Math.random().toString(36).substring(2) + Date.now().toString(36);
+};
+
+// Генерация уникального номера бронирования
+const generateBookingNumber = () => {
+    return 'BN-' + Math.random().toString(36).substring(2, 8).toUpperCase();
 };
 
 // Middleware для проверки аутентификации
@@ -144,8 +150,12 @@ app.get('/api/user', authenticateUser, (req, res) => {
 // Маршрут для бронирования отеля
 app.post('/api/bookings', authenticateUser, (req, res) => {
     try {
-        const { hotelId, checkInDate, checkOutDate } = req.body;
+        const { hotelId, checkInDate, checkOutDate, roomNumber } = req.body;
         const userId = req.user.id;
+
+        if (!roomNumber || !checkInDate || !checkOutDate) {
+            return res.status(400).json({ message: 'Номер комнаты и даты обязательны' });
+        }
 
         const bookingsFilePath = path.join(__dirname, '../data', 'bookings.json');
         let bookings = [];
@@ -155,9 +165,25 @@ app.post('/api/bookings', authenticateUser, (req, res) => {
             bookings = JSON.parse(rawData) || [];
         }
 
-        const existingBooking = bookings.find(booking => booking.userId === userId && booking.hotelId === hotelId);
-        if (existingBooking) {
-            return res.status(400).json({ message: 'Отель уже забронирован' });
+        // Проверка доступности комнаты на выбранные даты
+        const isRoomAvailable = bookings.every(booking => {
+            if (booking.hotelId === hotelId && booking.roomNumber === roomNumber) {
+                const existingCheckIn = new Date(booking.checkInDate);
+                const existingCheckOut = new Date(booking.checkOutDate);
+                const newCheckIn = new Date(checkInDate);
+                const newCheckOut = new Date(checkOutDate);
+
+                // Проверка пересечения дат
+                return (
+                    newCheckOut <= existingCheckIn ||
+                    newCheckIn >= existingCheckOut
+                );
+            }
+            return true;
+        });
+
+        if (!isRoomAvailable) {
+            return res.status(400).json({ message: 'Комната уже забронирована на выбранные даты' });
         }
 
         const newBooking = {
@@ -166,12 +192,16 @@ app.post('/api/bookings', authenticateUser, (req, res) => {
             hotelId,
             checkInDate,
             checkOutDate,
+            roomNumber, // Сохраняем номер комнаты
+            bookingNumber: generateBookingNumber(), // Генерация номера бронирования
         };
+
+        console.log('Создано новое бронирование:', newBooking); // Debugging line
 
         bookings.push(newBooking);
         fs.writeFileSync(bookingsFilePath, JSON.stringify(bookings, null, 2), 'utf-8');
 
-        return res.status(201).json({ message: 'Бронирование успешно' });
+        return res.status(201).json({ message: 'Бронирование успешно', bookingNumber: newBooking.bookingNumber });
     } catch (error) {
         console.error('Ошибка при бронировании:', error);
         return res.status(500).json({ message: 'Ошибка сервера' });
@@ -210,6 +240,8 @@ app.get('/api/bookings', authenticateUser, (req, res) => {
                 hotelPricePerNight: hotel ? hotel.pricePerNight : 'Неизвестная цена',
             };
         });
+
+        console.log('Бронирования пользователя:', bookingsWithHotelInfo); // Debugging line
 
         return res.status(200).json(bookingsWithHotelInfo);
     } catch (error) {

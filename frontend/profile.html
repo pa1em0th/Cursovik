@@ -153,7 +153,6 @@
             </div>
         </div>
     </footer>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const sessionId = localStorage.getItem('sessionId');
@@ -163,7 +162,7 @@
             const bookingsTab = document.getElementById('bookingsTab');
             const userDataContent = document.getElementById('userDataContent');
             const bookingsContent = document.getElementById('bookingsContent');
-
+    
             if (sessionId) {
                 profileTab.classList.remove('hidden');
                 logoutTab.classList.remove('hidden');
@@ -175,21 +174,21 @@
                 alert('Пожалуйста, войдите в систему.');
                 window.location.href = 'login.html';
             }
-
+    
             userDataTab.addEventListener('click', () => {
                 userDataTab.classList.add('tab-active');
                 bookingsTab.classList.remove('tab-active');
                 userDataContent.classList.remove('hidden');
                 bookingsContent.classList.add('hidden');
             });
-
+    
             bookingsTab.addEventListener('click', () => {
                 bookingsTab.classList.add('tab-active');
                 userDataTab.classList.remove('tab-active');
                 bookingsContent.classList.remove('hidden');
                 userDataContent.classList.add('hidden');
             });
-
+    
             document.getElementById('logoutLink')?.addEventListener('click', async (e) => {
                 e.preventDefault();
                 try {
@@ -210,7 +209,7 @@
                 }
             });
         });
-
+    
         async function loadUserData() {
             try {
                 const response = await fetch('/api/user', {
@@ -229,7 +228,7 @@
                 alert('Произошла ошибка. Попробуйте снова.');
             }
         }
-
+    
         async function loadBookings() {
             try {
                 const response = await fetch('/api/bookings', {
@@ -238,22 +237,25 @@
                 });
                 if (response.ok) {
                     const bookings = await response.json();
+                    console.log('Bookings data:', bookings); // Debugging line to check the data structure
                     const bookingsList = document.getElementById('bookingsList');
                     bookingsList.innerHTML = '';
-
+    
                     if (bookings.length === 0) {
                         bookingsList.innerHTML = '<p class="text-center text-gray-400">У вас нет бронирований.</p>';
                     } else {
                         bookings.forEach(booking => {
                             const checkInDate = new Date(booking.checkInDate).toLocaleDateString();
                             const checkOutDate = new Date(booking.checkOutDate).toLocaleDateString();
-
+    
                             const bookingItem = document.createElement('div');
                             bookingItem.className = 'bg-[#222222] p-4 rounded-lg';
                             bookingItem.innerHTML = `
                                 <p class="text-sm text-primary">Отель: ${booking.hotelName}</p>
                                 <p class="text-sm text-gray-400">Дата заезда: ${checkInDate}</p>
                                 <p class="text-sm text-gray-400">Дата выезда: ${checkOutDate}</p>
+                                <p class="text-sm text-gray-400">Номер комнаты: ${booking.roomNumber || 'Неизвестно'}</p>
+                                <p class="text-sm text-gray-400">Номер бронирования: ${booking.bookingNumber || 'Неизвестно'}</p>
                                 <button class="bg-red-500 text-background py-2 px-4 rounded-full mt-4 hover:bg-red-600 transition-colors" onclick="cancelBooking(${booking.id})">Отменить бронирование</button>
                             `;
                             bookingsList.appendChild(bookingItem);
@@ -267,7 +269,7 @@
                 alert('Произошла ошибка. Попробуйте снова.');
             }
         }
-
+    
         async function cancelBooking(bookingId) {
             const sessionId = localStorage.getItem('sessionId');
             try {
@@ -277,7 +279,7 @@
                         'Authorization': sessionId,
                     },
                 });
-
+    
                 if (response.ok) {
                     alert('Бронирование успешно отменено!');
                     // Обновляем список бронирований
@@ -292,5 +294,6 @@
             }
         }
     </script>
+    
 </body>
 </html>
