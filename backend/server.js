@@ -9,7 +9,6 @@ const PORT = 5000;
 app.use(express.json()); // Для парсинга JSON
 app.use(express.static(path.join(__dirname, '../frontend'))); // Для статических файлов
 
-
 // Хранение текущих сессий пользователей (в памяти)
 let sessions = {};
 
@@ -36,6 +35,21 @@ const authenticateUser = (req, res, next) => {
     req.user = sessions[sessionId];
     next();
 };
+
+// Middleware для проверки роли администратора
+const authenticateAdmin = (req, res, next) => {
+    const sessionId = req.headers.authorization;
+    console.log('Session ID:', sessionId); // Логирование для отладки
+
+    // Проверяем, является ли sessionId административным
+    if (sessionId === 'admin_session_id' || (sessions[sessionId] && sessions[sessionId].email === 'admin@admin.com')) {
+        next();
+    } else {
+        console.log('Доступ запрещен: неверный sessionId или не администратор'); // Логирование для отладки
+        return res.status(403).json({ message: 'Доступ запрещен' });
+    }
+};
+
 
 // Маршрут для регистрации
 app.post('/register', async (req, res) => {
@@ -125,16 +139,23 @@ app.post('/login', async (req, res) => {
     }
 });
 
+
 // Маршрут для выхода
 app.post('/logout', (req, res) => {
     const sessionId = req.headers.authorization;
+    console.log('Session ID:', sessionId); // Логирование для отладки
+
     if (sessionId && sessions[sessionId]) {
         delete sessions[sessionId];
+        console.log('Сессия удалена:', sessionId); // Логирование для отладки
         return res.status(200).json({ message: 'Выход выполнен успешно' });
     } else {
+        console.log('Сессия не найдена или недействительна'); // Логирование для отладки
         return res.status(400).json({ message: 'Сессия не найдена' });
     }
 });
+
+
 
 // Маршрут для получения данных пользователя
 app.get('/api/user', authenticateUser, (req, res) => {
@@ -165,7 +186,6 @@ app.post('/api/bookings', authenticateUser, (req, res) => {
             bookings = JSON.parse(rawData) || [];
         }
 
-        // Проверка доступности комнаты на выбранные даты
         const isRoomAvailable = bookings.every(booking => {
             if (booking.hotelId === hotelId && booking.roomNumber === roomNumber) {
                 const existingCheckIn = new Date(booking.checkInDate);
@@ -173,7 +193,6 @@ app.post('/api/bookings', authenticateUser, (req, res) => {
                 const newCheckIn = new Date(checkInDate);
                 const newCheckOut = new Date(checkOutDate);
 
-                // Проверка пересечения дат
                 return (
                     newCheckOut <= existingCheckIn ||
                     newCheckIn >= existingCheckOut
@@ -192,11 +211,9 @@ app.post('/api/bookings', authenticateUser, (req, res) => {
             hotelId,
             checkInDate,
             checkOutDate,
-            roomNumber, // Сохраняем номер комнаты
-            bookingNumber: generateBookingNumber(), // Генерация номера бронирования
+            roomNumber,
+            bookingNumber: generateBookingNumber(),
         };
-
-        console.log('Создано новое бронирование:', newBooking); // Debugging line
 
         bookings.push(newBooking);
         fs.writeFileSync(bookingsFilePath, JSON.stringify(bookings, null, 2), 'utf-8');
@@ -240,8 +257,6 @@ app.get('/api/bookings', authenticateUser, (req, res) => {
                 hotelPricePerNight: hotel ? hotel.pricePerNight : 'Неизвестная цена',
             };
         });
-
-        console.log('Бронирования пользователя:', bookingsWithHotelInfo); // Debugging line
 
         return res.status(200).json(bookingsWithHotelInfo);
     } catch (error) {
@@ -337,11 +352,336 @@ app.post('/api/reviews', authenticateUser, (req, res) => {
 // Маршрут для страницы "Полезные статьи"
 app.get('/articles', authenticateUser, (req, res) => {
     try {
-        // Отправляем HTML-страницу
         res.sendFile(path.join(__dirname, '../frontend/articles.html'));
     } catch (error) {
         console.error('Ошибка при загрузке страницы статей:', error);
         res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
+
+// Маршрут для добавления отеля (администратор)
+app.post('/admin/addHotel', authenticateAdmin, (req, res) => {
+    try {
+        const { hotelName } = req.body;
+
+        if (!hotelName) {
+            return res.status(400).json({ message: 'Название отеля обязательно' });
+        }
+
+        const hotelsFilePath = path.join(__dirname, '../data', 'hotels.json');
+        let hotels = [];
+
+        if (fs.existsSync(hotelsFilePath)) {
+            const rawData = fs.readFileSync(hotelsFilePath, 'utf-8');
+            hotels = JSON.parse(rawData) || [];
+        }
+
+        const newHotel = {
+            id: hotels.length + 1,
+            name: hotelName,
+        };
+
+        hotels.push(newHotel);
+        fs.writeFileSync(hotelsFilePath, JSON.stringify(hotels, null, 2), 'utf-8');
+
+        return res.status(201).json({ message: 'Отель успешно добавлен' });
+    } catch (error) {
+        console.error('Ошибка при добавлении отеля:', error);
+        return res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
+
+// Маршрут для получения списка отелей (для администратора)
+app.get('/admin/hotels', authenticateAdmin, (req, res) => {
+    try {
+        const hotelsFilePath = path.join(__dirname, '../data', 'hotels.json');
+        let hotels = [];
+
+        if (fs.existsSync(hotelsFilePath)) {
+            const rawData = fs.readFileSync(hotelsFilePath, 'utf-8');
+            hotels = JSON.parse(rawData) || [];
+        }
+
+        return res.status(200).json(hotels);
+    } catch (error) {
+        console.error('Ошибка при получении отелей:', error);
+        return res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
+
+// Маршрут для удаления отеля
+app.delete('/admin/deleteHotel/:hotelId', authenticateAdmin, (req, res) => {
+    try {
+        const hotelId = parseInt(req.params.hotelId, 10);
+
+        const hotelsFilePath = path.join(__dirname, '../data', 'hotels.json');
+        let hotels = [];
+
+        if (fs.existsSync(hotelsFilePath)) {
+            const rawData = fs.readFileSync(hotelsFilePath, 'utf-8');
+            hotels = JSON.parse(rawData) || [];
+        }
+
+        const hotelIndex = hotels.findIndex(hotel => hotel.id === hotelId);
+        if (hotelIndex === -1) {
+            return res.status(404).json({ message: 'Отель не найден' });
+        }
+
+        hotels.splice(hotelIndex, 1);
+        fs.writeFileSync(hotelsFilePath, JSON.stringify(hotels, null, 2), 'utf-8');
+
+        return res.status(200).json({ message: 'Отель успешно удален' });
+    } catch (error) {
+        console.error('Ошибка при удалении отеля:', error);
+        return res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
+
+// Маршрут для получения списка пользователей (для администратора)
+app.get('/admin/users', authenticateAdmin, (req, res) => {
+    try {
+        const usersFilePath = path.join(__dirname, '../data', 'users.json');
+        let users = [];
+
+        if (fs.existsSync(usersFilePath)) {
+            const rawData = fs.readFileSync(usersFilePath, 'utf-8');
+            users = JSON.parse(rawData) || [];
+        }
+
+        return res.status(200).json(users);
+    } catch (error) {
+        console.error('Ошибка при получении пользователей:', error);
+        return res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
+
+// Маршрут для удаления пользователя
+app.delete('/admin/deleteUser/:userId', authenticateAdmin, (req, res) => {
+    try {
+        const userId = parseInt(req.params.userId, 10);
+
+        const usersFilePath = path.join(__dirname, '../data', 'users.json');
+        let users = [];
+
+        if (fs.existsSync(usersFilePath)) {
+            const rawData = fs.readFileSync(usersFilePath, 'utf-8');
+            users = JSON.parse(rawData) || [];
+        }
+
+        const userIndex = users.findIndex(user => user.id === userId);
+        if (userIndex === -1) {
+            return res.status(404).json({ message: 'Пользователь не найден' });
+        }
+
+        users.splice(userIndex, 1);
+        fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2), 'utf-8');
+
+        return res.status(200).json({ message: 'Пользователь успешно удален' });
+    } catch (error) {
+        console.error('Ошибка при удалении пользователя:', error);
+        return res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
+
+// Маршрут для получения списка отзывов (для администратора)
+app.get('/admin/reviews', authenticateAdmin, (req, res) => {
+    try {
+        const reviewsFilePath = path.join(__dirname, '../data', 'reviews.json');
+        let reviews = [];
+
+        if (fs.existsSync(reviewsFilePath)) {
+            const rawData = fs.readFileSync(reviewsFilePath, 'utf-8');
+            reviews = JSON.parse(rawData) || [];
+        }
+
+        return res.status(200).json(reviews);
+    } catch (error) {
+        console.error('Ошибка при получении отзывов:', error);
+        return res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
+
+// Маршрут для удаления отзыва
+app.delete('/admin/deleteReview/:reviewId', authenticateAdmin, (req, res) => {
+    try {
+        const reviewId = parseInt(req.params.reviewId, 10);
+
+        const reviewsFilePath = path.join(__dirname, '../data', 'reviews.json');
+        let reviews = [];
+
+        if (fs.existsSync(reviewsFilePath)) {
+            const rawData = fs.readFileSync(reviewsFilePath, 'utf-8');
+            reviews = JSON.parse(rawData) || [];
+        }
+
+        const reviewIndex = reviews.findIndex(review => review.id === reviewId);
+        if (reviewIndex === -1) {
+            return res.status(404).json({ message: 'Отзыв не найден' });
+        }
+
+        reviews.splice(reviewIndex, 1);
+        fs.writeFileSync(reviewsFilePath, JSON.stringify(reviews, null, 2), 'utf-8');
+
+        return res.status(200).json({ message: 'Отзыв успешно удален' });
+    } catch (error) {
+        console.error('Ошибка при удалении отзыва:', error);
+        return res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
+
+// Маршрут для редактирования отзыва
+app.put('/admin/editReview/:reviewId', authenticateAdmin, (req, res) => {
+    try {
+        const reviewId = parseInt(req.params.reviewId, 10);
+        const { content } = req.body;
+
+        const reviewsFilePath = path.join(__dirname, '../data', 'reviews.json');
+        let reviews = [];
+
+        if (fs.existsSync(reviewsFilePath)) {
+            const rawData = fs.readFileSync(reviewsFilePath, 'utf-8');
+            reviews = JSON.parse(rawData) || [];
+        }
+
+        const review = reviews.find(review => review.id === reviewId);
+        if (!review) {
+            return res.status(404).json({ message: 'Отзыв не найден' });
+        }
+
+        review.comment = content;
+        fs.writeFileSync(reviewsFilePath, JSON.stringify(reviews, null, 2), 'utf-8');
+
+        return res.status(200).json({ message: 'Отзыв успешно отредактирован' });
+    } catch (error) {
+        console.error('Ошибка при редактировании отзыва:', error);
+        return res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
+
+// Маршрут для добавления отеля (администратор)
+app.post('/admin/addHotel', authenticateAdmin, (req, res) => {
+    try {
+        const { hotelName, location, pricePerNight } = req.body;
+
+        if (!hotelName || !location || pricePerNight == null) {
+            return res.status(400).json({ message: 'Все поля обязательны' });
+        }
+
+        const hotelsFilePath = path.join(__dirname, '../data', 'hotels.json');
+        let hotels = [];
+
+        if (fs.existsSync(hotelsFilePath)) {
+            const rawData = fs.readFileSync(hotelsFilePath, 'utf-8');
+            hotels = JSON.parse(rawData) || [];
+        }
+
+        const newHotel = {
+            id: hotels.length + 1,
+            name: hotelName,
+            location,
+            pricePerNight,
+        };
+
+        hotels.push(newHotel);
+        fs.writeFileSync(hotelsFilePath, JSON.stringify(hotels, null, 2), 'utf-8');
+
+        return res.status(201).json({ message: 'Отель успешно добавлен' });
+    } catch (error) {
+        console.error('Ошибка при добавлении отеля:', error);
+        return res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
+
+// Маршрут для редактирования отеля (администратор)
+app.put('/admin/editHotel/:hotelId', authenticateAdmin, (req, res) => {
+    try {
+        const hotelId = parseInt(req.params.hotelId, 10);
+        const { hotelName, location, pricePerNight } = req.body;
+
+        const hotelsFilePath = path.join(__dirname, '../data', 'hotels.json');
+        let hotels = [];
+
+        if (fs.existsSync(hotelsFilePath)) {
+            const rawData = fs.readFileSync(hotelsFilePath, 'utf-8');
+            hotels = JSON.parse(rawData) || [];
+        }
+
+        const hotel = hotels.find(hotel => hotel.id === hotelId);
+        if (!hotel) {
+            return res.status(404).json({ message: 'Отель не найден' });
+        }
+
+        hotel.name = hotelName;
+        hotel.location = location;
+        hotel.pricePerNight = pricePerNight;
+
+        fs.writeFileSync(hotelsFilePath, JSON.stringify(hotels, null, 2), 'utf-8');
+
+        return res.status(200).json({ message: 'Отель успешно отредактирован' });
+    } catch (error) {
+        console.error('Ошибка при редактировании отеля:', error);
+        return res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
+
+// Маршрут для добавления пользователя (администратор)
+app.post('/admin/addUser', authenticateAdmin, async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+
+        if (!name || !email || !password) {
+            return res.status(400).json({ message: 'Все поля обязательны' });
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ message: 'Некорректный email' });
+        }
+
+        const usersFilePath = path.join(__dirname, '../data', 'users.json');
+        let users = [];
+
+        if (fs.existsSync(usersFilePath)) {
+            const rawData = fs.readFileSync(usersFilePath, 'utf-8');
+            users = JSON.parse(rawData) || [];
+        }
+
+        const existingUser = users.find(user => user.email === email);
+        if (existingUser) {
+            return res.status(400).json({ message: 'Пользователь уже существует' });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = {
+            id: users.length + 1,
+            name,
+            email,
+            password: hashedPassword,
+        };
+
+        users.push(newUser);
+        fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2), 'utf-8');
+
+        return res.status(201).json({ message: 'Пользователь успешно добавлен' });
+    } catch (error) {
+        console.error('Ошибка при добавлении пользователя:', error);
+        return res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
+
+// Маршрут для выхода
+app.post('/logout', (req, res) => {
+    const sessionId = req.headers.authorization;
+    console.log('Session ID:', sessionId); // Логирование для отладки
+
+    if (sessionId && sessions[sessionId]) {
+        delete sessions[sessionId];
+        console.log('Сессия удалена:', sessionId); // Логирование для отладки
+        return res.status(200).json({ message: 'Выход выполнен успешно' });
+    } else {
+        console.log('Сессия не найдена или недействительна'); // Логирование для отладки
+        return res.status(400).json({ message: 'Сессия не найдена' });
     }
 });
 
