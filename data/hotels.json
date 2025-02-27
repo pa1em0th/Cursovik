@@ -1,19 +1,14 @@
 [
   {
     "id": 1,
-    "name": "Hotel Hilton",
+    "name": "Hotel Hiltone",
     "location": "Moscow, Russia",
     "pricePerNight": "5500",
     "image": "https://example.com/hotel1.jpg",
     "rooms": [
-      {
-        "id": 1,
-        "number": 101
-      },
-      {
-        "id": 2,
-        "number": 102
-      }
+      101,
+      102,
+      103
     ]
   },
   {
@@ -23,18 +18,9 @@
     "pricePerNight": 6000,
     "image": "https://example.com/hotel2.jpg",
     "rooms": [
-      {
-        "id": 4,
-        "number": 201
-      },
-      {
-        "id": 5,
-        "number": 202
-      },
-      {
-        "id": 6,
-        "number": 203
-      }
+      201,
+      202,
+      203
     ]
   },
   {
@@ -44,18 +30,9 @@
     "pricePerNight": 7000,
     "image": "https://example.com/hotel3.jpg",
     "rooms": [
-      {
-        "id": 7,
-        "number": 301
-      },
-      {
-        "id": 8,
-        "number": 302
-      },
-      {
-        "id": 9,
-        "number": 303
-      }
+      301,
+      302,
+      303
     ]
   },
   {
@@ -65,18 +42,9 @@
     "pricePerNight": 8000,
     "image": "https://example.com/hotel4.jpg",
     "rooms": [
-      {
-        "id": 10,
-        "number": 401
-      },
-      {
-        "id": 11,
-        "number": 402
-      },
-      {
-        "id": 12,
-        "number": 403
-      }
+      401,
+      402,
+      403
     ]
   },
   {
@@ -86,18 +54,9 @@
     "pricePerNight": 6500,
     "image": "https://example.com/hotel5.jpg",
     "rooms": [
-      {
-        "id": 13,
-        "number": 501
-      },
-      {
-        "id": 14,
-        "number": 502
-      },
-      {
-        "id": 15,
-        "number": 503
-      }
+      501,
+      502,
+      503
     ]
   },
   {
@@ -107,18 +66,9 @@
     "pricePerNight": 7500,
     "image": "https://example.com/hotel6.jpg",
     "rooms": [
-      {
-        "id": 16,
-        "number": 601
-      },
-      {
-        "id": 17,
-        "number": 602
-      },
-      {
-        "id": 18,
-        "number": 603
-      }
+      601,
+      602,
+      603
     ]
   },
   {
@@ -128,18 +78,9 @@
     "pricePerNight": 5500,
     "image": "https://example.com/hotel7.jpg",
     "rooms": [
-      {
-        "id": 19,
-        "number": 701
-      },
-      {
-        "id": 20,
-        "number": 702
-      },
-      {
-        "id": 21,
-        "number": 703
-      }
+      701,
+      702,
+      703
     ]
   },
   {
@@ -149,18 +90,9 @@
     "pricePerNight": 6200,
     "image": "https://example.com/hotel8.jpg",
     "rooms": [
-      {
-        "id": 22,
-        "number": 801
-      },
-      {
-        "id": 23,
-        "number": 802
-      },
-      {
-        "id": 24,
-        "number": 803
-      }
+      801,
+      802,
+      803
     ]
   },
   {
@@ -170,18 +102,9 @@
     "pricePerNight": 5800,
     "image": "https://example.com/hotel9.jpg",
     "rooms": [
-      {
-        "id": 25,
-        "number": 901
-      },
-      {
-        "id": 26,
-        "number": 902
-      },
-      {
-        "id": 27,
-        "number": 903
-      }
+      901,
+      902,
+      903
     ]
   },
   {
@@ -191,30 +114,9 @@
     "pricePerNight": 5200,
     "image": "https://example.com/hotel10.jpg",
     "rooms": [
-      {
-        "id": 28,
-        "number": 1001
-      },
-      {
-        "id": 29,
-        "number": 1002
-      },
-      {
-        "id": 30,
-        "number": 1003
-      }
+      1001,
+      1002,
+      1003
     ]
-  },
-  {
-    "id": 11,
-    "name": "ввввв",
-    "location": "123456",
-    "pricePerNight": "4500"
-  },
-  {
-    "id": 12,
-    "name": "ввввв",
-    "location": "123456",
-    "pricePerNight": "4500"
   }
 ]
