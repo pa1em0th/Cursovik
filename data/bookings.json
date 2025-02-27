@@ -1,140 +1,5 @@
 [
   {
-    "id": 1,
-    "name": "Hotel Hilton",
-    "location": "Moscow, Russia",
-    "pricePerNight": 5000,
-    "image": "https://example.com/hotel1.jpg",
-    "rooms": [
-      101,
-      102,
-      103,
-      104,
-      105
-    ]
-  },
-  {
-    "id": 2,
-    "name": "Hotel Marriott",
-    "location": "St. Petersburg, Russia",
-    "pricePerNight": 6000,
-    "image": "https://example.com/hotel2.jpg",
-    "rooms": [
-      201,
-      202,
-      203,
-      204
-    ]
-  },
-  {
-    "id": 3,
-    "name": "Hotel Ritz-Carlton",
-    "location": "Novosibirsk, Russia",
-    "pricePerNight": 7000,
-    "image": "https://example.com/hotel3.jpg",
-    "rooms": [
-      301,
-      302,
-      303,
-      304,
-      305
-    ]
-  },
-  {
-    "id": 4,
-    "name": "Hotel Four Seasons",
-    "location": "Kazan, Russia",
-    "pricePerNight": 8000,
-    "image": "https://example.com/hotel4.jpg",
-    "rooms": [
-      401,
-      402,
-      403,
-      404
-    ]
-  },
-  {
-    "id": 5,
-    "name": "Hotel Hyatt",
-    "location": "Ekaterinburg, Russia",
-    "pricePerNight": 6500,
-    "image": "https://example.com/hotel5.jpg",
-    "rooms": [
-      501,
-      502,
-      503,
-      504,
-      505
-    ]
-  },
-  {
-    "id": 6,
-    "name": "Hotel InterContinental",
-    "location": "Nizhny Novgorod, Russia",
-    "pricePerNight": 7500,
-    "image": "https://example.com/hotel6.jpg",
-    "rooms": [
-      601,
-      602,
-      603,
-      604
-    ]
-  },
-  {
-    "id": 7,
-    "name": "Hotel Sheraton",
-    "location": "Samara, Russia",
-    "pricePerNight": 5500,
-    "image": "https://example.com/hotel7.jpg",
-    "rooms": [
-      701,
-      702,
-      703,
-      704,
-      705
-    ]
-  },
-  {
-    "id": 8,
-    "name": "Hotel Radisson Blu",
-    "location": "Rostov-on-Don, Russia",
-    "pricePerNight": 6200,
-    "image": "https://example.com/hotel8.jpg",
-    "rooms": [
-      801,
-      802,
-      803,
-      804
-    ]
-  },
-  {
-    "id": 9,
-    "name": "Hotel Crowne Plaza",
-    "location": "Krasnodar, Russia",
-    "pricePerNight": 5800,
-    "image": "https://example.com/hotel9.jpg",
-    "rooms": [
-      901,
-      902,
-      903,
-      904,
-      905
-    ]
-  },
-  {
-    "id": 10,
-    "name": "Hotel Holiday Inn",
-    "location": "Voronezh, Russia",
-    "pricePerNight": 5200,
-    "image": "https://example.com/hotel10.jpg",
-    "rooms": [
-      1001,
-      1002,
-      1003,
-      1004
-    ]
-  },
-  {
     "id": 11,
     "userId": 4,
     "hotelId": 1,
@@ -178,5 +43,14 @@
     "checkOutDate": "2025-03-29",
     "roomNumber": "101",
     "bookingNumber": 734823
+  },
+  {
+    "id": 6,
+    "userId": 5,
+    "hotelId": 1,
+    "checkInDate": "2025-04-01",
+    "checkOutDate": "2025-04-24",
+    "roomNumber": "101",
+    "bookingNumber": "BN-1E7SDV"
   }
 ]

@@ -102,6 +102,12 @@
                     <input type="number" id="pricePerNight" placeholder="Цена за ночь" required>
                     <button onclick="addHotel()">Добавить</button>
                 </div>
+                <div id="editHotelForm" class="hidden">
+                    <input type="text" id="editHotelName" placeholder="Название отеля" required>
+                    <input type="text" id="editLocation" placeholder="Локация" required>
+                    <input type="number" id="editPricePerNight" placeholder="Цена за ночь" required>
+                    <button onclick="saveEditHotel()">Сохранить</button>
+                </div>
                 <div id="hotelsList" class="space-y-4">
                     <p class="text-center text-gray-400">Загрузка отелей...</p>
                 </div>
@@ -178,35 +184,19 @@
                 hotelsContent.classList.add('hidden');
             });
 
-            document.getElementById('logoutLink')?.addEventListener('click', async (e) => {
-    e.preventDefault();
-    const sessionId = localStorage.getItem('sessionId');
-    console.log('Session ID:', sessionId); // Логирование для отладки
+            document.getElementById('logoutLink')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                const sessionId = localStorage.getItem('sessionId');
+                console.log('Session ID:', sessionId); // Логирование для отладки
 
-    if (sessionId) {
-        try {
-            const response = await fetch('/logout', {
-                method: 'POST',
-                headers: { 'Authorization': sessionId },
+                if (sessionId === 'admin_session_id') {
+                    localStorage.removeItem('sessionId');
+                    alert('Вы успешно вышли из системы.');
+                    window.location.href = 'login.html';
+                } else {
+                    alert('Сессия не найдена. Пожалуйста, войдите снова.');
+                }
             });
-            if (response.ok) {
-                localStorage.removeItem('sessionId');
-                alert('Вы успешно вышли из системы.');
-                window.location.href = 'index.html';
-            } else {
-                const errorData = await response.json();
-                console.error('Ошибка при выходе:', errorData); // Логирование для отладки
-                alert('Ошибка при выходе из системы: ' + errorData.message);
-            }
-        } catch (error) {
-            console.error('Ошибка при выходе:', error);
-            alert('Произошла ошибка. Попробуйте снова.');
-        }
-    } else {
-        alert('Сессия не найдена. Пожалуйста, войдите снова.');
-    }
-});
-
         });
 
         async function loadUsers() {
@@ -454,43 +444,45 @@
         }
 
         function showEditHotelForm(hotelId, hotelName, location, pricePerNight) {
-            const form = document.getElementById('editHotelForm');
-            document.getElementById('editHotelName').value = hotelName;
-            document.getElementById('editLocation').value = location;
-            document.getElementById('editPricePerNight').value = pricePerNight;
-            form.classList.remove('hidden');
-            form.onsubmit = function(event) {
-                event.preventDefault();
-                editHotel(hotelId);
-            };
+    const form = document.getElementById('editHotelForm');
+    document.getElementById('editHotelName').value = hotelName;
+    document.getElementById('editLocation').value = location;
+    document.getElementById('editPricePerNight').value = pricePerNight;
+    form.classList.remove('hidden');
+
+    // Устанавливаем обработчик события для кнопки сохранения
+    const saveButton = form.querySelector('button');
+    saveButton.onclick = () => saveEditHotel(hotelId); // Передаем hotelId в функцию сохранения
+}
+
+async function saveEditHotel(hotelId) {
+    const hotelName = document.getElementById('editHotelName').value.trim();
+    const location = document.getElementById('editLocation').value.trim();
+    const pricePerNight = document.getElementById('editPricePerNight').value.trim();
+
+    try {
+        const response = await fetch(`/admin/editHotel/${hotelId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('sessionId'),
+            },
+            body: JSON.stringify({ hotelName, location, pricePerNight }),
+        });
+
+        if (response.ok) {
+            alert('Отель успешно отредактирован!');
+            loadHotels();
+            document.getElementById('editHotelForm').classList.add('hidden');
+        } else {
+            alert('Ошибка при редактировании отеля.');
         }
+    } catch (error) {
+        console.error('Ошибка при редактировании отеля:', error);
+        alert('Произошла ошибка. Попробуйте снова.');
+    }
+}
 
-        async function editHotel(hotelId) {
-            const hotelName = document.getElementById('editHotelName').value.trim();
-            const location = document.getElementById('editLocation').value.trim();
-            const pricePerNight = document.getElementById('editPricePerNight').value.trim();
-
-            try {
-                const response = await fetch(`/admin/editHotel/${hotelId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': localStorage.getItem('sessionId'),
-                    },
-                    body: JSON.stringify({ hotelName, location, pricePerNight }),
-                });
-
-                if (response.ok) {
-                    alert('Отель успешно отредактирован!');
-                    loadHotels();
-                } else {
-                    alert('Ошибка при редактировании отеля.');
-                }
-            } catch (error) {
-                console.error('Ошибка при редактировании отеля:', error);
-                alert('Произошла ошибка. Попробуйте снова.');
-            }
-        }
     </script>
 </body>
 </html>

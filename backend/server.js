@@ -50,7 +50,6 @@ const authenticateAdmin = (req, res, next) => {
     }
 };
 
-
 // Маршрут для регистрации
 app.post('/register', async (req, res) => {
     try {
@@ -139,7 +138,6 @@ app.post('/login', async (req, res) => {
     }
 });
 
-
 // Маршрут для выхода
 app.post('/logout', (req, res) => {
     const sessionId = req.headers.authorization;
@@ -155,7 +153,25 @@ app.post('/logout', (req, res) => {
     }
 });
 
+// Маршрут для получения списка отелей
+app.get('/api/hotels', (req, res) => {
+    try {
+        const hotelsFilePath = path.join(__dirname, '../data', 'hotels.json');
+        let hotels = [];
 
+        if (fs.existsSync(hotelsFilePath)) {
+            const rawData = fs.readFileSync(hotelsFilePath, 'utf-8');
+            hotels = JSON.parse(rawData) || [];
+        }
+
+        console.log('Загруженные отели с сервера:', hotels); // Логирование для отладки
+
+        return res.status(200).json(hotels);
+    } catch (error) {
+        console.error('Ошибка при получении отелей:', error);
+        return res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
 
 // Маршрут для получения данных пользователя
 app.get('/api/user', authenticateUser, (req, res) => {
@@ -362,10 +378,10 @@ app.get('/articles', authenticateUser, (req, res) => {
 // Маршрут для добавления отеля (администратор)
 app.post('/admin/addHotel', authenticateAdmin, (req, res) => {
     try {
-        const { hotelName } = req.body;
+        const { hotelName, location, pricePerNight } = req.body;
 
-        if (!hotelName) {
-            return res.status(400).json({ message: 'Название отеля обязательно' });
+        if (!hotelName || !location || pricePerNight == null) {
+            return res.status(400).json({ message: 'Все поля обязательны' });
         }
 
         const hotelsFilePath = path.join(__dirname, '../data', 'hotels.json');
@@ -379,6 +395,8 @@ app.post('/admin/addHotel', authenticateAdmin, (req, res) => {
         const newHotel = {
             id: hotels.length + 1,
             name: hotelName,
+            location,
+            pricePerNight,
         };
 
         hotels.push(newHotel);
@@ -557,41 +575,6 @@ app.put('/admin/editReview/:reviewId', authenticateAdmin, (req, res) => {
         return res.status(500).json({ message: 'Ошибка сервера' });
     }
 });
-
-// Маршрут для добавления отеля (администратор)
-app.post('/admin/addHotel', authenticateAdmin, (req, res) => {
-    try {
-        const { hotelName, location, pricePerNight } = req.body;
-
-        if (!hotelName || !location || pricePerNight == null) {
-            return res.status(400).json({ message: 'Все поля обязательны' });
-        }
-
-        const hotelsFilePath = path.join(__dirname, '../data', 'hotels.json');
-        let hotels = [];
-
-        if (fs.existsSync(hotelsFilePath)) {
-            const rawData = fs.readFileSync(hotelsFilePath, 'utf-8');
-            hotels = JSON.parse(rawData) || [];
-        }
-
-        const newHotel = {
-            id: hotels.length + 1,
-            name: hotelName,
-            location,
-            pricePerNight,
-        };
-
-        hotels.push(newHotel);
-        fs.writeFileSync(hotelsFilePath, JSON.stringify(hotels, null, 2), 'utf-8');
-
-        return res.status(201).json({ message: 'Отель успешно добавлен' });
-    } catch (error) {
-        console.error('Ошибка при добавлении отеля:', error);
-        return res.status(500).json({ message: 'Ошибка сервера' });
-    }
-});
-
 // Маршрут для редактирования отеля (администратор)
 app.put('/admin/editHotel/:hotelId', authenticateAdmin, (req, res) => {
     try {
@@ -611,10 +594,12 @@ app.put('/admin/editHotel/:hotelId', authenticateAdmin, (req, res) => {
             return res.status(404).json({ message: 'Отель не найден' });
         }
 
+        // Обновляем данные отеля
         hotel.name = hotelName;
         hotel.location = location;
         hotel.pricePerNight = pricePerNight;
 
+        // Сохраняем обновленные данные в файл
         fs.writeFileSync(hotelsFilePath, JSON.stringify(hotels, null, 2), 'utf-8');
 
         return res.status(200).json({ message: 'Отель успешно отредактирован' });
@@ -623,7 +608,6 @@ app.put('/admin/editHotel/:hotelId', authenticateAdmin, (req, res) => {
         return res.status(500).json({ message: 'Ошибка сервера' });
     }
 });
-
 // Маршрут для добавления пользователя (администратор)
 app.post('/admin/addUser', authenticateAdmin, async (req, res) => {
     try {
@@ -667,21 +651,6 @@ app.post('/admin/addUser', authenticateAdmin, async (req, res) => {
     } catch (error) {
         console.error('Ошибка при добавлении пользователя:', error);
         return res.status(500).json({ message: 'Ошибка сервера' });
-    }
-});
-
-// Маршрут для выхода
-app.post('/logout', (req, res) => {
-    const sessionId = req.headers.authorization;
-    console.log('Session ID:', sessionId); // Логирование для отладки
-
-    if (sessionId && sessions[sessionId]) {
-        delete sessions[sessionId];
-        console.log('Сессия удалена:', sessionId); // Логирование для отладки
-        return res.status(200).json({ message: 'Выход выполнен успешно' });
-    } else {
-        console.log('Сессия не найдена или недействительна'); // Логирование для отладки
-        return res.status(400).json({ message: 'Сессия не найдена' });
     }
 });
 

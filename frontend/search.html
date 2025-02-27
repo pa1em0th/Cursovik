@@ -163,149 +163,6 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const sessionId = localStorage.getItem('sessionId');
-            const profileTab = document.getElementById('profileTab');
-            const logoutTab = document.getElementById('logoutTab');
-
-            let hotels = [
-                { "id": 1, "name": "Hotel Hilton", "location": "Moscow, Russia", "pricePerNight": 5000, "image": "png/hotel1.png", "rooms": [101, 102, 103] },
-                { "id": 2, "name": "Hotel Marriott", "location": "St. Petersburg, Russia", "pricePerNight": 6000, "image": "png/hotel2.png", "rooms": [201, 202, 203] },
-                { "id": 3, "name": "Hotel Ritz-Carlton", "location": "Novosibirsk, Russia", "pricePerNight": 7000, "image": "png/hotel3.png", "rooms": [301, 302, 303] },
-                { "id": 4, "name": "Hotel Four Seasons", "location": "Kazan, Russia", "pricePerNight": 8000, "image": "png/hotel4.png", "rooms": [401, 402, 403] },
-                { "id": 5, "name": "Hotel Hyatt", "location": "Ekaterinburg, Russia", "pricePerNight": 6500, "image": "png/hotel5.png", "rooms": [501, 502, 503] },
-                { "id": 6, "name": "Hotel InterContinental", "location": "Nizhny Novgorod, Russia", "pricePerNight": 7500, "image": "png/hotel6.png", "rooms": [601, 602, 603] },
-                { "id": 7, "name": "Hotel Sheraton", "location": "Samara, Russia", "pricePerNight": 5500, "image": "png/hotel7.png", "rooms": [701, 702, 703] },
-                { "id": 8, "name": "Hotel Radisson Blu", "location": "Rostov-on-Don, Russia", "pricePerNight": 6200, "image": "png/hotel8.png", "rooms": [801, 802, 803] },
-                { "id": 9, "name": "Hotel Crowne Plaza", "location": "Krasnodar, Russia", "pricePerNight": 5800, "image": "png/hotel9.png", "rooms": [901, 902, 903] },
-                { "id": 10, "name": "Hotel Holiday Inn", "location": "Voronezh, Russia", "pricePerNight": 5200, "image": "png/hotel10.png", "rooms": [1001, 1002, 1003] }
-            ];
-
-            if (sessionId) {
-                profileTab.classList.remove('hidden');
-                logoutTab.classList.remove('hidden');
-                document.querySelectorAll('#navMenu li a[href="login.html"], #navMenu li a[href="register.html"]').forEach(link => {
-                    link.parentElement.classList.add('hidden');
-                });
-                loadHotels();
-            } else {
-                profileTab.classList.add('hidden');
-                logoutTab.classList.add('hidden');
-                document.querySelectorAll('#navMenu li a[href="login.html"], #navMenu li a[href="register.html"]').forEach(link => {
-                    link.parentElement.classList.remove('hidden');
-                });
-            }
-
-            document.getElementById('logoutLink')?.addEventListener('click', async (e) => {
-                e.preventDefault();
-
-                try {
-                    const response = await fetch('/logout', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': sessionId,
-                        },
-                    });
-
-                    if (response.ok) {
-                        localStorage.removeItem('sessionId');
-                        alert('Вы успешно вышли из системы.');
-                        window.location.href = 'index.html';
-                    } else {
-                        const errorData = await response.json();
-                        alert(`Ошибка при выходе из системы: ${errorData.message}`);
-                    }
-                } catch (error) {
-                    console.error('Ошибка при выходе:', error);
-                    alert('Произошла ошибка. Попробуйте снова.');
-                }
-            });
-
-            document.getElementById('search').addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase();
-                filterHotels(query);
-            });
-
-            document.getElementById('sort').addEventListener('change', (e) => {
-                const sortBy = e.target.value;
-                sortHotels(sortBy);
-            });
-
-            function loadHotels() {
-                displayHotels(hotels);
-            }
-
-            function displayHotels(hotelsToDisplay) {
-                const hotelList = document.getElementById('hotelList');
-                hotelList.innerHTML = '';
-
-                hotelsToDisplay.forEach(hotel => {
-                    const hotelDiv = document.createElement('div');
-                    hotelDiv.classList.add('bg-[#222222]', 'p-4', 'rounded-lg', 'shadow-lg');
-                    hotelDiv.innerHTML = `
-                        <img src="${hotel.image}" alt="${hotel.name}" class="w-full h-48 object-cover rounded-lg mb-4">
-                        <h3 class="text-primary text-xl font-bold">${hotel.name}</h3>
-                        <p class="text-text">${hotel.location}</p>
-                        <p class="text-secondary font-bold mt-2">${hotel.pricePerNight} руб./ночь</p>
-                        <!-- Кнопка "Подробнее" -->
-                        <button class="bg-blue-500 text-background py-2 px-4 rounded-full w-full hover:bg-blue-600 transition-colors mb-2" onclick="viewHotelDetails()">Подробнее</button>
-                        <!-- Кнопка "Забронировать" -->
-                        <button class="bg-primary text-background py-2 px-4 rounded-full w-full hover:bg-secondary transition-colors" onclick="toggleDatePicker(${hotel.id})">Забронировать</button>
-                        <div id="datePicker-${hotel.id}" class="hidden mt-4">
-                            <div class="mt-4">
-                                <label for="checkIn-${hotel.id}" class="text-primary">Дата заезда:</label>
-                                <input type="text" id="checkIn-${hotel.id}" class="flatpickr px-4 py-2 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border mb-2" placeholder="Выберите дату">
-                            </div>
-                            <div class="mt-2">
-                                <label for="checkOut-${hotel.id}" class="text-primary">Дата выезда:</label>
-                                <input type="text" id="checkOut-${hotel.id}" class="flatpickr px-4 py-2 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border mb-2" placeholder="Выберите дату">
-                            </div>
-                            <div class="mt-2">
-                                <label for="roomNumber-${hotel.id}" class="text-primary">Номер комнаты:</label>
-                                <select id="roomNumber-${hotel.id}" class="px-4 py-2 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border mb-2">
-                                    ${hotel.rooms.map(room => `<option value="${room}">${room}</option>`).join('')}
-                                </select>
-                            </div>
-                            <button class="bg-accent text-background py-2 px-4 rounded-full w-full mt-4 hover:bg-red-600 transition-colors" onclick="calculateTotalAndBook(${hotel.id}, ${hotel.pricePerNight})">Забронировать</button>
-                        </div>
-                    `;
-                    hotelList.appendChild(hotelDiv);
-
-                    // Initialize flatpickr
-                    flatpickr(`#checkIn-${hotel.id}`, { dateFormat: "Y-m-d" });
-                    flatpickr(`#checkOut-${hotel.id}`, { dateFormat: "Y-m-d" });
-                });
-            }
-
-            window.toggleDatePicker = function(hotelId) {
-                const datePicker = document.getElementById(`datePicker-${hotelId}`);
-                if (datePicker) {
-                    datePicker.classList.toggle('hidden');
-                }
-            };
-
-            window.viewHotelDetails = function() {
-                window.location.href = 'about-hotels.html';
-            };
-
-            function filterHotels(query) {
-                const filteredHotels = hotels.filter(hotel =>
-                    hotel.name.toLowerCase().includes(query) ||
-                    hotel.location.toLowerCase().includes(query)
-                );
-                displayHotels(filteredHotels);
-            }
-
-            function sortHotels(sortBy) {
-                const sortedHotels = [...hotels].sort((a, b) => {
-                    if (a[sortBy] < b[sortBy]) return -1;
-                    if (a[sortBy] > b[sortBy]) return 1;
-                    return 0;
-                });
-                displayHotels(sortedHotels);
-            }
-        });
-
         async function calculateTotalAndBook(hotelId, pricePerNight) {
             const checkInDate = document.getElementById(`checkIn-${hotelId}`).value;
             const checkOutDate = document.getElementById(`checkOut-${hotelId}`).value;
@@ -352,6 +209,152 @@
                 alert('Произошла ошибка. Попробуйте снова.');
             }
         }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const sessionId = localStorage.getItem('sessionId');
+            const profileTab = document.getElementById('profileTab');
+            const logoutTab = document.getElementById('logoutTab');
+
+            try {
+                const response = await fetch('/api/hotels');
+                if (!response.ok) {
+                    throw new Error('Ошибка при загрузке данных отелей');
+                }
+                const hotels = await response.json();
+
+                console.log('Загруженные отели на клиенте:', hotels); // Логирование для отладки
+
+                if (!Array.isArray(hotels)) {
+                    throw new Error('Данные отелей не являются массивом');
+                }
+
+                if (sessionId) {
+                    profileTab.classList.remove('hidden');
+                    logoutTab.classList.remove('hidden');
+                    document.querySelectorAll('#navMenu li a[href="login.html"], #navMenu li a[href="register.html"]').forEach(link => {
+                        link.parentElement.classList.add('hidden');
+                    });
+                    loadHotels(hotels);
+                } else {
+                    profileTab.classList.add('hidden');
+                    logoutTab.classList.add('hidden');
+                    document.querySelectorAll('#navMenu li a[href="login.html"], #navMenu li a[href="register.html"]').forEach(link => {
+                        link.parentElement.classList.remove('hidden');
+                    });
+                }
+
+                document.getElementById('logoutLink')?.addEventListener('click', async (e) => {
+                    e.preventDefault();
+
+                    try {
+                        const response = await fetch('/logout', {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': sessionId,
+                            },
+                        });
+
+                        if (response.ok) {
+                            localStorage.removeItem('sessionId');
+                            alert('Вы успешно вышли из системы.');
+                            window.location.href = 'index.html';
+                        } else {
+                            const errorData = await response.json();
+                            alert(`Ошибка при выходе из системы: ${errorData.message}`);
+                        }
+                    } catch (error) {
+                        console.error('Ошибка при выходе:', error);
+                        alert('Произошла ошибка. Попробуйте снова.');
+                    }
+                });
+
+                document.getElementById('search').addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase();
+                    filterHotels(query, hotels);
+                });
+
+                document.getElementById('sort').addEventListener('change', (e) => {
+                    const sortBy = e.target.value;
+                    sortHotels(sortBy, hotels);
+                });
+
+                function loadHotels(hotels) {
+                    displayHotels(hotels);
+                }
+
+                function displayHotels(hotelsToDisplay) {
+                    const hotelList = document.getElementById('hotelList');
+                    hotelList.innerHTML = '';
+
+                    hotelsToDisplay.forEach(hotel => {
+                        const hotelDiv = document.createElement('div');
+                        hotelDiv.classList.add('bg-[#222222]', 'p-4', 'rounded-lg', 'shadow-lg');
+                        hotelDiv.innerHTML = `
+                            <img src="${hotel.image}" alt="${hotel.name}" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <h3 class="text-primary text-xl font-bold">${hotel.name}</h3>
+                            <p class="text-text">${hotel.location}</p>
+                            <p class="text-secondary font-bold mt-2">${hotel.pricePerNight} руб./ночь</p>
+                            <!-- Кнопка "Подробнее" -->
+                            <button class="bg-blue-500 text-background py-2 px-4 rounded-full w-full hover:bg-blue-600 transition-colors mb-2" onclick="viewHotelDetails()">Подробнее</button>
+                            <!-- Кнопка "Забронировать" -->
+                            <button class="bg-primary text-background py-2 px-4 rounded-full w-full hover:bg-secondary transition-colors" onclick="toggleDatePicker(${hotel.id})">Забронировать</button>
+                            <div id="datePicker-${hotel.id}" class="hidden mt-4">
+                                <div class="mt-4">
+                                    <label for="checkIn-${hotel.id}" class="text-primary">Дата заезда:</label>
+                                    <input type="text" id="checkIn-${hotel.id}" class="flatpickr px-4 py-2 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border mb-2" placeholder="Выберите дату">
+                                </div>
+                                <div class="mt-2">
+                                    <label for="checkOut-${hotel.id}" class="text-primary">Дата выезда:</label>
+                                    <input type="text" id="checkOut-${hotel.id}" class="flatpickr px-4 py-2 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border mb-2" placeholder="Выберите дату">
+                                </div>
+                                <div class="mt-2">
+                                    <label for="roomNumber-${hotel.id}" class="text-primary">Номер комнаты:</label>
+                                    <select id="roomNumber-${hotel.id}" class="px-4 py-2 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border mb-2">
+                                        ${hotel.rooms ? hotel.rooms.map(room => `<option value="${room}">${room}</option>`).join('') : '<option value="">Номера недоступны</option>'}
+                                    </select>
+                                </div>
+                                <button class="bg-accent text-background py-2 px-4 rounded-full w-full mt-4 hover:bg-red-600 transition-colors" onclick="calculateTotalAndBook(${hotel.id}, ${hotel.pricePerNight})">Забронировать</button>
+                            </div>
+                        `;
+                        hotelList.appendChild(hotelDiv);
+
+                        // Initialize flatpickr
+                        flatpickr(`#checkIn-${hotel.id}`, { dateFormat: "Y-m-d" });
+                        flatpickr(`#checkOut-${hotel.id}`, { dateFormat: "Y-m-d" });
+                    });
+                }
+
+                window.toggleDatePicker = function(hotelId) {
+                    const datePicker = document.getElementById(`datePicker-${hotelId}`);
+                    if (datePicker) {
+                        datePicker.classList.toggle('hidden');
+                    }
+                };
+
+                window.viewHotelDetails = function() {
+                    window.location.href = 'about-hotels.html';
+                };
+
+                function filterHotels(query, hotels) {
+                    const filteredHotels = hotels.filter(hotel =>
+                        hotel.name.toLowerCase().includes(query) ||
+                        hotel.location.toLowerCase().includes(query)
+                    );
+                    displayHotels(filteredHotels);
+                }
+
+                function sortHotels(sortBy, hotels) {
+                    const sortedHotels = [...hotels].sort((a, b) => {
+                        if (a[sortBy] < b[sortBy]) return -1;
+                        if (a[sortBy] > b[sortBy]) return 1;
+                        return 0;
+                    });
+                    displayHotels(sortedHotels);
+                }
+            } catch (error) {
+                console.error('Ошибка при загрузке данных отелей:', error);
+            }
+        });
     </script>
 </body>
 </html>
