@@ -34,5 +34,11 @@
     "name": "anna",
     "email": "annaruabtseva050@gmail.com",
     "password": "$2a$10$V1Xk3ZeSLhWLijSz.wgMouaHqh0YrPqYCIgicPcqAK81fttPWiYAC"
+  },
+  {
+    "id": 7,
+    "name": "vadik",
+    "email": "annaruabtseva0500@gmail.com",
+    "password": "$2a$10$0awpCJlUYR2swjCzZs/aTOx68dIjkcZSeuZFlJeO..3/QsIIUYLg6"
   }
 ]

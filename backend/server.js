@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
+const db = require('./db'); // Импортируем подключение к базе данных
 const app = express();
 const PORT = 5000;
 
@@ -89,6 +90,12 @@ app.post('/register', async (req, res) => {
         users.push(newUser);
         fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2), 'utf-8');
 
+        // Сохранение в базу данных
+        await db.query(
+            'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
+            [newUser.name, newUser.email, newUser.password]
+        );
+
         return res.status(201).json({ message: 'Регистрация успешна' });
     } catch (error) {
         console.error('Ошибка при регистрации:', error);
@@ -154,18 +161,9 @@ app.post('/logout', (req, res) => {
 });
 
 // Маршрут для получения списка отелей
-app.get('/api/hotels', (req, res) => {
+app.get('/api/hotels', async (req, res) => {
     try {
-        const hotelsFilePath = path.join(__dirname, '../data', 'hotels.json');
-        let hotels = [];
-
-        if (fs.existsSync(hotelsFilePath)) {
-            const rawData = fs.readFileSync(hotelsFilePath, 'utf-8');
-            hotels = JSON.parse(rawData) || [];
-        }
-
-        console.log('Загруженные отели с сервера:', hotels); // Логирование для отладки
-
+        const [hotels] = await db.query('SELECT * FROM hotels');
         return res.status(200).json(hotels);
     } catch (error) {
         console.error('Ошибка при получении отелей:', error);
@@ -185,7 +183,7 @@ app.get('/api/user', authenticateUser, (req, res) => {
 });
 
 // Маршрут для бронирования отеля
-app.post('/api/bookings', authenticateUser, (req, res) => {
+app.post('/api/bookings', authenticateUser, async (req, res) => {
     try {
         const { hotelId, checkInDate, checkOutDate, roomNumber } = req.body;
         const userId = req.user.id;
@@ -234,6 +232,12 @@ app.post('/api/bookings', authenticateUser, (req, res) => {
         bookings.push(newBooking);
         fs.writeFileSync(bookingsFilePath, JSON.stringify(bookings, null, 2), 'utf-8');
 
+        // Сохранение в базу данных
+        await db.query(
+            'INSERT INTO bookings (userId, hotelId, checkInDate, checkOutDate, roomNumber, bookingNumber) VALUES (?, ?, ?, ?, ?, ?)',
+            [newBooking.userId, newBooking.hotelId, newBooking.checkInDate, newBooking.checkOutDate, newBooking.roomNumber, newBooking.bookingNumber]
+        );
+
         return res.status(201).json({ message: 'Бронирование успешно', bookingNumber: newBooking.bookingNumber });
     } catch (error) {
         console.error('Ошибка при бронировании:', error);
@@ -242,29 +246,15 @@ app.post('/api/bookings', authenticateUser, (req, res) => {
 });
 
 // Маршрут для получения списка бронирований пользователя
-app.get('/api/bookings', authenticateUser, (req, res) => {
+app.get('/api/bookings', authenticateUser, async (req, res) => {
     try {
         const userId = req.user.id;
 
-        const bookingsFilePath = path.join(__dirname, '../data', 'bookings.json');
-        let bookings = [];
+        const [bookings] = await db.query('SELECT * FROM bookings WHERE userId = ?', [userId]);
 
-        if (fs.existsSync(bookingsFilePath)) {
-            const rawData = fs.readFileSync(bookingsFilePath, 'utf-8');
-            bookings = JSON.parse(rawData) || [];
-        }
+        const [hotels] = await db.query('SELECT * FROM hotels');
 
-        const userBookings = bookings.filter(booking => booking.userId === userId);
-
-        const hotelsFilePath = path.join(__dirname, '../data', 'hotels.json');
-        let hotels = [];
-
-        if (fs.existsSync(hotelsFilePath)) {
-            const rawData = fs.readFileSync(hotelsFilePath, 'utf-8');
-            hotels = JSON.parse(rawData) || [];
-        }
-
-        const bookingsWithHotelInfo = userBookings.map(booking => {
+        const bookingsWithHotelInfo = bookings.map(booking => {
             const hotel = hotels.find(h => h.id === booking.hotelId);
             return {
                 ...booking,
@@ -282,7 +272,7 @@ app.get('/api/bookings', authenticateUser, (req, res) => {
 });
 
 // Маршрут для отмены бронирования
-app.delete('/api/bookings/:bookingId', authenticateUser, (req, res) => {
+app.delete('/api/bookings/:bookingId', authenticateUser, async (req, res) => {
     try {
         const bookingId = parseInt(req.params.bookingId, 10);
         const userId = req.user.id;
@@ -303,6 +293,9 @@ app.delete('/api/bookings/:bookingId', authenticateUser, (req, res) => {
         bookings.splice(bookingIndex, 1);
         fs.writeFileSync(bookingsFilePath, JSON.stringify(bookings, null, 2), 'utf-8');
 
+        // Удаление из базы данных
+        await db.query('DELETE FROM bookings WHERE id = ?', [bookingId]);
+
         return res.status(200).json({ message: 'Бронирование успешно отменено' });
     } catch (error) {
         console.error('Ошибка при отмене бронирования:', error);
@@ -311,21 +304,13 @@ app.delete('/api/bookings/:bookingId', authenticateUser, (req, res) => {
 });
 
 // Маршрут для получения отзывов об отеле
-app.get('/api/reviews/:hotelId', (req, res) => {
+app.get('/api/reviews/:hotelId', async (req, res) => {
     try {
         const hotelId = parseInt(req.params.hotelId, 10);
 
-        const reviewsFilePath = path.join(__dirname, '../data', 'reviews.json');
-        let reviews = [];
+        const [reviews] = await db.query('SELECT * FROM reviews WHERE hotelId = ?', [hotelId]);
 
-        if (fs.existsSync(reviewsFilePath)) {
-            const rawData = fs.readFileSync(reviewsFilePath, 'utf-8');
-            reviews = JSON.parse(rawData) || [];
-        }
-
-        const hotelReviews = reviews.filter(review => review.hotelId === hotelId);
-
-        return res.status(200).json(hotelReviews);
+        return res.status(200).json(reviews);
     } catch (error) {
         console.error('Ошибка при получении отзывов:', error);
         return res.status(500).json({ message: 'Ошибка сервера' });
@@ -333,7 +318,7 @@ app.get('/api/reviews/:hotelId', (req, res) => {
 });
 
 // Маршрут для добавления отзыва об отеле
-app.post('/api/reviews', authenticateUser, (req, res) => {
+app.post('/api/reviews', authenticateUser, async (req, res) => {
     try {
         const { hotelId, rating, comment } = req.body;
         const userId = req.user.id;
@@ -358,6 +343,12 @@ app.post('/api/reviews', authenticateUser, (req, res) => {
         reviews.push(newReview);
         fs.writeFileSync(reviewsFilePath, JSON.stringify(reviews, null, 2), 'utf-8');
 
+        // Сохранение в базу данных
+        await db.query(
+            'INSERT INTO reviews (userId, hotelId, rating, comment) VALUES (?, ?, ?, ?)',
+            [newReview.userId, newReview.hotelId, newReview.rating, newReview.comment]
+        );
+
         return res.status(201).json({ message: 'Отзыв успешно добавлен' });
     } catch (error) {
         console.error('Ошибка при добавлении отзыва:', error);
@@ -376,7 +367,7 @@ app.get('/articles', authenticateUser, (req, res) => {
 });
 
 // Маршрут для добавления отеля (администратор)
-app.post('/admin/addHotel', authenticateAdmin, (req, res) => {
+app.post('/admin/addHotel', authenticateAdmin, async (req, res) => {
     try {
         const { hotelName, location, pricePerNight } = req.body;
 
@@ -402,6 +393,12 @@ app.post('/admin/addHotel', authenticateAdmin, (req, res) => {
         hotels.push(newHotel);
         fs.writeFileSync(hotelsFilePath, JSON.stringify(hotels, null, 2), 'utf-8');
 
+        // Сохранение в базу данных
+        await db.query(
+            'INSERT INTO hotels (name, location, pricePerNight) VALUES (?, ?, ?)',
+            [newHotel.name, newHotel.location, newHotel.pricePerNight]
+        );
+
         return res.status(201).json({ message: 'Отель успешно добавлен' });
     } catch (error) {
         console.error('Ошибка при добавлении отеля:', error);
@@ -410,16 +407,9 @@ app.post('/admin/addHotel', authenticateAdmin, (req, res) => {
 });
 
 // Маршрут для получения списка отелей (для администратора)
-app.get('/admin/hotels', authenticateAdmin, (req, res) => {
+app.get('/admin/hotels', authenticateAdmin, async (req, res) => {
     try {
-        const hotelsFilePath = path.join(__dirname, '../data', 'hotels.json');
-        let hotels = [];
-
-        if (fs.existsSync(hotelsFilePath)) {
-            const rawData = fs.readFileSync(hotelsFilePath, 'utf-8');
-            hotels = JSON.parse(rawData) || [];
-        }
-
+        const [hotels] = await db.query('SELECT * FROM hotels');
         return res.status(200).json(hotels);
     } catch (error) {
         console.error('Ошибка при получении отелей:', error);
@@ -428,7 +418,7 @@ app.get('/admin/hotels', authenticateAdmin, (req, res) => {
 });
 
 // Маршрут для удаления отеля
-app.delete('/admin/deleteHotel/:hotelId', authenticateAdmin, (req, res) => {
+app.delete('/admin/deleteHotel/:hotelId', authenticateAdmin, async (req, res) => {
     try {
         const hotelId = parseInt(req.params.hotelId, 10);
 
@@ -448,6 +438,9 @@ app.delete('/admin/deleteHotel/:hotelId', authenticateAdmin, (req, res) => {
         hotels.splice(hotelIndex, 1);
         fs.writeFileSync(hotelsFilePath, JSON.stringify(hotels, null, 2), 'utf-8');
 
+        // Удаление из базы данных
+        await db.query('DELETE FROM hotels WHERE id = ?', [hotelId]);
+
         return res.status(200).json({ message: 'Отель успешно удален' });
     } catch (error) {
         console.error('Ошибка при удалении отеля:', error);
@@ -456,16 +449,9 @@ app.delete('/admin/deleteHotel/:hotelId', authenticateAdmin, (req, res) => {
 });
 
 // Маршрут для получения списка пользователей (для администратора)
-app.get('/admin/users', authenticateAdmin, (req, res) => {
+app.get('/admin/users', authenticateAdmin, async (req, res) => {
     try {
-        const usersFilePath = path.join(__dirname, '../data', 'users.json');
-        let users = [];
-
-        if (fs.existsSync(usersFilePath)) {
-            const rawData = fs.readFileSync(usersFilePath, 'utf-8');
-            users = JSON.parse(rawData) || [];
-        }
-
+        const [users] = await db.query('SELECT * FROM users');
         return res.status(200).json(users);
     } catch (error) {
         console.error('Ошибка при получении пользователей:', error);
@@ -474,7 +460,7 @@ app.get('/admin/users', authenticateAdmin, (req, res) => {
 });
 
 // Маршрут для удаления пользователя
-app.delete('/admin/deleteUser/:userId', authenticateAdmin, (req, res) => {
+app.delete('/admin/deleteUser/:userId', authenticateAdmin, async (req, res) => {
     try {
         const userId = parseInt(req.params.userId, 10);
 
@@ -494,6 +480,9 @@ app.delete('/admin/deleteUser/:userId', authenticateAdmin, (req, res) => {
         users.splice(userIndex, 1);
         fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2), 'utf-8');
 
+        // Удаление из базы данных
+        await db.query('DELETE FROM users WHERE id = ?', [userId]);
+
         return res.status(200).json({ message: 'Пользователь успешно удален' });
     } catch (error) {
         console.error('Ошибка при удалении пользователя:', error);
@@ -502,16 +491,9 @@ app.delete('/admin/deleteUser/:userId', authenticateAdmin, (req, res) => {
 });
 
 // Маршрут для получения списка отзывов (для администратора)
-app.get('/admin/reviews', authenticateAdmin, (req, res) => {
+app.get('/admin/reviews', authenticateAdmin, async (req, res) => {
     try {
-        const reviewsFilePath = path.join(__dirname, '../data', 'reviews.json');
-        let reviews = [];
-
-        if (fs.existsSync(reviewsFilePath)) {
-            const rawData = fs.readFileSync(reviewsFilePath, 'utf-8');
-            reviews = JSON.parse(rawData) || [];
-        }
-
+        const [reviews] = await db.query('SELECT * FROM reviews');
         return res.status(200).json(reviews);
     } catch (error) {
         console.error('Ошибка при получении отзывов:', error);
@@ -520,7 +502,7 @@ app.get('/admin/reviews', authenticateAdmin, (req, res) => {
 });
 
 // Маршрут для удаления отзыва
-app.delete('/admin/deleteReview/:reviewId', authenticateAdmin, (req, res) => {
+app.delete('/admin/deleteReview/:reviewId', authenticateAdmin, async (req, res) => {
     try {
         const reviewId = parseInt(req.params.reviewId, 10);
 
@@ -540,6 +522,9 @@ app.delete('/admin/deleteReview/:reviewId', authenticateAdmin, (req, res) => {
         reviews.splice(reviewIndex, 1);
         fs.writeFileSync(reviewsFilePath, JSON.stringify(reviews, null, 2), 'utf-8');
 
+        // Удаление из базы данных
+        await db.query('DELETE FROM reviews WHERE id = ?', [reviewId]);
+
         return res.status(200).json({ message: 'Отзыв успешно удален' });
     } catch (error) {
         console.error('Ошибка при удалении отзыва:', error);
@@ -548,7 +533,7 @@ app.delete('/admin/deleteReview/:reviewId', authenticateAdmin, (req, res) => {
 });
 
 // Маршрут для редактирования отзыва
-app.put('/admin/editReview/:reviewId', authenticateAdmin, (req, res) => {
+app.put('/admin/editReview/:reviewId', authenticateAdmin, async (req, res) => {
     try {
         const reviewId = parseInt(req.params.reviewId, 10);
         const { content } = req.body;
@@ -569,14 +554,18 @@ app.put('/admin/editReview/:reviewId', authenticateAdmin, (req, res) => {
         review.comment = content;
         fs.writeFileSync(reviewsFilePath, JSON.stringify(reviews, null, 2), 'utf-8');
 
+        // Обновление в базе данных
+        await db.query('UPDATE reviews SET comment = ? WHERE id = ?', [content, reviewId]);
+
         return res.status(200).json({ message: 'Отзыв успешно отредактирован' });
     } catch (error) {
         console.error('Ошибка при редактировании отзыва:', error);
         return res.status(500).json({ message: 'Ошибка сервера' });
     }
 });
+
 // Маршрут для редактирования отеля (администратор)
-app.put('/admin/editHotel/:hotelId', authenticateAdmin, (req, res) => {
+app.put('/admin/editHotel/:hotelId', authenticateAdmin, async (req, res) => {
     try {
         const hotelId = parseInt(req.params.hotelId, 10);
         const { hotelName, location, pricePerNight } = req.body;
@@ -602,12 +591,19 @@ app.put('/admin/editHotel/:hotelId', authenticateAdmin, (req, res) => {
         // Сохраняем обновленные данные в файл
         fs.writeFileSync(hotelsFilePath, JSON.stringify(hotels, null, 2), 'utf-8');
 
+        // Обновление в базе данных
+        await db.query(
+            'UPDATE hotels SET name = ?, location = ?, pricePerNight = ? WHERE id = ?',
+            [hotelName, location, pricePerNight, hotelId]
+        );
+
         return res.status(200).json({ message: 'Отель успешно отредактирован' });
     } catch (error) {
         console.error('Ошибка при редактировании отеля:', error);
         return res.status(500).json({ message: 'Ошибка сервера' });
     }
 });
+
 // Маршрут для добавления пользователя (администратор)
 app.post('/admin/addUser', authenticateAdmin, async (req, res) => {
     try {
@@ -646,6 +642,12 @@ app.post('/admin/addUser', authenticateAdmin, async (req, res) => {
 
         users.push(newUser);
         fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2), 'utf-8');
+
+        // Сохранение в базу данных
+        await db.query(
+            'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
+            [newUser.name, newUser.email, newUser.password]
+        );
 
         return res.status(201).json({ message: 'Пользователь успешно добавлен' });
     } catch (error) {
