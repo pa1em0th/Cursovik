@@ -106,28 +106,5 @@
       902,
       903
     ]
-  },
-  {
-    "id": 10,
-    "name": "Hotel Holiday Inn",
-    "location": "Voronezh, Russia",
-    "pricePerNight": 5200,
-    "image": "https://example.com/hotel10.jpg",
-    "rooms": [
-      1001,
-      1002,
-      1003
-    ]
-  },
-  {
-    "id": 11,
-    "name": "ячя",
-    "location": "сочи",
-    "pricePerNight": "1200",
-    "rooms": [
-      135,
-      136,
-      137
-    ]
   }
 ]

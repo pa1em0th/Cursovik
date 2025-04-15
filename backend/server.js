@@ -160,11 +160,27 @@ app.post('/logout', (req, res) => {
     }
 });
 
-// Маршрут для получения списка отелей
+// Маршрут для получения списка отелей с номерами
 app.get('/api/hotels', async (req, res) => {
     try {
-        const [hotels] = await db.query('SELECT * FROM hotels');
-        return res.status(200).json(hotels);
+        // Получаем отели и их номера одним запросом
+        const [hotels] = await db.query(`
+            SELECT h.*, 
+                   GROUP_CONCAT(r.roomNumber) AS roomNumbers,
+                   GROUP_CONCAT(r.id) AS roomIds
+            FROM hotels h
+            LEFT JOIN rooms r ON h.id = r.hotelId
+            GROUP BY h.id
+        `);
+
+        // Преобразуем строки с номерами в массивы
+        const formattedHotels = hotels.map(hotel => ({
+            ...hotel,
+            rooms: hotel.roomNumbers ? hotel.roomNumbers.split(',').map(Number) : [],
+            roomIds: hotel.roomIds ? hotel.roomIds.split(',').map(Number) : []
+        }));
+
+        return res.status(200).json(formattedHotels);
     } catch (error) {
         console.error('Ошибка при получении отелей:', error);
         return res.status(500).json({ message: 'Ошибка сервера' });
@@ -406,10 +422,16 @@ app.post('/admin/addHotel', authenticateAdmin, async (req, res) => {
     }
 });
 
-// Маршрут для получения списка отелей (для администратора)
+// Маршрут для получения списка отелей (админ)
 app.get('/admin/hotels', authenticateAdmin, async (req, res) => {
     try {
-        const [hotels] = await db.query('SELECT * FROM hotels');
+        const [hotels] = await db.query(`
+            SELECT h.*, 
+                   COUNT(r.id) AS roomsCount
+            FROM hotels h
+            LEFT JOIN rooms r ON h.id = r.hotelId
+            GROUP BY h.id
+        `);
         return res.status(200).json(hotels);
     } catch (error) {
         console.error('Ошибка при получении отелей:', error);

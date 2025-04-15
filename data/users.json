@@ -1,11 +1,5 @@
 [
   {
-    "id": 2,
-    "name": "2",
-    "email": "pa1emo0th@gmail.com",
-    "password": "$2a$10$WDNDUzlx41ncZSaA37Ytr.fsXeld3QZ36XIEAavf/uYD9oGetOSU2"
-  },
-  {
     "id": 3,
     "name": "user",
     "email": "annaruabtseva052@gmail.com",
@@ -40,5 +34,17 @@
     "name": "vadik",
     "email": "annaruabtseva0500@gmail.com",
     "password": "$2a$10$0awpCJlUYR2swjCzZs/aTOx68dIjkcZSeuZFlJeO..3/QsIIUYLg6"
+  },
+  {
+    "id": 8,
+    "name": "11",
+    "email": "annaruabtseva0509@gmail.com",
+    "password": "$2a$10$lTM209.C.D31RkYjZcKgFeHu2rZx1k8QO26yCCrQtlcWjjtU1Rvpm"
+  },
+  {
+    "id": 9,
+    "name": "ёёё",
+    "email": "annaruabtseva5009@gmail.com",
+    "password": "$2a$10$W9QJVSI1W9YKifXbSxm2luvHJkIW81dun7SJSXIAVLF97P4ywmahO"
   }
 ]
