@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Регистрация</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -19,9 +20,9 @@
             },
         }
     </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-background text-text font-sans min-h-screen flex flex-col">
-    <!-- Заголовок -->
     <header class="bg-[#1E1E1E] text-primary py-4 px-6 shadow-md sticky top-0 z-50">
         <nav class="flex justify-center items-center">
             <ul class="flex gap-6">
@@ -31,7 +32,7 @@
             </ul>
         </nav>
     </header>
-    <!-- Форма регистрации -->
+
     <main class="flex-grow flex items-center justify-center">
         <form id="registerForm" class="bg-[#1E1E1E] p-8 rounded-lg shadow-lg w-96">
             <h2 class="text-2xl font-bold text-primary text-center mb-6">Регистрация</h2>
@@ -47,15 +48,78 @@
                 <label for="password" class="block text-sm font-medium text-primary mb-2">Пароль:</label>
                 <input type="password" id="password" name="password" class="w-full px-4 py-2 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border" required>
             </div>
-            <button type="submit" class="w-full bg-primary hover:bg-secondary text-background py-3 rounded-full font-bold transition-colors">Зарегистрироваться</button>
+            <button type="submit" id="submitButton" class="w-full bg-primary hover:bg-secondary text-background py-3 rounded-full font-bold transition-colors">
+                Зарегистрироваться
+            </button>
             <p class="mt-4 text-center text-primary"><a href="login.html" class="hover:text-secondary transition-colors">Уже есть аккаунт? Войти</a></p>
         </form>
     </main>
-    <!-- Подвал -->
+
     <footer class="bg-background text-primary py-4 mt-auto text-center">
         <p>&copy; 2025 Система бронирования гостиниц</p>
     </footer>
-    <!-- Подключение main.js -->
-    <script src="js/main.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#registerForm').on('submit', async function(e) {
+                e.preventDefault();
+
+                const name = $('#name').val().trim();
+                const email = $('#email').val().trim();
+                const password = $('#password').val().trim();
+                const submitButton = $('#submitButton');
+
+                // Валидация
+                if (!name || !email || !password) {
+                    alert('Пожалуйста, заполните все поля');
+                    return;
+                }
+
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    alert('Пожалуйста, введите корректный email');
+                    $('#email').focus();
+                    return;
+                }
+
+                // Блокируем кнопку
+                submitButton.prop('disabled', true);
+                submitButton.html('<i class="fas fa-spinner fa-spin"></i> Регистрация...');
+
+                try {
+                    const response = await fetch('/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ name, email, password }),
+                    });
+
+                    const result = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(result.message || `Ошибка сервера: ${response.status}`);
+                    }
+
+                    alert('Регистрация успешна! Теперь вы можете войти.');
+                    window.location.href = 'login.html';
+                } catch (error) {
+                    console.error('Ошибка при регистрации:', error);
+                    
+                    let errorMessage = error.message.includes('already exists') || error.message.includes('уже существует') 
+                        ? 'Пользователь с таким email уже существует' 
+                        : error.message.includes('password') 
+                            ? 'Пароль слишком простой' 
+                            : 'Произошла ошибка при регистрации. Пожалуйста, попробуйте позже.';
+                    
+                    alert(errorMessage);
+                    $('#password').val('').focus();
+                } finally {
+                    submitButton.prop('disabled', false);
+                    submitButton.text('Зарегистрироваться');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
