@@ -385,7 +385,7 @@ app.get('/articles', authenticateUser, (req, res) => {
 // Маршрут для добавления отеля (администратор)
 app.post('/admin/addHotel', authenticateAdmin, async (req, res) => {
     try {
-        const { hotelName, location, pricePerNight } = req.body;
+        const { hotelName, location, pricePerNight, roomNumbers } = req.body;
 
         if (!hotelName || !location || pricePerNight == null) {
             return res.status(400).json({ message: 'Все поля обязательны' });
@@ -409,15 +409,84 @@ app.post('/admin/addHotel', authenticateAdmin, async (req, res) => {
         hotels.push(newHotel);
         fs.writeFileSync(hotelsFilePath, JSON.stringify(hotels, null, 2), 'utf-8');
 
-        // Сохранение в базу данных
-        await db.query(
+        // Сохранение отеля в базу данных
+        const [result] = await db.query(
             'INSERT INTO hotels (name, location, pricePerNight) VALUES (?, ?, ?)',
             [newHotel.name, newHotel.location, newHotel.pricePerNight]
         );
 
+        const hotelId = result.insertId;
+
+        // Добавление номеров, если они указаны
+        if (roomNumbers && roomNumbers.length > 0) {
+            for (const roomNumber of roomNumbers) {
+                await db.query('INSERT INTO rooms (hotelId, roomNumber) VALUES (?, ?)', [hotelId, roomNumber]);
+            }
+        }
+
         return res.status(201).json({ message: 'Отель успешно добавлен' });
     } catch (error) {
         console.error('Ошибка при добавлении отеля:', error);
+        return res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
+
+// Маршрут для добавления номера к отелю
+app.post('/admin/addRoom/:hotelId', authenticateAdmin, async (req, res) => {
+    try {
+        const hotelId = parseInt(req.params.hotelId, 10);
+        const { roomNumber } = req.body;
+
+        if (!roomNumber) {
+            return res.status(400).json({ message: 'Номер комнаты обязателен' });
+        }
+
+        // Проверка, существует ли отель
+        const [hotel] = await db.query('SELECT * FROM hotels WHERE id = ?', [hotelId]);
+        if (hotel.length === 0) {
+            return res.status(404).json({ message: 'Отель не найден' });
+        }
+
+        // Проверка, существует ли уже такой номер
+        const [existingRoom] = await db.query('SELECT * FROM rooms WHERE hotelId = ? AND roomNumber = ?', [hotelId, roomNumber]);
+        if (existingRoom.length > 0) {
+            return res.status(400).json({ message: 'Номер уже существует' });
+        }
+
+        // Добавление номера в базу данных
+        await db.query('INSERT INTO rooms (hotelId, roomNumber) VALUES (?, ?)', [hotelId, roomNumber]);
+
+        return res.status(201).json({ message: 'Номер успешно добавлен' });
+    } catch (error) {
+        console.error('Ошибка при добавлении номера:', error);
+        return res.status(500).json({ message: 'Ошибка сервера' });
+    }
+});
+
+// Маршрут для удаления номера из отеля
+app.delete('/admin/removeRoom/:hotelId/:roomNumber', authenticateAdmin, async (req, res) => {
+    try {
+        const hotelId = parseInt(req.params.hotelId, 10);
+        const roomNumber = parseInt(req.params.roomNumber, 10);
+
+        // Проверка, существует ли отель
+        const [hotel] = await db.query('SELECT * FROM hotels WHERE id = ?', [hotelId]);
+        if (hotel.length === 0) {
+            return res.status(404).json({ message: 'Отель не найден' });
+        }
+
+        // Проверка, существует ли номер
+        const [room] = await db.query('SELECT * FROM rooms WHERE hotelId = ? AND roomNumber = ?', [hotelId, roomNumber]);
+        if (room.length === 0) {
+            return res.status(404).json({ message: 'Номер не найден' });
+        }
+
+        // Удаление номера из базы данных
+        await db.query('DELETE FROM rooms WHERE hotelId = ? AND roomNumber = ?', [hotelId, roomNumber]);
+
+        return res.status(200).json({ message: 'Номер успешно удален' });
+    } catch (error) {
+        console.error('Ошибка при удалении номера:', error);
         return res.status(500).json({ message: 'Ошибка сервера' });
     }
 });
@@ -444,6 +513,28 @@ app.delete('/admin/deleteHotel/:hotelId', authenticateAdmin, async (req, res) =>
     try {
         const hotelId = parseInt(req.params.hotelId, 10);
 
+        // Проверяем, существует ли отель в базе данных
+        const [hotel] = await db.query('SELECT * FROM hotels WHERE id = ?', [hotelId]);
+        if (hotel.length === 0) {
+            return res.status(404).json({ message: 'Отель не найден' });
+        }
+
+        // Удаляем связанные записи: номера, бронирования, отзывы
+        console.log(`Удаление номеров для hotelId=${hotelId}`);
+        await db.query('DELETE FROM rooms WHERE hotelId = ?', [hotelId]);
+
+        console.log(`Удаление бронирований для hotelId=${hotelId}`);
+        const [bookingsResult] = await db.query('DELETE FROM bookings WHERE hotelId = ?', [hotelId]);
+        console.log(`Удалено бронирований: ${bookingsResult.affectedRows}`);
+
+        console.log(`Удаление отзывов для hotelId=${hotelId}`);
+        await db.query('DELETE FROM reviews WHERE hotelId = ?', [hotelId]);
+
+        // Удаляем отель из базы данных
+        console.log(`Удаление отеля с id=${hotelId}`);
+        await db.query('DELETE FROM hotels WHERE id = ?', [hotelId]);
+
+        // Обновляем hotels.json
         const hotelsFilePath = path.join(__dirname, '../data', 'hotels.json');
         let hotels = [];
 
@@ -453,20 +544,15 @@ app.delete('/admin/deleteHotel/:hotelId', authenticateAdmin, async (req, res) =>
         }
 
         const hotelIndex = hotels.findIndex(hotel => hotel.id === hotelId);
-        if (hotelIndex === -1) {
-            return res.status(404).json({ message: 'Отель не найден' });
+        if (hotelIndex !== -1) {
+            hotels.splice(hotelIndex, 1);
+            fs.writeFileSync(hotelsFilePath, JSON.stringify(hotels, null, 2), 'utf-8');
         }
-
-        hotels.splice(hotelIndex, 1);
-        fs.writeFileSync(hotelsFilePath, JSON.stringify(hotels, null, 2), 'utf-8');
-
-        // Удаление из базы данных
-        await db.query('DELETE FROM hotels WHERE id = ?', [hotelId]);
 
         return res.status(200).json({ message: 'Отель успешно удален' });
     } catch (error) {
         console.error('Ошибка при удалении отеля:', error);
-        return res.status(500).json({ message: 'Ошибка сервера' });
+        return res.status(500).json({ message: 'Ошибка сервера', error: error.message });
     }
 });
 

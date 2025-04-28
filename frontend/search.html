@@ -60,7 +60,7 @@
                 <ul class="flex gap-6" id="navMenu">
                     <li><a href="index.html" class="hover:text-secondary transition-colors">Главная</a></li>
                     <li><a href="search.html" class="hover:text-secondary transition-colors">Поиск отелей</a></li>
-                    <li><a href="articles.html" class="hover:text-secondary transition-colors">Полезные статьи</a></li>
+                    <li><a href="articles.html" class="hover$text-secondary transition-colors">Полезные статьи</a></li>
                     <li><a href="login.html" class="hover:text-secondary transition-colors">Вход</a></li>
                     <li><a href="register.html" class="hover:text-secondary transition-colors">Регистрация</a></li>
                     <li id="profileTab" class="hidden"><a href="profile.html" class="hover:text-secondary transition-colors">Личный кабинет</a></li>
@@ -163,6 +163,8 @@
     </footer>
 
     <script>
+        let hotelsData = []; // Глобальная переменная для хранения отелей
+
         async function calculateTotalAndBook(hotelId, pricePerNight) {
             const checkInDate = document.getElementById(`checkIn-${hotelId}`).value;
             const checkOutDate = document.getElementById(`checkOut-${hotelId}`).value;
@@ -220,11 +222,11 @@
                 if (!response.ok) {
                     throw new Error('Ошибка при загрузке данных отелей');
                 }
-                const hotels = await response.json();
+                hotelsData = await response.json();
 
-                console.log('Загруженные отели на клиенте:', hotels); // Логирование для отладки
+                console.log('Загруженные отели на клиенте:', hotelsData); // Логирование для отладки
 
-                if (!Array.isArray(hotels)) {
+                if (!Array.isArray(hotelsData)) {
                     throw new Error('Данные отелей не являются массивом');
                 }
 
@@ -234,13 +236,14 @@
                     document.querySelectorAll('#navMenu li a[href="login.html"], #navMenu li a[href="register.html"]').forEach(link => {
                         link.parentElement.classList.add('hidden');
                     });
-                    loadHotels(hotels);
+                    loadHotels(hotelsData);
                 } else {
                     profileTab.classList.add('hidden');
                     logoutTab.classList.add('hidden');
                     document.querySelectorAll('#navMenu li a[href="login.html"], #navMenu li a[href="register.html"]').forEach(link => {
                         link.parentElement.classList.remove('hidden');
                     });
+                    loadHotels(hotelsData);
                 }
 
                 document.getElementById('logoutLink')?.addEventListener('click', async (e) => {
@@ -270,12 +273,12 @@
 
                 document.getElementById('search').addEventListener('input', (e) => {
                     const query = e.target.value.toLowerCase();
-                    filterHotels(query, hotels);
+                    filterHotels(query, hotelsData);
                 });
 
                 document.getElementById('sort').addEventListener('change', (e) => {
                     const sortBy = e.target.value;
-                    sortHotels(sortBy, hotels);
+                    sortHotels(sortBy, hotelsData);
                 });
 
                 function loadHotels(hotels) {
@@ -290,12 +293,12 @@
                         const hotelDiv = document.createElement('div');
                         hotelDiv.classList.add('bg-[#222222]', 'p-4', 'rounded-lg', 'shadow-lg');
                         hotelDiv.innerHTML = `
-                            <img src="${hotel.image}" alt="${hotel.name}" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <img src="${hotel.image || 'png/default-hotel.png'}" alt="${hotel.name}" class="w-full h-48 object-cover rounded-lg mb-4">
                             <h3 class="text-primary text-xl font-bold">${hotel.name}</h3>
                             <p class="text-text">${hotel.location}</p>
                             <p class="text-secondary font-bold mt-2">${hotel.pricePerNight} руб./ночь</p>
                             <!-- Кнопка "Подробнее" -->
-                            <button class="bg-blue-500 text-background py-2 px-4 rounded-full w-full hover:bg-blue-600 transition-colors mb-2" onclick="viewHotelDetails()">Подробнее</button>
+                            <button class="bg-blue-500 text-background py-2 px-4 rounded-full w-full hover:bg-blue-600 transition-colors mb-2" onclick="viewHotelDetails(${hotel.id})">Подробнее</button>
                             <!-- Кнопка "Забронировать" -->
                             <button class="bg-primary text-background py-2 px-4 rounded-full w-full hover:bg-secondary transition-colors" onclick="toggleDatePicker(${hotel.id})">Забронировать</button>
                             <div id="datePicker-${hotel.id}" class="hidden mt-4">
@@ -310,7 +313,7 @@
                                 <div class="mt-2">
                                     <label for="roomNumber-${hotel.id}" class="text-primary">Номер комнаты:</label>
                                     <select id="roomNumber-${hotel.id}" class="px-4 py-2 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border mb-2">
-                                        ${hotel.rooms ? hotel.rooms.map(room => `<option value="${room}">${room}</option>`).join('') : '<option value="">Номера недоступны</option>'}
+                                        ${hotel.rooms && hotel.rooms.length > 0 ? hotel.rooms.map(room => `<option value="${room}">${room}</option>`).join('') : '<option value="">Номера недоступны</option>'}
                                     </select>
                                 </div>
                                 <button class="bg-accent text-background py-2 px-4 rounded-full w-full mt-4 hover:bg-red-600 transition-colors" onclick="calculateTotalAndBook(${hotel.id}, ${hotel.pricePerNight})">Забронировать</button>
@@ -331,7 +334,8 @@
                     }
                 };
 
-                window.viewHotelDetails = function() {
+                window.viewHotelDetails = function(hotelId) {
+                    localStorage.setItem('selectedHotelId', hotelId);
                     window.location.href = 'about-hotels.html';
                 };
 
@@ -353,6 +357,7 @@
                 }
             } catch (error) {
                 console.error('Ошибка при загрузке данных отелей:', error);
+                alert('Не удалось загрузить данные об отелях.');
             }
         });
     </script>

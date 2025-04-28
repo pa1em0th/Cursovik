@@ -1,29 +1,5 @@
 [
   {
-    "id": 1,
-    "name": "Hotel Hiltone",
-    "location": "Moscow, Russia",
-    "pricePerNight": "5500",
-    "image": "https://example.com/hotel1.jpg",
-    "rooms": [
-      101,
-      102,
-      103
-    ]
-  },
-  {
-    "id": 2,
-    "name": "Hotel Marriott",
-    "location": "St. Petersburg, Russia",
-    "pricePerNight": 6000,
-    "image": "https://example.com/hotel2.jpg",
-    "rooms": [
-      201,
-      202,
-      203
-    ]
-  },
-  {
     "id": 3,
     "name": "Hotel Ritz-Carlton",
     "location": "Novosibirsk, Russia",
@@ -93,18 +69,6 @@
       801,
       802,
       803
-    ]
-  },
-  {
-    "id": 9,
-    "name": "Hotel Crowne Plaza",
-    "location": "Krasnodar, Russia",
-    "pricePerNight": 5800,
-    "image": "https://example.com/hotel9.jpg",
-    "rooms": [
-      901,
-      902,
-      903
     ]
   }
 ]

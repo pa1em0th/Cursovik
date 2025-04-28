@@ -17,30 +17,65 @@
                         background: '#121212',
                         text: '#f5f5f5',
                         accent: '#FF6B6B',
+                        dark: '#1E1E1E',
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                     },
                     boxShadow: {
                         glow: '0 0 15px rgba(255, 215, 0, 0.5)',
+                        soft: '0 4px 6px rgba(0, 0, 0, 0.3)',
+                    },
+                    backgroundImage: {
+                        'gradient-primary': 'linear-gradient(135deg, #FFD700, #FFC107)',
                     },
                 },
             },
         }
     </script>
     <style>
-        .nav-bg {
-            background-color: #1E1E1E;
-        }
         .gradient-bg {
             background: linear-gradient(135deg, #121212, #1E1E1E);
         }
         .hover-glow:hover {
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
         }
         .tab-active {
-            border-bottom: 2px solid #FFD700;
+            border-bottom: 3px solid #FFD700;
             color: #FFD700;
+            transition: all 0.3s ease;
+        }
+        .modal {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: #1E1E1E;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        .input-icon {
+            position: relative;
+        }
+        .input-icon i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #FFD700;
+        }
+        .input-icon input {
+            padding-left: 40px;
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #FFD700, #FFC107);
+            transition: all 0.3s ease;
+        }
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #FFC107, #FFD700);
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -73,53 +108,140 @@
         </section>
 
         <!-- Админ Панель -->
-        <section class="max-w-4xl w-full bg-[#1E1E1E] p-8 rounded-lg shadow-lg mt-8 mb-16">
-            <h2 class="text-2xl font-bold text-primary text-center mb-6">Админ Панель</h2>
-            <div class="flex justify-center border-b border-gray-700 mb-4">
-                <button id="usersTab" class="tab-active px-4 py-2 text-lg font-semibold">Пользователи</button>
-                <button id="hotelsTab" class="px-4 py-2 text-lg font-semibold text-gray-400">Отели</button>
-                <button id="reviewsTab" class="px-4 py-2 text-lg font-semibold text-gray-400">Отзывы</button>
+        <section class="max-w-5xl w-full bg-dark p-8 rounded-2xl shadow-soft mt-8 mb-16">
+            <h2 class="text-3xl font-bold text-primary text-center mb-8">Админ Панель</h2>
+            <div class="flex justify-center border-b border-gray-700 mb-6">
+                <button id="usersTab" class="tab-active px-6 py-3 text-lg font-semibold">Пользователи</button>
+                <button id="hotelsTab" class="px-6 py-3 text-lg font-semibold text-gray-400">Отели</button>
+                <button id="reviewsTab" class="px-6 py-3 text-lg font-semibold text-gray-400">Отзывы</button>
             </div>
+
+            <!-- Пользователи -->
             <div id="usersContent" class="text-center">
-                <h3 class="text-lg font-semibold text-primary">Список пользователей</h3>
-                <button class="mb-4 bg-primary text-background px-4 py-2 rounded" onclick="toggleAddUserForm()">Добавить пользователя</button>
-                <div id="addUserForm" class="hidden">
-                    <input type="text" id="userName" placeholder="Имя" required>
-                    <input type="email" id="userEmail" placeholder="Email" required>
-                    <input type="password" id="userPassword" placeholder="Пароль" required>
-                    <button onclick="addUser()">Добавить</button>
-                </div>
+                <h3 class="text-xl font-semibold text-primary mb-4">Список пользователей</h3>
+                <button class="mb-6 bg-gradient-primary text-background px-6 py-2 rounded-lg btn-gradient" onclick="toggleAddUserModal()">Добавить пользователя</button>
                 <div id="usersList" class="space-y-4">
                     <p class="text-center text-gray-400">Загрузка пользователей...</p>
                 </div>
             </div>
+
+            <!-- Отели -->
             <div id="hotelsContent" class="hidden text-center">
-                <h3 class="text-lg font-semibold text-primary">Список отелей</h3>
-                <button class="mb-4 bg-primary text-background px-4 py-2 rounded" onclick="toggleAddHotelForm()">Добавить отель</button>
-                <div id="addHotelForm" class="hidden">
-                    <input type="text" id="hotelName" placeholder="Название отеля" required>
-                    <input type="text" id="location" placeholder="Локация" required>
-                    <input type="number" id="pricePerNight" placeholder="Цена за ночь" required>
-                    <button onclick="addHotel()">Добавить</button>
-                </div>
-                <div id="editHotelForm" class="hidden">
-                    <input type="text" id="editHotelName" placeholder="Название отеля" required>
-                    <input type="text" id="editLocation" placeholder="Локация" required>
-                    <input type="number" id="editPricePerNight" placeholder="Цена за ночь" required>
-                    <button onclick="saveEditHotel()">Сохранить</button>
-                </div>
+                <h3 class="text-xl font-semibold text-primary mb-4">Список отелей</h3>
+                <button class="mb-6 bg-gradient-primary text-background px-6 py-2 rounded-lg btn-gradient" onclick="toggleAddHotelModal()">Добавить отель</button>
                 <div id="hotelsList" class="space-y-4">
                     <p class="text-center text-gray-400">Загрузка отелей...</p>
                 </div>
             </div>
+
+            <!-- Отзывы -->
             <div id="reviewsContent" class="hidden text-center">
-                <h3 class="text-lg font-semibold text-primary">Список отзывов</h3>
+                <h3 class="text-xl font-semibold text-primary mb-4">Список отзывов</h3>
                 <div id="reviewsList" class="space-y-4">
                     <p class="text-center text-gray-400">Загрузка отзывов...</p>
                 </div>
             </div>
         </section>
     </main>
+
+    <!-- Модальное окно для добавления пользователя -->
+    <div id="addUserModal" class="hidden fixed inset-0 modal flex items-center justify-center z-50">
+        <div class="modal-content p-8 w-full max-w-md">
+            <h3 class="text-xl font-semibold text-primary mb-6">Добавить пользователя</h3>
+            <div class="space-y-4">
+                <div class="input-icon">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="userName" placeholder="Имя" class="w-full px-4 py-3 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border" required>
+                </div>
+                <div class="input-icon">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="userEmail" placeholder="Email" class="w-full px-4 py-3 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border" required>
+                </div>
+                <div class="input-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="userPassword" placeholder="Пароль" class="w-full px-4 py-3 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border" required>
+                </div>
+            </div>
+            <div class="flex justify-end gap-4 mt-6">
+                <button class="px-4 py-2 text-gray-400 hover:text-white transition-colors" onclick="toggleAddUserModal()">Отмена</button>
+                <button class="bg-gradient-primary text-background px-6 py-2 rounded-lg btn-gradient" onclick="addUser()">Добавить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для добавления отеля -->
+    <div id="addHotelModal" class="hidden fixed inset-0 modal flex items-center justify-center z-50">
+        <div class="modal-content p-8 w-full max-w-md">
+            <h3 class="text-xl font-semibold text-primary mb-6">Добавить отель</h3>
+            <div class="space-y-4">
+                <div class="input-icon">
+                    <i class="fas fa-hotel"></i>
+                    <input type="text" id="hotelName" placeholder="Название отеля" class="w-full px-4 py-3 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border" required>
+                </div>
+                <div class="input-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input type="text" id="location" placeholder="Локация" class="w-full px-4 py-3 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border" required>
+                </div>
+                <div class="input-icon">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <input type="number" id="pricePerNight" placeholder="Цена за ночь" class="w-full px-4 py-3 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border" required>
+                </div>
+                <div class="input-icon">
+                    <i class="fas fa-door-open"></i>
+                    <input type="text" id="roomNumbers" placeholder="Номера (через запятую, например: 101,102,103)" class="w-full px-4 py-3 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border">
+                </div>
+            </div>
+            <div class="flex justify-end gap-4 mt-6">
+                <button class="px-4 py-2 text-gray-400 hover:text-white transition-colors" onclick="toggleAddHotelModal()">Отмена</button>
+                <button class="bg-gradient-primary text-background px-6 py-2 rounded-lg btn-gradient" onclick="addHotel()">Добавить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для редактирования отеля -->
+    <div id="editHotelModal" class="hidden fixed inset-0 modal flex items-center justify-center z-50">
+        <div class="modal-content p-8 w-full max-w-md">
+            <h3 class="text-xl font-semibold text-primary mb-6">Редактировать отель</h3>
+            <div class="space-y-4">
+                <div class="input-icon">
+                    <i class="fas fa-hotel"></i>
+                    <input type="text" id="editHotelName" placeholder="Название отеля" class="w-full px-4 py-3 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border" required>
+                </div>
+                <div class="input-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input type="text" id="editLocation" placeholder="Локация" class="w-full px-4 py-3 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border" required>
+                </div>
+                <div class="input-icon">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <input type="number" id="editPricePerNight" placeholder="Цена за ночь" class="w-full px-4 py-3 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border" required>
+                </div>
+            </div>
+            <div class="flex justify-end gap-4 mt-6">
+                <button class="px-4 py-2 text-gray-400 hover:text-white transition-colors" onclick="toggleEditHotelModal()">Отмена</button>
+                <button class="bg-gradient-primary text-background px-6 py-2 rounded-lg btn-gradient" onclick="saveEditHotel()">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для редактирования номеров -->
+    <div id="editRoomsModal" class="hidden fixed inset-0 modal flex items-center justify-center z-50">
+        <div class="modal-content p-8 w-full max-w-md">
+            <h3 class="text-xl font-semibold text-primary mb-6">Редактировать номера</h3>
+            <div class="space-y-4">
+                <div id="roomsListEdit" class="space-y-2">
+                    <!-- Здесь будут отображаться номера -->
+                </div>
+                <div class="input-icon">
+                    <i class="fas fa-plus"></i>
+                    <input type="number" id="newRoomNumber" placeholder="Добавить новый номер" class="w-full px-4 py-3 border border-gray-600 rounded-lg bg-[#222222] text-white focus:outline-none focus:border-primary transition-border">
+                </div>
+                <button class="bg-gradient-primary text-background px-4 py-2 rounded-lg btn-gradient" onclick="addRoomToHotel()">Добавить номер</button>
+            </div>
+            <div class="flex justify-end gap-4 mt-6">
+                <button class="px-4 py-2 text-gray-400 hover:text-white transition-colors" onclick="toggleEditRoomsModal()">Закрыть</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Подвал -->
     <footer class="gradient-bg text-primary py-8 mt-auto">
@@ -138,7 +260,11 @@
             </div>
         </div>
     </footer>
+
     <script>
+        let currentHotelId = null;
+        let currentRooms = [];
+
         document.addEventListener('DOMContentLoaded', () => {
             const sessionId = localStorage.getItem('sessionId');
             const usersTab = document.getElementById('usersTab');
@@ -187,7 +313,7 @@
             document.getElementById('logoutLink')?.addEventListener('click', (e) => {
                 e.preventDefault();
                 const sessionId = localStorage.getItem('sessionId');
-                console.log('Session ID:', sessionId); // Логирование для отладки
+                console.log('Session ID:', sessionId);
 
                 if (sessionId === 'admin_session_id') {
                     localStorage.removeItem('sessionId');
@@ -215,10 +341,10 @@
                     } else {
                         users.forEach(user => {
                             const userItem = document.createElement('div');
-                            userItem.className = 'bg-[#222222] p-4 rounded-lg';
+                            userItem.className = 'bg-[#222222] p-4 rounded-lg hover-glow';
                             userItem.innerHTML = `
                                 <p class="text-sm text-primary">Пользователь: ${user.name} (${user.email})</p>
-                                <button class="text-red-500" onclick="deleteUser(${user.id})">Удалить</button>
+                                <button class="text-red-500 hover:text-red-400 transition-colors mt-2" onclick="deleteUser(${user.id})">Удалить</button>
                             `;
                             usersList.appendChild(userItem);
                         });
@@ -248,11 +374,17 @@
                     } else {
                         hotels.forEach(hotel => {
                             const hotelItem = document.createElement('div');
-                            hotelItem.className = 'bg-[#222222] p-4 rounded-lg';
+                            hotelItem.className = 'bg-[#222222] p-6 rounded-lg hover-glow';
                             hotelItem.innerHTML = `
                                 <p class="text-sm text-primary">Отель: ${hotel.name}</p>
-                                <button class="text-red-500" onclick="deleteHotel(${hotel.id})">Удалить</button>
-                                <button class="text-blue-500" onclick="showEditHotelForm(${hotel.id}, '${hotel.name}', '${hotel.location}', ${hotel.pricePerNight})">Редактировать</button>
+                                <p class="text-sm text-gray-400">Локация: ${hotel.location}</p>
+                                <p class="text-sm text-gray-400">Цена за ночь: ${hotel.pricePerNight}</p>
+                                <p class="text-sm text-gray-400">Номера: ${hotel.roomsCount > 0 ? hotel.roomsCount : 'Нет номеров'}</p>
+                                <div class="flex gap-2 mt-3">
+                                    <button class="text-red-500 hover:text-red-400 transition-colors" onclick="deleteHotel(${hotel.id})">Удалить</button>
+                                    <button class="text-blue-500 hover:text-blue-400 transition-colors" onclick="showEditHotelModal(${hotel.id}, '${hotel.name}', '${hotel.location}', ${hotel.pricePerNight})">Редактировать</button>
+                                    <button class="text-green-500 hover:text-green-400 transition-colors" onclick="showEditRoomsModal(${hotel.id})">Управление номерами</button>
+                                </div>
                             `;
                             hotelsList.appendChild(hotelItem);
                         });
@@ -282,11 +414,13 @@
                     } else {
                         reviews.forEach(review => {
                             const reviewItem = document.createElement('div');
-                            reviewItem.className = 'bg-[#222222] p-4 rounded-lg';
+                            reviewItem.className = 'bg-[#222222] p-4 rounded-lg hover-glow';
                             reviewItem.innerHTML = `
                                 <p class="text-sm text-primary">Отзыв: ${review.comment}</p>
-                                <button class="text-red-500" onclick="deleteReview(${review.id})">Удалить</button>
-                                <button class="text-blue-500" onclick="editReview(${review.id}, '${review.comment}')">Редактировать</button>
+                                <div class="flex gap-2 mt-2">
+                                    <button class="text-red-500 hover:text-red-400 transition-colors" onclick="deleteReview(${review.id})">Удалить</button>
+                                    <button class="text-blue-500 hover:text-blue-400 transition-colors" onclick="editReview(${review.id}, '${review.comment}')">Редактировать</button>
+                                </div>
                             `;
                             reviewsList.appendChild(reviewItem);
                         });
@@ -383,6 +517,8 @@
             const hotelName = document.getElementById('hotelName').value.trim();
             const location = document.getElementById('location').value.trim();
             const pricePerNight = document.getElementById('pricePerNight').value.trim();
+            const roomNumbersInput = document.getElementById('roomNumbers').value.trim();
+            const roomNumbers = roomNumbersInput ? roomNumbersInput.split(',').map(num => parseInt(num.trim())).filter(num => !isNaN(num)) : [];
 
             try {
                 const response = await fetch('/admin/addHotel', {
@@ -391,14 +527,16 @@
                         'Content-Type': 'application/json',
                         'Authorization': localStorage.getItem('sessionId'),
                     },
-                    body: JSON.stringify({ hotelName, location, pricePerNight }),
+                    body: JSON.stringify({ hotelName, location, pricePerNight, roomNumbers }),
                 });
 
                 if (response.ok) {
                     alert('Отель успешно добавлен!');
+                    toggleAddHotelModal();
                     loadHotels();
                 } else {
-                    alert('Ошибка при добавлении отеля.');
+                    const result = await response.json();
+                    alert(result.message || 'Ошибка при добавлении отеля.');
                 }
             } catch (error) {
                 console.error('Ошибка при добавлении отеля:', error);
@@ -423,9 +561,11 @@
 
                 if (response.ok) {
                     alert('Пользователь успешно добавлен!');
+                    toggleAddUserModal();
                     loadUsers();
                 } else {
-                    alert('Ошибка при добавлении пользователя.');
+                    const result = await response.json();
+                    alert(result.message || 'Ошибка при добавлении пользователя.');
                 }
             } catch (error) {
                 console.error('Ошибка при добавлении пользователя:', error);
@@ -433,56 +573,184 @@
             }
         }
 
-        function toggleAddUserForm() {
-            const form = document.getElementById('addUserForm');
-            form.classList.toggle('hidden');
+        async function showEditHotelModal(hotelId, hotelName, location, pricePerNight) {
+            currentHotelId = hotelId;
+            document.getElementById('editHotelName').value = hotelName;
+            document.getElementById('editLocation').value = location;
+            document.getElementById('editPricePerNight').value = pricePerNight;
+            document.getElementById('editHotelModal').classList.remove('hidden');
         }
 
-        function toggleAddHotelForm() {
-            const form = document.getElementById('addHotelForm');
-            form.classList.toggle('hidden');
+        async function showEditRoomsModal(hotelId) {
+            currentHotelId = hotelId;
+            try {
+                const response = await fetch(`/api/hotels`, {
+                    method: 'GET',
+                    headers: { 'Authorization': localStorage.getItem('sessionId') },
+                });
+                if (response.ok) {
+                    const hotels = await response.json();
+                    const hotel = hotels.find(h => h.id === hotelId);
+                    currentRooms = hotel.rooms || [];
+                    const roomsListEdit = document.getElementById('roomsListEdit');
+                    roomsListEdit.innerHTML = '';
+                    if (currentRooms.length === 0) {
+                        roomsListEdit.innerHTML = '<p class="text-gray-400">Номеров нет.</p>';
+                    } else {
+                        currentRooms.forEach((room, index) => {
+                            const roomItem = document.createElement('div');
+                            roomItem.className = 'flex justify-between items-center bg-[#222222] p-3 rounded-lg';
+                            roomItem.innerHTML = `
+                                <span class="text-primary">Номер: ${room}</span>
+                                <button class="text-red-500 hover:text-red-400 transition-colors" onclick="removeRoom(${index})">Удалить</button>
+                            `;
+                            roomsListEdit.appendChild(roomItem);
+                        });
+                    }
+                    document.getElementById('editRoomsModal').classList.remove('hidden');
+                } else {
+                    alert('Ошибка при загрузке номеров.');
+                }
+            } catch (error) {
+                console.error('Ошибка при загрузке номеров:', error);
+                alert('Произошла ошибка. Попробуйте снова.');
+            }
         }
 
-        function showEditHotelForm(hotelId, hotelName, location, pricePerNight) {
-    const form = document.getElementById('editHotelForm');
-    document.getElementById('editHotelName').value = hotelName;
-    document.getElementById('editLocation').value = location;
-    document.getElementById('editPricePerNight').value = pricePerNight;
-    form.classList.remove('hidden');
+        async function addRoomToHotel() {
+            const newRoomNumber = parseInt(document.getElementById('newRoomNumber').value.trim());
+            if (isNaN(newRoomNumber)) {
+                alert('Пожалуйста, введите корректный номер комнаты.');
+                return;
+            }
 
-    // Устанавливаем обработчик события для кнопки сохранения
-    const saveButton = form.querySelector('button');
-    saveButton.onclick = () => saveEditHotel(hotelId); // Передаем hotelId в функцию сохранения
-}
+            if (currentRooms.includes(newRoomNumber)) {
+                alert('Этот номер уже существует.');
+                return;
+            }
 
-async function saveEditHotel(hotelId) {
-    const hotelName = document.getElementById('editHotelName').value.trim();
-    const location = document.getElementById('editLocation').value.trim();
-    const pricePerNight = document.getElementById('editPricePerNight').value.trim();
+            try {
+                const response = await fetch(`/admin/addRoom/${currentHotelId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': localStorage.getItem('sessionId'),
+                    },
+                    body: JSON.stringify({ roomNumber: newRoomNumber }),
+                });
 
-    try {
-        const response = await fetch(`/admin/editHotel/${hotelId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem('sessionId'),
-            },
-            body: JSON.stringify({ hotelName, location, pricePerNight }),
-        });
-
-        if (response.ok) {
-            alert('Отель успешно отредактирован!');
-            loadHotels();
-            document.getElementById('editHotelForm').classList.add('hidden');
-        } else {
-            alert('Ошибка при редактировании отеля.');
+                if (response.ok) {
+                    currentRooms.push(newRoomNumber);
+                    const roomsListEdit = document.getElementById('roomsListEdit');
+                    const roomItem = document.createElement('div');
+                    roomItem.className = 'flex justify-between items-center bg-[#222222] p-3 rounded-lg';
+                    roomItem.innerHTML = `
+                        <span class="text-primary">Номер: ${newRoomNumber}</span>
+                        <button class="text-red-500 hover:text-red-400 transition-colors" onclick="removeRoom(${currentRooms.length - 1})">Удалить</button>
+                    `;
+                    roomsListEdit.appendChild(roomItem);
+                    document.getElementById('newRoomNumber').value = '';
+                    loadHotels();
+                } else {
+                    alert('Ошибка при добавлении номера.');
+                }
+            } catch (error) {
+                console.error('Ошибка при добавлении номера:', error);
+                alert('Произошла ошибка. Попробуйте снова.');
+            }
         }
-    } catch (error) {
-        console.error('Ошибка при редактировании отеля:', error);
-        alert('Произошла ошибка. Попробуйте снова.');
-    }
-}
 
+        async function removeRoom(index) {
+            const roomNumber = currentRooms[index];
+            try {
+                const response = await fetch(`/admin/removeRoom/${currentHotelId}/${roomNumber}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': localStorage.getItem('sessionId') },
+                });
+                if (response.ok) {
+                    currentRooms.splice(index, 1);
+                    const roomsListEdit = document.getElementById('roomsListEdit');
+                    roomsListEdit.innerHTML = '';
+                    if (currentRooms.length === 0) {
+                        roomsListEdit.innerHTML = '<p class="text-gray-400">Номеров нет.</p>';
+                    } else {
+                        currentRooms.forEach((room, idx) => {
+                            const roomItem = document.createElement('div');
+                            roomItem.className = 'flex justify-between items-center bg-[#222222] p-3 rounded-lg';
+                            roomItem.innerHTML = `
+                                <span class="text-primary">Номер: ${room}</span>
+                                <button class="text-red-500 hover:text-red-400 transition-colors" onclick="removeRoom(${idx})">Удалить</button>
+                            `;
+                            roomsListEdit.appendChild(roomItem);
+                        });
+                    }
+                    loadHotels();
+                } else {
+                    alert('Ошибка при удалении номера.');
+                }
+            } catch (error) {
+                console.error('Ошибка при удалении номера:', error);
+                alert('Произошла ошибка. Попробуйте снова.');
+            }
+        }
+
+        async function saveEditHotel() {
+            const hotelName = document.getElementById('editHotelName').value.trim();
+            const location = document.getElementById('editLocation').value.trim();
+            const pricePerNight = document.getElementById('editPricePerNight').value.trim();
+
+            try {
+                const response = await fetch(`/admin/editHotel/${currentHotelId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': localStorage.getItem('sessionId'),
+                    },
+                    body: JSON.stringify({ hotelName, location, pricePerNight }),
+                });
+
+                if (response.ok) {
+                    alert('Отель успешно отредактирован!');
+                    toggleEditHotelModal();
+                    loadHotels();
+                } else {
+                    const result = await response.json();
+                    alert(result.message || 'Ошибка при редактировании отеля.');
+                }
+            } catch (error) {
+                console.error('Ошибка при редактировании отеля:', error);
+                alert('Произошла ошибка. Попробуйте снова.');
+            }
+        }
+
+        function toggleAddUserModal() {
+            const modal = document.getElementById('addUserModal');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) {
+                document.getElementById('userName').value = '';
+                document.getElementById('userEmail').value = '';
+                document.getElementById('userPassword').value = '';
+            }
+        }
+
+        function toggleAddHotelModal() {
+            const modal = document.getElementById('addHotelModal');
+            modal.classList.toggle('hidden');
+            if (!modal.classList.contains('hidden')) {
+                document.getElementById('hotelName').value = '';
+                document.getElementById('location').value = '';
+                document.getElementById('pricePerNight').value = '';
+                document.getElementById('roomNumbers').value = '';
+            }
+        }
+
+        function toggleEditHotelModal() {
+            document.getElementById('editHotelModal').classList.toggle('hidden');
+        }
+
+        function toggleEditRoomsModal() {
+            document.getElementById('editRoomsModal').classList.toggle('hidden');
+        }
     </script>
 </body>
 </html>

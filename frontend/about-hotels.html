@@ -184,9 +184,7 @@
     </footer>
 
     <script>
-        let hotels = []; // Глобальная переменная для хранения данных об отелях
-
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const sessionId = localStorage.getItem('sessionId');
             const profileTab = document.getElementById('profileTab');
             const logoutTab = document.getElementById('logoutTab');
@@ -205,110 +203,18 @@
                 });
             }
 
-            hotels = [
-                {
-                    "id": 1,
-                    "name": "Hotel Hilton",
-                    "location": "Moscow, Russia",
-                    "pricePerNight": 5000,
-                    "image": "png/hotel1.png",
-                    "description": "Роскошный отель в центре Москвы с великолепным видом на Кремль.",
-                    "amenities": "Бесплатный Wi-Fi, фитнес-центр, ресторан, обслуживание номеров 24/7.",
-                    "features": "Просторные номера с современным дизайном, панорамные окна с видом на город."
-                },
-                {
-                    "id": 2,
-                    "name": "Hotel Marriott",
-                    "location": "St. Petersburg, Russia",
-                    "pricePerNight": 6000,
-                    "image": "png/hotel2.png",
-                    "description": "Исторический отель с современным интерьером и удобствами.",
-                    "amenities": "Спа-центр, бассейн, конференц-залы, бесплатный завтрак.",
-                    "features": "Уникальная архитектура, сочетающая исторические элементы с современными удобствами."
-                },
-                {
-                    "id": 3,
-                    "name": "Hotel Ritz-Carlton",
-                    "location": "Novosibirsk, Russia",
-                    "pricePerNight": 7000,
-                    "image": "png/hotel3.png",
-                    "description": "Элегантный отель с высоким уровнем сервиса и комфорта.",
-                    "amenities": "Лобби-бар, ресторан высокой кухни, услуги консьержа.",
-                    "features": "Индивидуальный подход к каждому гостю, эксклюзивные номера с уникальным дизайном."
-                },
-                {
-                    "id": 4,
-                    "name": "Hotel Four Seasons",
-                    "location": "Kazan, Russia",
-                    "pricePerNight": 8000,
-                    "image": "png/hotel4.png",
-                    "description": "Уютный отель с уникальным дизайном и вниманием к деталям.",
-                    "amenities": "Спа-центр, фитнес-зал, ресторан, бесплатный Wi-Fi.",
-                    "features": "Индивидуальный дизайн номеров, внимание к каждому гостю."
-                },
-                {
-                    "id": 5,
-                    "name": "Hotel Hyatt",
-                    "location": "Ekaterinburg, Russia",
-                    "pricePerNight": 6500,
-                    "image": "png/hotel5.png",
-                    "description": "Современный отель с широким спектром услуг для бизнеса и отдыха.",
-                    "amenities": "Конференц-залы, фитнес-центр, ресторан, бесплатный Wi-Fi.",
-                    "features": "Просторные номера с современным дизайном, удобства для бизнеса."
-                },
-                {
-                    "id": 6,
-                    "name": "Hotel InterContinental",
-                    "location": "Nizhny Novgorod, Russia",
-                    "pricePerNight": 7500,
-                    "image": "png/hotel6.png",
-                    "description": "Комфортабельный отель с отличным расположением и панорамными видами.",
-                    "amenities": "Спа-центр, фитнес-зал, ресторан, бесплатный Wi-Fi.",
-                    "features": "Панорамные виды на город, удобное расположение."
-                },
-                {
-                    "id": 7,
-                    "name": "Hotel Sheraton",
-                    "location": "Samara, Russia",
-                    "pricePerNight": 5500,
-                    "image": "png/hotel7.png",
-                    "description": "Стильный отель с просторными номерами и высококлассным обслуживанием.",
-                    "amenities": "Фитнес-центр, ресторан, бесплатный Wi-Fi, обслуживание номеров.",
-                    "features": "Просторные номера, высокий уровень обслуживания."
-                },
-                {
-                    "id": 8,
-                    "name": "Hotel Radisson Blu",
-                    "location": "Rostov-on-Don, Russia",
-                    "pricePerNight": 6200,
-                    "image": "png/hotel8.png",
-                    "description": "Отель с уникальной атмосферой и вниманием к каждому гостю.",
-                    "amenities": "Фитнес-центр, ресторан, бесплатный Wi-Fi, обслуживание номеров.",
-                    "features": "Уникальная атмосфера, внимание к каждому гостю."
-                },
-                {
-                    "id": 9,
-                    "name": "Hotel Crowne Plaza",
-                    "location": "Krasnodar, Russia",
-                    "pricePerNight": 5800,
-                    "image": "png/hotel9.png",
-                    "description": "Идеальное место для деловых встреч и отдыха.",
-                    "amenities": "Конференц-залы, фитнес-центр, ресторан, бесплатный Wi-Fi.",
-                    "features": "Удобства для деловых встреч, комфортные номера."
-                },
-                {
-                    "id": 10,
-                    "name": "Hotel Holiday Inn",
-                    "location": "Voronezh, Russia",
-                    "pricePerNight": 5200,
-                    "image": "png/hotel10.png",
-                    "description": "Доступный отель с высоким уровнем комфорта и удобствами.",
-                    "amenities": "Ресторан, бесплатный Wi-Fi, обслуживание номеров.",
-                    "features": "Доступные цены, высокий уровень комфорта."
+            // Загружаем отели через API
+            try {
+                const response = await fetch('/api/hotels');
+                if (!response.ok) {
+                    throw new Error('Ошибка при загрузке данных отелей');
                 }
-            ];
-
-            fetchReviewsAndDisplayHotels(hotels);
+                const hotels = await response.json();
+                fetchReviewsAndDisplayHotels(hotels);
+            } catch (error) {
+                console.error('Ошибка при загрузке данных отелей:', error);
+                alert('Не удалось загрузить данные об отелях.');
+            }
 
             document.getElementById('logoutLink')?.addEventListener('click', async (e) => {
                 e.preventDefault();
@@ -322,7 +228,7 @@
                     });
 
                     if (response.ok) {
-                        localStorage.removeItem('sessionId');
+                        localStorage.remove('sessionId');
                         alert('Вы успешно вышли из системы.');
                         window.location.href = 'index.html';
                     } else {
@@ -364,14 +270,14 @@
                 const hotelDiv = document.createElement('div');
                 hotelDiv.classList.add('bg-[#222222]', 'p-6', 'rounded-lg', 'shadow-lg');
                 hotelDiv.innerHTML = `
-                    <img src="${hotel.image}" alt="${hotel.name}" class="hotel-image mb-4 rounded-lg">
+                    <img src="${hotel.image || 'png/default-hotel.png'}" alt="${hotel.name}" class="hotel-image mb-4 rounded-lg">
                     <h2 class="text-2xl font-bold text-primary">${hotel.name}</h2>
                     <p class="text-gray-300">${hotel.location}</p>
                     <p class="text-secondary font-bold mt-2">${hotel.pricePerNight} руб./ночь</p>
-                    <p class="text-gray-400 mt-4">${hotel.description}</p>
+                    <p class="text-gray-400 mt-4">${hotel.description || 'Описание отсутствует.'}</p>
                     <p class="text-primary font-bold mt-2">Средний рейтинг: ${averageRating}</p>
-                    <p class="text-gray-400 mt-4"><strong>Удобства:</strong> ${hotel.amenities}</p>
-                    <p class="text-gray-400 mt-2"><strong>Особенности:</strong> ${hotel.features}</p>
+                    <p class="text-gray-400 mt-4"><strong>Удобства:</strong> ${hotel.amenities || 'Информация отсутствует.'}</p>
+                    <p class="text-gray-400 mt-2"><strong>Особенности:</strong> ${hotel.features || 'Информация отсутствует.'}</p>
                     <div class="review-form mt-4">
                         <h3 class="text-xl font-semibold text-primary mb-2">Оставить отзыв</h3>
                         <div class="mb-4">
@@ -435,7 +341,10 @@
                 if (response.ok) {
                     alert('Отзыв успешно отправлен!');
                     document.getElementById(`review-${hotelId}`).value = '';
-                    fetchReviewsAndDisplayHotels(hotels); // Обновляем отзывы
+                    // Перезагружаем отели и отзывы
+                    const hotelsResponse = await fetch('/api/hotels');
+                    const hotels = await hotelsResponse.json();
+                    fetchReviewsAndDisplayHotels(hotels);
                 } else {
                     const errorData = await response.json();
                     console.error('Ошибка при отправке отзыва:', errorData);
