@@ -46,5 +46,11 @@
     "name": "ёёё",
     "email": "annaruabtseva5009@gmail.com",
     "password": "$2a$10$W9QJVSI1W9YKifXbSxm2luvHJkIW81dun7SJSXIAVLF97P4ywmahO"
+  },
+  {
+    "id": 9,
+    "name": "eeee",
+    "email": "antonsymkin@gmail.com",
+    "password": "$2a$10$hXGosSap1D9WsBNiMyInquvBJaaobg/QwdCoUVlzLhHjuYKtRq..e"
   }
 ]

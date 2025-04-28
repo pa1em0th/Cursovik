@@ -55,50 +55,49 @@ const authenticateAdmin = (req, res, next) => {
 app.post('/register', async (req, res) => {
     try {
         const { name, email, password } = req.body;
-
+        
         if (!name || !email || !password) {
             return res.status(400).json({ message: 'Все поля обязательны' });
         }
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            return res.status(400).json({ message: 'Некорректный email' });
+        // Проверка в базе данных
+        const [existingInDB] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+        if (existingInDB.length > 0) {
+            return res.status(400).json({ message: 'Пользователь уже существует' });
         }
 
+        // Проверка в JSON файле
         const usersFilePath = path.join(__dirname, '../data', 'users.json');
         let users = [];
-
         if (fs.existsSync(usersFilePath)) {
-            const rawData = fs.readFileSync(usersFilePath, 'utf-8');
-            users = JSON.parse(rawData) || [];
+            users = JSON.parse(fs.readFileSync(usersFilePath, 'utf-8')) || [];
         }
-
-        const existingUser = users.find(user => user.email === email);
-        if (existingUser) {
+        
+        if (users.some(u => u.email === email)) {
             return res.status(400).json({ message: 'Пользователь уже существует' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        // Добавляем в базу данных
+        await db.query(
+            'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
+            [name, email, hashedPassword]
+        );
+
+        // Добавляем в JSON файл
         const newUser = {
             id: users.length + 1,
             name,
             email,
-            password: hashedPassword,
+            password: hashedPassword, // Храним хеш, а не чистый пароль!
         };
-
         users.push(newUser);
-        fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2), 'utf-8');
-
-        // Сохранение в базу данных
-        await db.query(
-            'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
-            [newUser.name, newUser.email, newUser.password]
-        );
+        fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2));
 
         return res.status(201).json({ message: 'Регистрация успешна' });
     } catch (error) {
-        console.error('Ошибка при регистрации:', error);
+        console.error('Ошибка регистрации:', error);
         return res.status(500).json({ message: 'Ошибка сервера' });
     }
 });
@@ -112,20 +111,21 @@ app.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Все поля обязательны' });
         }
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            return res.status(400).json({ message: 'Некорректный email' });
+        // 1. Сначала проверяем в базе данных
+        const [dbUser] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+        
+        // 2. Если нет в БД, проверяем JSON файл
+        let user;
+        if (dbUser.length > 0) {
+            user = dbUser[0];
+        } else {
+            const usersFilePath = path.join(__dirname, '../data', 'users.json');
+            if (fs.existsSync(usersFilePath)) {
+                const users = JSON.parse(fs.readFileSync(usersFilePath, 'utf-8')) || [];
+                user = users.find(u => u.email === email);
+            }
         }
 
-        const usersFilePath = path.join(__dirname, '../data', 'users.json');
-        let users = [];
-
-        if (fs.existsSync(usersFilePath)) {
-            const rawData = fs.readFileSync(usersFilePath, 'utf-8');
-            users = JSON.parse(rawData) || [];
-        }
-
-        const user = users.find(u => u.email === email);
         if (!user) {
             return res.status(400).json({ message: 'Неверный email или пароль' });
         }
@@ -136,15 +136,26 @@ app.post('/login', async (req, res) => {
         }
 
         const sessionId = generateSessionId();
-        sessions[sessionId] = { id: user.id, email: user.email, name: user.name };
+        sessions[sessionId] = { 
+            id: user.id, 
+            email: user.email, 
+            name: user.name 
+        };
 
-        return res.status(200).json({ message: 'Вход выполнен успешно', sessionId });
+        return res.status(200).json({ 
+            message: 'Вход выполнен успешно', 
+            sessionId,
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email
+            }
+        });
     } catch (error) {
         console.error('Ошибка при входе:', error);
         return res.status(500).json({ message: 'Ошибка сервера' });
     }
 });
-
 // Маршрут для выхода
 app.post('/logout', (req, res) => {
     const sessionId = req.headers.authorization;
